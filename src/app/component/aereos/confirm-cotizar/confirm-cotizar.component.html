@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-4 text-center">
+            <h1 class="font-weight-bold">{{ 'vuelos.cotizacion-realizada'|translate }} <i class="far fa-check-square"></i></h1>
+    
+             <ng-container *ngIf="cotizarResult.data.tipo_viaje == 'roundtrip'; else elseBlock">
+                <div class="mt-5">
+                    <p class="text-3 m-0">{{ cotizarResult.data.tramos[0]?.nombre_origen }} - {{ cotizarResult.data.tramos[0]?.nombre_destino }}</p>
+                    <p class="text-3 m-0"><i class="far fa-calendar mr-4"></i> {{cotizarResult.data.tramos[0]?.date | date : 'dd/MM/yyyy' }} - {{cotizarResult.data.tramos[1]?.date | date : 'dd/MM/yyyy' }}</p>
+                </div>
+            </ng-container>
+            <ng-template #elseBlock>
+                <div class="mt-5" *ngFor="let tramo of cotizarResult.data.tramos">
+                    <p class="text-3 m-0">{{ tramo?.nombre_origen }} - {{ tramo?.nombre_destino }}</p>
+                    <p class="text-3 m-0"><i class="far fa-calendar mr-4"></i> {{ tramo?.date | date : 'dd/MM/yyyy' }}</p>
+                </div>
+            </ng-template> 
+            
+        </div>
+    </div>
+     <div class="row">
+        <div class="col-12 mt-4">
+            <div class="card-white">
+                <p>{{ 'vuelos.datos-utiles-emitir'|translate }}</p>
+                <div class="mb-3">
+                    <p class="m-0">{{ 'vuelos.localizador'|translate }}: <span class="font-weight-bold">{{ cotizarResult.data.idBooking }}</span></p>
+                    <p class="m-0">{{ 'vuelos.liga-de-pago'|translate }}: <span class="font-weight-bold"> </span></p> <a [href]="cotizarResult.data.liga_pago" target="_blank" >{{ 'vuelos.aqui'|translate }}</a>
+                </div>
+                <p>
+                    {{ 'vuelos.bien-informados'|translate }}<br>  {{ 'vuelos.asegurate-recibir'|translate }} <b> contacto@checkin2travel.com </b>{{ 'vuelos.asegurate-recibir-0'|translate }} <b>24 {{ 'vuelos.horas'|translate }}</b>, {{ 'vuelos.asegurate-recibir-1'|translate }}.
+                    <br><br>
+                    {{ 'vuelos.recuerda-limite'|translate }} {{ cotizarResult.data.expire_time  }} {{ 'vuelos.recuerda-limite-pagar'|translate }}
+                </p>
+                <div class="text-center mt-3">
+                    <p class="font-weight-bold text-danger"> {{ 'vuelos.redireccionando'|translate }} {{ counter }}  {{ 'vuelos.segundos'|translate }}...</p>
+                    <button class="btn btn-primary" [routerLink]="['/reservaciones']"> {{ 'vuelos.ir-a-reservas'|translate }}</button>
+                </div>
+                    
+            </div>
+        </div>
+    </div> 
+    </div>
+    
+    

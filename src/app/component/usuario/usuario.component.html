@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-4 mb-2">
+            <h5 class="font-weight-bold">{{ 'usuario.perfil-usuario'|translate }}</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4 col-md-5">
+            <div class="profile-card">
+                <div class="title">
+                    {{ 'usuario.mi-perfil'|translate }}
+                </div>
+                <div class="body">
+                    <div class="profile-pic">
+                        <img [src]="user?.fotoPerfil" alt="Imagen de Perfil">
+                        <div class="overlay"></div>
+                        <a href="javascript:void(0)" class="overlay-text" (click)="modificarImage()"><i class="far fa-edit"></i> {{ 'usuario.cambiar-foto'|translate }}</a>
+                    </div>
+                    <span class="name-user">{{ user?.name }}</span>
+                    <small>{{ user?.nomAgencia }}</small>
+                    <span class="level" [ngClass]="{ 'gold': user.categoria_nombre == 'gold', 'slvr': user.categoria_nombre == 'silver', 'dmon': user.categoria_nombre == 'diamante', 'blck': user.categoria_nombre == 'black' }">{{ user?.categoria_nombre }}</span>
+                    <div class="location">
+                        
+                    </div>
+                </div>
+                <div class="">
+                    <a href="javascript:void(0)" class="btn btn-blue btn-block" (click)="modificarPerfil()">{{ 'usuario.modificar'|translate }}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-7">
+            
+
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <app-ultimas-reservas></app-ultimas-reservas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<ngx-spinner type="">
+    <img src='{{imgruta}}'/>
+</ngx-spinner>

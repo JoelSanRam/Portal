@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{informacionHotel.name}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body modal-terminosCondiciones">
+    <div class="row">
+		<!-- galleria -->
+        <div class="col-lg-12">
+			<gallery [items]="images" thumbPosition="left"></gallery>
+        </div> 
+        <div class="col-12">
+            <p class="small bold">{{informacionHotel.address}}</p><br>
+            <p class="small bold" [innerHTML]="informacionHotel.description"></p><br>
+        </div>
+        <!-- <div class="col-xs-12 col-lg-12" *ngIf="  informacionHotel.servicios?.length >0">
+			<h4> Servicios </h4>
+			<table class="table table-sm table-striped">
+				<thead>
+					<tr>
+						<th>Servicio</th>
+						<th>Descripción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let s of informacionHotel.servicios; let $i = index">
+						<td>{{s.nombre}}</td>
+						<td [innerHTML]="s.descripcion"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div> -->
+		
+		<div class="col-12" *ngIf="informacionHotel.location.latitude != null || informacionHotel.location.latitude">
+				<google-map 
+					class="map-info" 
+					[center]="center"
+					[zoom]="zoom">
+						<map-marker
+							[position]="center"
+							[options]="options">
+						</map-marker>
+				</google-map>
+		</div>
+    </div>
+</div> 

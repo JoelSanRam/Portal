@@ -1,0 +1,73 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ fichaTecnica?.datoshotel?.nombre }}</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<h5 class="title-page">{{ 'cotizaciones.informacion'|translate }}</h5>
+	<p>{{ fichaTecnica?.datoshotel?.direccion }}</p>
+	<p [innerHTML]="fichaTecnica?.datoshotel?.info"></p>
+	<div *ngIf="fichaTecnica.length < 0 || fichaTecnica == ''" class="alert alert-danger text-center" role="alert">
+		{{ 'cotizaciones.ficha-vacia'|translate }}
+	</div>
+	<div class="row">
+		<div class="col-12 col-lg-6 mb-2" *ngIf="fichaTecnica?.servicios?.length > 0">
+			<h5 class="title-page">{{ 'cotizaciones.servicios'|translate }}</h5>
+			<div class="services">
+				<table class="table-services">
+					<tr *ngFor="let s of fichaTecnica.servicios">
+						<th>{{ s.nombre }} 
+							<div [hidden]="!s.descripcion">
+								<small [innerHTML]="s?.descripcion"></small>
+							</div>
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col-12 col-lg-6 mb-2" *ngIf="fichaTecnica?.instalaciones?.restaurantes?.length > 0">
+			<h5 class="title-page">{{ 'cotizaciones.restaurantes'|translate }}</h5>
+			<div class="services">
+				<table class="table-services">
+					<tr *ngFor="let s of fichaTecnica.instalaciones.restaurantes">
+						<th>{{ s.nombre }} 
+							<div [hidden]="!s.descripcion">
+								<small [innerHTML]="s?.descripcion"></small>
+							</div>
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col-12 col-lg-6 mb-2" *ngIf="fichaTecnica?.instalaciones?.bares?.length > 0">
+			<h5 class="title-page">{{ 'cotizaciones.bares'|translate }}</h5>
+			<div class="services">
+				<table class="table-services">
+					<tr *ngFor="let s of fichaTecnica.instalaciones.bares">
+						<th>{{ s.nombre }}
+							<div [hidden]="!s.descripcion">
+								<small [innerHTML]="s?.descripcion"></small>
+							</div>
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col-12 col-lg-6" *ngIf="fichaTecnica?.instalaciones?.discos?.length > 0">
+			<h5 class="title-page">{{ 'cotizaciones.discos'|translate }}</h5>
+			<div class="services">
+				<table class="table-services">
+					<tr *ngFor="let s of fichaTecnica.instalaciones.discos">
+						<th>{{ s.nombre }}
+							<div [hidden]="!s.descripcion">
+								<small [innerHTML]="s?.descripcion"></small>
+							</div>
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>  
+	

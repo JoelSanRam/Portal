@@ -1,0 +1,134 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{ 'reservaciones.monto-pagar'|translate }}</h3>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <form [formGroup]="pagofinal">
+      <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
+          <div *ngIf="tipopago=='1'" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <h4>{{ 'reservaciones.importe-neto'|translate }} $<B>{{monto}}</B> MXN</h4>
+          </div>
+          <div *ngIf="tipopago==2" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <h4>{{ 'reservaciones.importe-publico'|translate }} $<B>{{monto}}</B> MXN</h4>
+          </div>
+          <div *ngIf="tipopago==3" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <h4>{{ 'reservaciones.abono'|translate }} $<B>{{monto}}</B> MXN</h4>
+          </div>
+          <div  class="form-group col-xs-4 col-sm-4 col-md-12 col-lg-12 ">
+              <div class="row">
+                <div class="col-6">
+                    <label class="text-center">
+                        <input type="radio" name="tarjetatipo" formControlName="tarjetatipo" (change)="tarjeta(1)" [value]=1 checked>
+                        <span class="label-text">{{ 'reservaciones.visa-mastercard'|translate }}</span>
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label class="text-center">
+                        <input type="radio" name="tarjetatipo" formControlName="tarjetatipo" (change)="tarjeta(2)" [value]=2>
+                        <span class="label-text">{{ 'reservaciones.american-express'|translate }}</span>
+                    </label>
+                </div>
+              </div>
+          </div>
+          <div  class="form-group col-xs-4 col-sm-4 col-md-12 col-lg-12 ">
+            <div class="row">
+                <div class="col-4">
+                    <label class="text-center">
+                        <input type="radio" name="tpago" formControlName="tpago" (change)="tipopagot(1)" [value]=1 checked>
+                        <span class="label-text">{{ 'reservaciones.credito'|translate }}</span>
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="text-center">
+                        <input type="radio" name="tpago" formControlName="tpago" (change)="tipopagot(2)" [value]=2>
+                        <span class="label-text">{{ 'reservaciones.debito'|translate }}</span>
+                    </label>
+                </div>
+                <div class="col-4">
+                    <label class="text-center">
+                        <input type="radio" name="tpago" formControlName="tpago" (change)="tipopagot(3)" [value]=3>
+                        <span class="label-text">{{ 'reservaciones.extranjera'|translate }}</span>
+                    </label>
+                </div>
+              </div>
+          </div>
+          <div *ngIf="tarjetatipo==1 && tpago==1" class="form-group col-xs-4 col-sm-4 col-md-12 col-lg-12 ">
+            {{ 'reservaciones.metodo-pago-VM'|translate }}
+              <div class="col-xs-6 col-sm-12 col-md-12 col-lg-12"> 
+                  <select class="form-control" id="mesesp" formControlName="mesesp" [(ngModel)]="mesesp" (change)="mesespago(mesesp);">
+                      <option *ngFor="let c of arreglomeses" [ngValue]="c.id" >{{c.name}}</option> 
+                  </select>
+              </div>
+          </div>
+          <div *ngIf="tarjetatipo==2 && tpago==1" class="form-group col-xs-4 col-sm-4 col-md-12 col-lg-12 ">
+            {{ 'reservaciones.metodo-pago-AE'|translate }}
+              <div class="col-xs-6 col-sm-12 col-md-12 col-lg-12"> 
+                  <select class="form-control" id="mesespamex" formControlName="mesespamex" [(ngModel)]="mesespamex" (change)="mesespago(mesespamex);">
+                      <option *ngFor="let ca of arreglomesesamex" [ngValue]="ca.id">{{ca.name}}</option> 
+                  </select>
+              </div>
+          </div>
+      </div>
+      <div  class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
+              <div *ngIf="tipopago==1" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div class="row form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <label>{{ 'reservaciones.importe'|translate }}:</label>
+                      <div *ngIf="forzarneta==0" class="col-4">
+                        <input type="checkbox" id="comision" formControlName="comision" [(ngModel)]="comision" (change)="checksum(comision)">
+                        <label for="comision">{{ 'reservaciones.sumar-comision'|translate }}</label>
+                      </div>
+                  </div>
+                  <input type="number" name="pagoneutro" formControlName="pagoneutro" [(ngModel)]="pagoneutro" readonly="readonly" class="form-control">
+              </div>
+              <div *ngIf="tipopago==2" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div class="row form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <label>{{ 'reservaciones.importe'|translate }}:</label>
+                      <div *ngIf="forzarpublica==0" class="col-4">
+                        <input type="checkbox" id="comision" formControlName="comision" [(ngModel)]="comision" (change)="checksum(comision)">
+                        <label for="comision">{{ 'reservaciones.sumar-comision'|translate }}</label>
+                      </div>
+                  </div>
+                  <input type="number" name="pagoneutro" formControlName="pagoneutro" [(ngModel)]="pagoneutro" readonly="readonly" class="form-control">
+              </div>
+              <div *ngIf="tipopago==3" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <label>{{ 'reservaciones.importe'|translate }}:</label>
+                  <input type="number" name="cantidad" formControlName="totalpago" [(ngModel)]="totalpago" min="1" max="{{monmax}}" (ngModelChange)="numonto(totalpago);" class="form-control">
+              </div>
+              <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <label>{{ 'reservaciones.comision'|translate }}:</label>
+                  <input type="number" name="comisionneutro" formControlName="comisionneutro" [(ngModel)]="comisionneutro" readonly="readonly" class="form-control">
+              </div>
+              <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div class="fs-15 text-center">
+                      <h5><B>{{ 'reservaciones.total-pagar'|translate }}:</B></h5> 
+                      <div *ngIf="tarinan">
+                          <h3><B>{{ 'reservaciones.monto-excede'|translate }}</B></h3>
+                      </div>
+                      <div *ngIf="monto>=0">
+                          <h3><B>{{pagosuma}}</B></h3>
+                      </div>
+                  </div>
+              </div>
+          <div *ngIf="!tarinan" class="form-group col-xs-12 col-sm-12 col-md-12 ">
+              <button class="btn btn-success btn-block" style="margin-top: 23px;" (click)="pagarReserva(1)">{{ 'reservaciones.pagar'|translate }}</button>
+          </div>
+          <div *ngIf="!tarinan" class="form-group col-xs-12 col-sm-12 col-md-12 ">
+              <button class="btn btn-info btn-block" (click)="pagarReserva(2)">{{ 'reservaciones.enviar-liga'|translate }}</button>
+          </div>
+          <div *ngIf="tipopago==3" class="form-group col-xs-12 col-sm-12 col-md-12 ">
+              <B>{{ 'reservaciones.limite-pago'|translate }} ${{monmax}} MXN</B>
+          </div>
+          <div class="form-group col-xs-12 col-sm-12 col-md-12 ">
+              <B>{{textocomision}}</B>
+          </div>
+          <div class="form-group col-xs-12 col-sm-12 col-md-12 ">
+             <B class="text-uppercasse">{{ 'reservaciones.bancos-participantes'|translate }}:</B>
+             {{ 'reservaciones.lista-bancos'|translate }}
+          </div>
+      </div>
+    </form>  
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger btn-md" (click)="activeModal.dismiss('Cross click')">{{ 'reservaciones.cerrar'|translate }}</button>
+</div>

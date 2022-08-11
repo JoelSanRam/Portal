@@ -1,0 +1,447 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-4 mb-2">
+            <h5 class="title-page">{{ 'agencia.perfil-agencia'|translate }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-5 mb-4 mb-lg-0">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card-agency">
+                        <h6 class="title mb-4">{{ 'agencia.datos-agencia'|translate }}</h6>
+                        <form [formGroup]="agenciaDataForm" (ngSubmit)="guardarAgencia()">
+                            <div class="form-group">
+                                <label for="nomAgencia">{{ 'agencia.nombre-agencia'|translate }}:</label>
+                                <input id="nomAgencia" class="form-control" type="text" formControlName="nomAgencia" [ngClass]="{ 'is-invalid': submitted && d.nomAgencia.errors }" required>
+                                <div *ngIf="submitted && d.nomAgencia.errors" class="invalid-feedback">
+                                    <div *ngIf="d.nomAgencia.errors.required">{{ 'agencia.ingrese-nombre'|translate }}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dirAgencia">{{ 'agencia.direccion-agencia'|translate }}:</label>
+                                <input id="dirAgencia" class="form-control" type="text" formControlName="dirAgencia" [ngClass]="{ 'is-invalid': submitted && d.dirAgencia.errors }" required>
+                                <div *ngIf="submitted && d.dirAgencia.errors" class="invalid-feedback">
+                                    <div *ngIf="d.dirAgencia.errors.required">{{ 'agencia.ingrese-direccion'|translate }}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="pais">{{ 'agencia.pais'|translate }}:</label>
+                                        <select id="pais" class="form-control" formControlName="pais" (change)="changePais()">
+                                            <option *ngFor="let pais of listPaises" [ngValue]="pais.id">{{ pais.nombre }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="estado">{{ 'agencia.estado'|translate }}:</label>
+                                        <select id="estado" class="form-control" formControlName="estado" (change)="changeEstado()">
+                                            <option *ngFor="let estado of listEstados" [ngValue]="estado.id">{{ estado.nombre }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="ciudad">{{ 'agencia.ciudad'|translate }}:</label>
+                                        <select id="ciudad" class="form-control" formControlName="ciudad">
+                                            <option *ngFor="let ciudad of listCiudades" [ngValue]="ciudad.id">{{ ciudad.nombre }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="telefono">{{ 'agencia.telefono'|translate }}:</label>
+                                        <input id="telefono" class="form-control" type="tel" formControlName="telefono" [ngClass]="{ 'is-invalid': submitted && d.telefono.errors }" required>
+                                        <div *ngIf="submitted && d.telefono.errors" class="invalid-feedback">
+                                            <div *ngIf="d.telefono.errors.required">{{ 'agencia.ingrese-telefono'|translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="celular">Celular:</label>
+                                        <input id="celular" class="form-control" type="tel" formControlName="celular" [ngClass]="{ 'is-invalid': submitted && d.celular.errors }" required>
+                                        <div *ngIf="submitted && d.celular.errors" class="invalid-feedback">
+                                            <div *ngIf="d.celular.errors.required">{{ 'agencia.ingrese-telefono'|translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="nationality_search">{{ 'agencia.nacionalidad'|translate }}:</label>
+                                        <select id="nationality_search" class="form-control" formControlName="nationality_search">
+                                            <option *ngFor="let nationality_search of listNacionalidades" [ngValue]="nationality_search.code">{{ nationality_search.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="redSocial">{{ 'agencia.sitio-web'|translate }}:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1">https://</span>
+                                    <input id="redSocial" type="text" class="form-control prepend-input" aria-describedby="basic-addon1" formControlName="redSocial" [ngClass]="{ 'is-invalid': submitted && d.redSocial.errors }">
+                                    <div *ngIf="submitted && d.redSocial.errors" class="invalid-feedback">
+                                        <div *ngIf="d.redSocial.errors.required">{{ 'agencia.ingrese-sitio-web'|translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="facebook">{{ 'agencia.facebook'|translate }}:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fab fa-facebook-f mr-2"></i> /</span>
+                                            <input type="text" class="form-control prepend-input" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="linkedIn">{{ 'agencia.linkedin'|translate }}:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fab fa-linkedin-in mr-2"></i> /</span>
+                                            <input type="text" class="form-control prepend-input" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="instagram">{{ 'agencia.instagram'|translate }}:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fab fa-instagram mr-2"></i> /</span>
+                                            <input type="text" class="form-control prepend-input" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="twitter">{{ 'agencia.twitter'|translate }}:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fab fa-twitter mr-2"></i> /</span>
+                                            <input type="text" class="form-control prepend-input" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <h6 class="title">{{ 'agencia.datos-fiscales'|translate }}</h6>
+                            <div class="form-group">
+                                <label for="rfc">{{ 'agencia.rfc'|translate }}:</label>
+                                <input id="rfc" class="form-control" type="text" formControlName="rfc" [ngClass]="{ 'is-invalid': submitted && d.rfc.errors }">
+                                <div *ngIf="submitted && d.rfc.errors" class="invalid-feedback">
+                                    <div *ngIf="d.rfc.errors.required">{{ 'agencia.ingrese-rfc'|translate }}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="razonSocial">{{ 'agencia.razon-social'|translate }}:</label>
+                                <input id="razonSocial" class="form-control" formControlName="razonSocial" [ngClass]="{ 'is-invalid': submitted && d.razonSocial.errors }">
+                                <div *ngIf="submitted && d.razonSocial.errors" class="invalid-feedback">
+                                    <div *ngIf="d.razonSocial.errors.required">{{ 'agencia.ingrese-razon-social'|translate }}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="direccionFiscal">{{ 'agencia.direccion-fiscal'|translate }}:</label>
+                                <input id="direccionFiscal" class="form-control" formControlName="direccionFiscal" [ngClass]="{ 'is-invalid': submitted && d.direccionFiscal.errors }">
+                                <div *ngIf="submitted && d.direccionFiscal.errors" class="invalid-feedback">
+                                    <div *ngIf="d.direccionFiscal.errors.required">{{ 'agencia.ingrese-direccion-fiscal'|translate }}</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-green btn-block mt-5" type="submit">{{ 'agencia.GUARDAR-DATOS'|translate }}
+                                <span *ngIf="loading">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card-agency">
+                        <h6 class="title mb-4">{{ 'agencia.mapa'|translate }}</h6>
+                        <form>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        {{ 'agencia.latitud'|translate }}:
+                                        <label class="form-control ml-0" style="cursor: default;font-size: small;">{{agencia.lat}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        {{ 'agencia.longitud'|translate }}:
+                                        <label class="form-control ml-0" style="cursor: default;font-size: small;">{{agencia.lnt}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="{{ 'agencia.buscar'|translate }}" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-12">
+                                    <google-map 
+                                        class="map-info" 
+                                        [center]="center"
+                                        [zoom]="zoom">
+                                            <map-marker
+                                                [position]="center"
+                                                [options]="options"
+                                                (mapDragend)="markerDragEnd($event)"
+                                                >
+                                            </map-marker>
+                                    </google-map>
+                                </div>
+                            </div>
+                            <button class="btn btn-green btn-block mt-5" type="button" (click)="guardarCoordenadas()">{{ 'agencia.GUARDAR-DATOS'|translate }}
+                                <span *ngIf="loading2">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card-users">
+                        <h6 class="title">{{ 'agencia.administracion-usuarios'|translate }}</h6>
+                        <div class="row">
+                            <div class="col-12 my-2">
+                                <div class="float-right">
+                                    <button class="btn btn-blue" type="button" (click)="modalUsuarioForm(newUsuario)">{{ 'agencia.nuevo-usuario'|translate }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="overflow">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>{{ 'agencia.nombre'|translate }}</th>
+                                                <th>{{ 'agencia.usuario'|translate }}</th>
+                                                <th>{{ 'agencia.tipo-usuario'|translate }}</th>
+                                                <th>{{ 'agencia.permisos'|translate }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let usuario of usuarios; let e = index">
+                                                <td>{{ usuario.nombre }}</td>
+                                                <td>{{ usuario.usuario }}</td>
+                                                <td class="d-flex">
+                                                    <button class="btn mr-2" (click)="modalUsuarioForm(usuario)" [ngClass]="{ 'btn-green' : usuario.nivel>=50, 'btn-blue': usuario.nivel<=10 }" type="button">{{ usuario.tipousuario }}</button>
+                                                    <button class="btn btn-danger" type="button" (click)="confirmDeleteUsuario(usuario)"><i class="far fa-trash-alt"></i></button>
+                                                </td>
+                                                <td><button class="btn btn-outline-blue" type="button" [disabled]="usuario.nivel==50" (click)="modalPermisos(usuario)">{{ 'agencia.permisos'|translate }}</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf='permisosiframe==1'>
+                <div class="col-12 mb-4">
+                    <div class="card-users">
+                        <h6 class="title">{{ 'agencia.booking-motor'|translate }}</h6>
+                        <div class="row">
+                            <div class="col-12 my-2">
+                                <div>
+                                    {{ 'agencia.info-booking-motor'|translate }}.
+                                </div>
+                                <div class="float-right">
+                                    <button class="btn btn-blue" type="button" [routerLink]="['/iframe']">{{ 'agencia.administrar'|translate }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-customize">
+                        <h6 class="title mb-4">{{ 'agencia.personalizar-sitio'|translate }}</h6>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 d-flex flex-column justify-content-between mb-3 mb-lg-0">
+                                <h6>{{ 'agencia.LOGOTIPO-DOCUMENTOS'|translate }}</h6>
+                                <div class="logo-doc">
+                                    <img class="border-rounded" width="100%" height="130" [src]="agencia.agencia_logodocs" alt="Logotipo para documentos">
+                                    <div class="overlay"></div>
+                                    <a href="javascript:void(0)" class="overlay-text" (click)="modificarLogoDocs()"><i class="far fa-edit"></i> {{ 'agencia.cambiar-logo'|translate }}</a>
+                                </div>
+                                <small class="mt-2">900 x 450 px</small>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex flex-column justify-content-between">
+                                <h6>{{ 'agencia.LOGOTIPO-WEB'|translate }}</h6>
+                                <div class="logo-doc">
+                                    <img class="border-rounded" width="100%" height="100" [src]="agencia.agencia_logobanner" alt="Logotipo para header web">
+                                    <div class="overlay"></div>
+                                    <a href="javascript:void(0)" class="overlay-text" (click)="modificarLogoHeader()"><i class="far fa-edit"></i> {{ 'agencia.cambiar-logo'|translate }}</a>
+                                </div>
+                                <small class="mt-2">900 x 300 px</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h6> {{ 'agencia.PIE-FLYERS'|translate }}</h6>
+                                <div class="logo-doc">
+                                    <img class="border-rounded" width="100%" height="110" [src]="agencia.agencia_pie" alt="Pie de flyers">
+                                    <div class="overlay"></div>
+                                    <a href="javascript:void(0)" class="overlay-text" (click)="modificarPieFlyer()"><i class="far fa-edit"></i> {{ 'agencia.cambiar-pie-flyers'|translate }}</a>
+                                </div>
+                                <small class="mt-2">900 x 150 px</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <div class="mb-3">
+                                    <h6 class="title mb-3" for="my-select"> {{ 'agencia.TEMAS'|translate }}</h6>
+                                    <select id="my-select" [(ngModel)]="theme" class="form-control" (change)="checkTheme()">
+                                        <option value="default"> {{ 'agencia.DEFAULT'|translate }}</option>
+                                        <option value="custom"> {{ 'agencia.PERSONALIZADO'|translate }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <h6 class="title mb-3"> {{ 'agencia.COLORES'|translate }}</h6>
+                            <div class="px-2 px-lg-3 colors">
+                                <form [formGroup]="themeForm" (ngSubmit)="changeTheme()">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-12">
+                                            <label for="">{{ 'agencia.color-principal'|translate }}</label>
+                                            <input id="color" class="color-picker" type="color" formControlName="color" [value]="color">
+                                            <label for="color" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.color.value,
+                                            'color': t.txtColor.value }">{{ t.color.value }}</label>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <label for=""> {{ 'agencia.color-texto-principal'|translate }}</label>
+                                            <input id="txtColor" class="color-picker" type="color" formControlName="txtColor" [value]="txtColor">
+                                            <label for="txtColor" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.color.value,
+                                            'color': t.txtColor.value }" [style.background]="t.color.value" [style.color]="t.txtColor.value">{{ t.txtColor.value }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-12">
+                                            <label class="text-uppercase" for=""> {{ 'agencia.color-secundario'|translate }}</label>
+                                            <input id="colorMenu" class="color-picker" type="color" formControlName="colorMenu" [value]="colorMenu">
+                                            <label for="colorMenu" [ngClass]="{ 'disabled': disabled }"  class="fake-btn" [ngStyle]="{ 'background-color': t.colorMenu.value,
+                                            'color': t.txtColorMenu.value }">{{ t.colorMenu.value }}</label>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <label class="text-uppercase" for="">{{ 'agencia.color-texto-secundario'|translate }}</label>
+                                            <input id="txtColorMenu" class="color-picker" type="color" formControlName="txtColorMenu" [value]="txtColorMenu">
+                                            <label for="txtColorMenu" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorMenu.value,
+                                            'color': t.txtColorMenu.value }">{{ t.txtColorMenu.value }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-12">
+                                            <label class="color-btn-1" for="">{{ 'agencia.color-btn-1'|translate }}</label>
+                                            <input id="colorBtnInfo" class="color-picker" type="color" formControlName="colorBtnInfo" [value]="colorBtnInfo">
+                                            <label for="colorBtnInfo" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnInfo.value,
+                                            'color': t.txtInfo.value }">{{ t.colorBtnInfo.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-texto'|translate }}</label>
+                                            <input id="txtInfo" class="color-picker" type="color" formControlName="txtInfo" [value]="txtInfo">
+                                            <label for="txtInfo" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnInfo.value,
+                                            'color': t.txtInfo.value }">{{ t.txtInfo.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label class="text-uppercase" for="">{{ 'agencia.resultados'|translate }}</label>
+                                            <button class="btn btn-block btn-lg text-uppercase" [ngStyle]="{ 'background-color': t.colorBtnInfo.value,
+                                            'color': t.txtInfo.value }" type="button">{{ 'agencia.btn-1'|translate }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-btn-2'|translate }}</label>
+                                            <input id="colorBtnSuccess" class="color-picker" type="color" formControlName="colorBtnSuccess" [value]="colorBtnSuccess">
+                                            <label for="colorBtnSuccess" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnSuccess.value,
+                                            'color': t.txtSuccess.value }">{{ t.colorBtnSuccess.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-texto'|translate }}</label>
+                                            <input id="txtSuccess" class="color-picker" type="color" formControlName="txtSuccess" [value]="txtSuccess">
+                                            <label for="txtSuccess" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnSuccess.value,
+                                            'color': t.txtSuccess.value }">{{ t.txtSuccess.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label class="text-uppercase" for="">{{ 'agencia.resultados'|translate }}</label>
+                                            <button class="btn btn-block btn-lg text-uppercase" [ngStyle]="{ 'background-color': t.colorBtnSuccess.value,
+                                            'color': t.txtSuccess.value }" type="button">{{ 'agencia.btn-2'|translate }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-btn-3'|translate }}</label>
+                                            <input id="colorBtnPrimary" class="color-picker" type="color" formControlName="colorBtnPrimary" [value]="colorBtnPrimary">
+                                            <label for="colorBtnPrimary" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnPrimary.value,
+                                            'color': t.txtPrimary.value }">{{ t.colorBtnPrimary.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-texto'|translate }}</label>
+                                            <input id="txtPrimary" class="color-picker" type="color" formControlName="txtPrimary" [value]="txtPrimary">
+                                            <label for="txtPrimary" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnPrimary.value,
+                                            'color': t.txtPrimary.value }">{{ t.txtPrimary.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label class="text-uppercase" for="">{{ 'agencia.resultados'|translate }}</label>
+                                            <button class="btn btn-block btn-lg text-uppercase" [ngStyle]="{ 'background-color': t.colorBtnPrimary.value,
+                                            'color': t.txtPrimary.value }" type="button">{{ 'agencia.btn-3'|translate }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-btn-4'|translate }}</label>
+                                            <input id="colorBtnDanger" class="color-picker" type="color" formControlName="colorBtnDanger" [value]="colorBtnDanger">
+                                            <label for="colorBtnDanger" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnDanger.value,
+                                            'color': t.txtDanger.value }">{{ t.colorBtnDanger.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label for="">{{ 'agencia.color-texto'|translate }}</label>
+                                            <input id="txtDanger" class="color-picker" type="color" formControlName="txtDanger" [value]="txtDanger">
+                                            <label for="txtDanger" [ngClass]="{ 'disabled': disabled }" class="fake-btn" [ngStyle]="{ 'background-color': t.colorBtnDanger.value,
+                                            'color': t.txtDanger.value }">{{ t.txtDanger.value }}</label>
+                                        </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <label class="text-uppercase" for="">{{ 'agencia.resultados'|translate }}</label>
+                                            <button class="btn btn-block btn-lg text-uppercase" [ngStyle]="{ 'background-color': t.colorBtnDanger.value,
+                                            'color': t.txtDanger.value }">{{ 'agencia.btn-4'|translate }}</button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <button class="btn btn-green btn-block" type="submit">{{ 'agencia.GUARDAR-DATOS'|translate }}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner type="">
+    <!-- <img src='../../../assets/img/spinners/general.gif'/> -->
+    <img [src]="imgruta"/>
+</ngx-spinner>

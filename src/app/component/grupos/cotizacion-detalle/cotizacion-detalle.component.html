@@ -1,0 +1,94 @@
+<div class="modal-header">
+	<span class="text-2">{{ 'grupo.cotizacion'|translate }}&nbsp;</span><h4 class="modal-title">{{ cotizacion.folio }}</h4>
+  
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="container mb-4">
+		<h6 class="font-weight-bold mb-3">{{ 'grupo.detalles'|translate }}:</h6>
+			<div class="row mb-2">
+				<div class="col-5">{{ 'grupo.hotel'|translate }}: </div>
+				<div class="col-7">{{ cotizacion.hotel }}</div>
+			</div>
+			<div class="row mb-2">
+        <div class="col-12 mb-1">{{ 'grupo.fechas-tentativas'|translate }}:</div>
+        <div class="col-6">
+          {{ 'grupo.check-in'|translate }}
+        </div>
+        <div class="col-6">
+          {{ 'grupo.check-out'|translate }}
+        </div>
+        <div class="col-12" *ngFor="let f of cotizacion.JSON.fechas">
+          <div class="row">
+            <div class="col-6">{{ f.finicio }}</div>
+            <div class="col-6">{{ f.ffinal }}</div>
+          </div>
+        </div> 
+      </div>
+			<div class="row">
+				<div class="col-5"> {{ 'grupo.no-habitaciones'|translate }}:</div>
+				<div class="col-7">{{ cotizacion.JSON.nhab}}</div>
+			</div>
+			<div class="row">
+				<div class="col-5">{{ 'grupo.tipo-ocupacion'|translate }}:</div>
+				<div class="col-7">
+          <div *ngFor="let o of cotizacion.JSON.tipoHabs">
+            <div class="row">
+              <div class="col">
+                {{ o.tipo }}
+              </div>
+            </div>
+          </div>
+        </div>
+			</div>
+    </div>
+    <div class="container mb-4">
+      <h6 class="font-weight-bold mb-3">{{ 'grupo.otros-detalles'|translate }}:</h6>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.tipo-grupo'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.tipoGrupo}}<span *ngIf="cotizacion.JSON.tipoGrupo.otro">: {{cotizacion.JSON.tipoGrupo.otro}}</span> </div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.plan-alimentos'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.planes}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.menores'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.menores}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.observaciones'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.obser}}</div>
+      </div>
+    </div>
+    <div class="container" *ngIf="cotizacion.JSON.evento">
+      <h6 class="font-weight-bold mb-3">{{ 'grupo.evento'|translate }}:</h6>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.tipo-Evento'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.evento.tipoEvento}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.no-personas'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.evento.nPer}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.dia'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.evento.dia}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.hora'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.evento.hora}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.duracion'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.evento.duracion}}</div>
+      </div>
+      <div class="row">
+        <div class="col-5">{{ 'grupo.servicios'|translate }}:</div>
+        <div class="col-7">{{cotizacion.JSON.evento.servicios}}</div>
+      </div>
+    </div>
+</div>  
+	

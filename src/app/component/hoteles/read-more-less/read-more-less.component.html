@@ -1,0 +1,7 @@
+<div [ngClass]="{'isCollapsed': !isCollapsed, 'collapsed': isCollapsed}" class="readMore" >
+  <ng-content></ng-content>
+</div>
+<a (click)="isCollapsed = !isCollapsed" class="float-right" [hidden]="isReadMore">
+  <span *ngIf="isCollapsed" style="cursor: pointer;"><strong>{{ 'hotel.ver-mas'|translate }}</strong></span>
+  <span *ngIf="!isCollapsed" style="cursor: pointer;"><strong>{{ 'hotel.ver-menos'|translate }}</strong></span>
+</a>

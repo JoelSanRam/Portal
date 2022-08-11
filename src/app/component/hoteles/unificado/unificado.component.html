@@ -1,0 +1,180 @@
+
+<div class="container">
+    <div class="row my-2">
+        <div class="col-12">
+            <a class="text-6" [routerLink]="['/hoteles']" [queryParams]="queryParams"><< {{ 'hotel.volver-busqueda'|translate }} </a>
+        </div>
+    </div>
+<!-- HOTEL & ROOMS -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-8">
+          <!-- CARD HOTEL -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="row">
+                            <!-- HOTEL DESCRIPTION -->
+                            <div class="col-12 col-sm-8">
+                                <h5 class="text-1 text-uppercase font-weight-bold">{{ datoshotel.nombre_hotel }}</h5>
+                                <legend class="d-flex align-items-center text-6 m-0" *ngIf="datoshotel.dirHotel">
+                                    <i class="fas fa-map-marker-alt text-orange mr-2"></i> {{ datoshotel.dirHotel }}
+                                </legend>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-6" [innerHTML]="datoshotel.idCategoria | ratingHotel ">
+                                    </div>
+                                    <div class="col-6 m-0">
+                                        <p class="text-uppercase text-4 text-blue m-0">{{ datosplan.nombre_plan }}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-3">
+                                    <div class="col-6">
+                                        <p class="m-0 text-5">{{ 'hotel.check-in'|translate }}</p>
+                                        <p class="m-0 text-4 font-weight-bold text-uppercase">{{ formatDateSpanish(fechas.checkin) }}</p>
+                                        <!-- <p class="m-0 text-5">15:00</p> -->
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="m-0 text-5">{{ 'hotel.check-out'|translate }}</p>
+                                        <p class="m-0 text-4 font-weight-bold text-uppercase">{{ formatDateSpanish(fechas.checkout) }}</p>
+                                        <!-- <p class="m-0 text-5">12:00</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--! HOTEL DESCRIPTION -->
+                            <!-- HOTEL IMG -->
+                            <div class="col-12 mt-2 col-sm-4 pl-sm-0">
+                                <div class="position-relative">
+                                    <div class="img-hotel-book" [ngStyle]="{'background-image': 'url(' + datoshotel.urlLogo + ')' }"></div>
+                                    <!-- <span class="tag-promo">PROMOCIÓN</span> -->
+                                </div>
+                            </div>
+                            <!--! HOTEL IMG -->
+                        </div>
+                        <hr>
+                        <!-- Details -->
+                        <div class="row ht-details">
+                            <div class="col-12">
+                                <div class="row" *ngIf="politicas" >
+                                    <div class="col-12 mb-2">
+                                        <div class="pol text-6 pl-3">
+                                            <p class="m-0 font-weight-bold">{{ 'hotel.politicas-cancelacion'|translate }}</p>
+                                            <p class="m-0" [innerHTML]="politicas.description"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- pricetravel no devuelve informacion de hotel -->
+                                <!-- <div class="row" *ngIf="info_importante">
+                                    <div class="col-12">
+                                        <div class="imp text-6 pl-3">
+                                            <p class="m-0 font-weight-bold">Información importante del hotel:</p>
+                                            <p class="m-0" [innerHTML]="info_importante"></p>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <!--! Details -->
+                    </div>
+                </div>
+            </div>
+          <!--! CARD HOTEL -->
+          <!-- CARD ROOMS -->
+            <div class="row mb-3" *ngFor="let dh of habitaciones; let i = index; first as isFirstHab">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="d-flex align-items-center text-uppercase text-6 mb-2">
+                            <p class="text-blue mb-0 mr-3">{{ 'hotel.habitacion'|translate }} {{ i+1 }}</p>
+                            <p class="mb-0 mr-3 font-weight-bold" [innerHTML]="datosroom.nombre_room"></p>
+                            <span class="badge badge-orange mr-2">{{ dh.adultos | labelOcp }}</span>
+                            <span class="badge badge-orange mr-2" *ngIf="dh.menores.length>0">{{dh.menores.length}} MNR</span>
+                            <span class="badge badge-orange mr-2" *ngIf="dh.edadjuniors.length > 0">{{dh.edadjuniors.length}} JR</span>
+                            <!-- <span class="badge badge-orange mr-2" *ngIf="dh.extras > 0">{{dh.extras}}} EXT</span> -->
+                        </div>
+                        <form class="text-6" *ngIf="dh.chk!=true">
+                                <div *ngFor="let p of dh.paxes; let px = index; first as isFirstPax">
+                                    <div class="row mb-4">
+                                        <div *ngIf="isFirstPax && isFirstHab" class="col-12">
+                                            <span><strong>{{ 'hotel.titular'|translate }} *</strong></span>
+                                        </div>
+                                        <div class="col-xl-3 col-12">
+                                            <label class="mb-0">{{ 'hotel.titulo'|translate }}:</label>
+                                            <select class="form-control" [name]="'titulo' + px" [(ngModel)]="p.titulo">
+                                                <option value="" selected disabled>{{ 'hotel.seleccionar'|translate }}</option>
+                                                <option *ngIf="p.type == 'AD'" value="Sr.">{{ 'hotel.sr'|translate }}</option>
+                                                <option *ngIf=" p.type == 'AD'" value="Sra.">{{ 'hotel.sra'|translate }}</option>
+                                                <option value="Srita.">{{ 'hotel.srita'|translate }}</option>
+                                                <option value="Joven">{{ 'hotel.joven'|translate }}</option>
+                                                <option *ngIf=" p.type != 'AD'" value="Menor">{{ 'hotel.menor'|translate }}</option>
+                                                <option value="Otro">{{ 'hotel.otro'|translate }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xl-3 col-12">
+                                            <div class="form-group mb-0">
+                                                <label class="mb-0">{{ 'hotel.nombres'|translate }} <small>({{ p.type == 'AD'? 'ADULTO' : 'MENOR' }} {{ px+1 }})</small>:</label>
+                                                <input type="text" class="form-control" (keypress)="soloNumLetras($event)" [name]="'nombres' + px" [(ngModel)]="p.nombres">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-12">
+                                            <div class="form-group mb-0">
+                                                <label class="mb-0">{{ 'hotel.apellidos'|translate }} <small>({{ p.type == 'AD'? 'ADULTO' : 'MENOR' }} {{ px+1 }})</small>:</label>
+                                                <input type="text" class="form-control" (keypress)="soloNumLetras($event)" [name]="'apellidos' + px" [(ngModel)]="p.apellidos">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-12">
+                                            <label class="mb-0">{{ 'hotel.edad'|translate }}:</label>
+                                            <input [disabled]=" p.type != 'AD'" onkeypress="return /[0-9]/i.test(event.key)" type="number" class="form-control" [name]="'edad' + px" [(ngModel)]="p.edad  ">
+                                        </div>
+                                    </div>
+                                </div>
+                        </form>
+                        <div class="form-group mb-0">
+                            <label class="mb-0 text-blue">{{ 'hotel.peticiones-especiales-opcional'|translate }}:</label>
+                            <input type="text" class="form-control" [name]="'comments' + i" [(ngModel)]="dh.comments">
+                            <small>{{ 'hotel.peticiones-hotel'|translate }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="card-white">
+                <div class="form-group mb-0">
+                    <label class="mb-0 text-blue">Peticiones especiales de reserva (opcional):</label>
+                    <input type="text" class="form-control" [name]="comments" [(ngModel)]="comments">
+                    <small>Haremos llegar tus peticiones al hotel, sin embargo están sujetas a disponibilidad y podría haber cargos adicionales.</small>
+                </div>
+            </div> -->
+          <!--! CARD ROOMS -->
+        </div>
+        <div class="col-12 col-md-4 book-price">
+            <!-- CARD BOOK -->
+                <div class="row mb-3">
+                        <!-- TITLE -->
+                        <!-- <div class="col-12 mb-2 mb-md-0 text-md-right font-weight-bold">
+                            Total Precio Público
+                        </div> -->
+                    <!--! TITLE -->
+                    <div class="col-12 mb-3">
+                        <div class="card-white">
+                            <div class="text-right">
+                                <!-- <h5 class="font-weight-bold">Total Precio Público</h5> -->
+                                <span class="">{{ 'hotel.total-estancia'|translate }}</span>
+                                <div class="text-1 text-orange font-weight-bold">
+                                    <span class="text-blue"><span class="color-currency">{{user.currency}}</span> {{ calculateTDC(detalle_reserva.importe) | currencyFormat }}</span>
+                                </div>
+                                <p class="text-uppercase text-6 mb-0" [innerHTML]="datosroom.nombre_room"></p>
+                                <span class="text-blue">{{ datosplan.nombre_plan }}</span>
+                            </div>
+                            <div class="mb-3 ht-change">
+                                <p class="ht-details text-6 m-0" *ngIf="user.currency !== detalle_reserva.exchange.currency">*{{ 'hotel.reserva-efectuada'|translate }} ${{detalle_reserva.importe}} {{detalle_reserva.exchange.currency}}, {{ 'hotel.precio-reflejado'|translate }}</p>
+                            </div>
+                            <div class="pt-2">
+                                <input type="checkbox" name="terms" id="terms" (change)="toggleTerms($event)">
+                                <label for="terms" class="text-blue text-6 font-weight-bold"><a href="javascript:0" (click)="TeminosYCondiciones()">{{ 'hotel.terminos-condiciones'|translate }} </a></label>
+                            </div>
+                            <button type="button" class="btn btn-blue btn-block" [disabled]="!aceptTerms" (click)="confirmarBook()">{{ 'hotel.RESERVAR'|translate }}</button>
+                            <!-- <button type="button" class="btn btn-orange btn-block">PAGAR AHORA</button> -->
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

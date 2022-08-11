@@ -1,0 +1,110 @@
+.profile-card {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1.5em 3em;
+    // height: 600px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    & .title {
+        font-weight: bold;
+    }
+    & .body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        & .profile-pic {
+            position: relative;
+            & img {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                margin-bottom: 10px;
+                object-fit: cover;
+            }
+            & .overlay {
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                top: 0;
+                left: 0;
+                background: rgba(0, 0, 0, 0);
+                transition: background 0.5s ease;
+                border-radius: 50%;
+            }
+            & .overlay-text {
+                color: $white;
+                font-size: 14px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                opacity: 0;
+                transition: opacity .35s ease;
+            }
+            &:hover {
+                & .overlay {
+                    background: rgba(0, 0, 0, .5);
+                }
+                & .overlay-text {
+                    opacity: 1;
+                }
+            }
+        } 
+        & .name-user {
+            font-family: 'Muli-SemiBold';
+            font-size: 18px;
+        }
+        & .level {
+            font-family: 'Muli-SemiBold';
+            text-transform: uppercase;
+            font-size: 18px;
+            &.gold {
+                color: gold;
+            }
+            &.slvr {
+                color: silver;
+            }
+            &.dmon {
+                color: cyan;
+            }
+            &.blck {
+                color: black;
+            }
+        }
+        .location {
+            font-size: 14px;
+            color: $colorPrimarioUno;
+            margin-top: 1rem;
+            margin-bottom: 4rem;
+        }
+    }
+}
+
+.saldo-card{
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1.5em 2em;
+    & .title {
+        margin-bottom: 2px;
+        font-weight: bold;
+    }
+    & .saldo {
+        font-family: 'Muli-SemiBold';
+        font-size: 25px;
+    }
+}
+
+.sales-card {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1.5em 2em;
+    & .title {
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+}

@@ -1,0 +1,156 @@
+<form class="row" [formGroup]="trasladosForm" (ngSubmit)="onBuscarTraslado()">
+    <div class="col-md-12">
+        <div class="row buscador-style">
+            <div class="col-12 col-lg-3 destino lateral">
+                <div class="form-row">
+                    <div class="mr-3">
+                        <input id="one_way" type="radio" value="one_way" formControlName="tipo_viaje" (change)="changeTipoViaje($event)" checked>
+                        <label for="one_way" class="">{{ 'buscador.traslados.one-way'|translate }}</label>
+                    </div>
+                    <div class="">
+                        <input id="round_trip" type="radio" value="round_trip" formControlName="tipo_viaje" (change)="changeTipoViaje($event)">
+                        <label for="round_trip" class="">{{ 'buscador.traslados.roundtrip'|translate }}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <select class="custom-select" formControlName="tipo_traslado" #tp (change)="changeTipoTraslado(tp.value)">
+                        <option value="AH">{{ 'buscador.traslados.aeropuerto-hotel'|translate }}</option>
+                        <option value="HA">{{ 'buscador.traslados.hotel-aeropuerto'|translate }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-lg-9 align-self-end destino lateral">
+                <div class="form-row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 form-group">
+                        <label class="label_search" for="">{{ 'buscador.traslados.destino'|translate }}</label>
+                        <Select ngDefaultControl formControlName="lugar" required class="custom-select" (change)="getAirports()">
+                            <option disabled [selected]="true" [value]="0">{{ 'buscador.traslados.selecciona-destino'|translate }}</option>
+                            <option [value]="d.idDestino" *ngFor="let d of destinos" [selected]="destinoSelected == d.idDestino">{{ d.destino }}</option>
+                        </Select>
+                        <div *ngIf="submitted && require.Errorlugar == true" class="invalid-feedback d-block">
+                            {{ 'buscador.traslados.selecciona-destino'|translate }}
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 form-group" *ngIf="tipo_tra == 'AH' || tipo_viaj == 'round_trip'">
+                        <label class="label_search" for="">{{ 'buscador.traslados.aeropuerto'|translate }}</label>
+                        <select class="custom-select" ngDefaultControl formControlName="aeropuerto">
+                            <option disabled [selected]="true" [value]="0">{{ 'buscador.traslados.selecciona-aeropuerto'|translate }}</option>
+                            <option *ngFor="let a of aeropuertos" [value]="a.idAeropuerto">{{ a.nombre }}</option>
+                        </select>
+                        <div *ngIf="submitted && require.ErrorAero == true" class="invalid-feedback d-block">
+                            {{ 'buscador.traslados.selecciona-aeropuerto'|translate }}
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 form-group">
+                        <label class="label_search" for="">{{ 'buscador.traslados.hotel'|translate }}</label>
+                        <input ngx-google-places-autocomplete type="text" #placesRef="ngx-places" placeholder="{{ 'buscador.traslados.encuentra-hotel'|translate }}" formControlName="hotelLabel" class="form-control input-hotel" (onAddressChange)="handleAddressChange($event)">
+                        <div *ngIf="submitted && f.hotelLabel.errors" class="invalid-feedback d-block">
+                            {{ 'buscador.traslados.selecciona-hotel'|translate }}
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 form-group" *ngIf="tipo_tra == 'HA' && tipo_viaj !== 'round_trip'">
+                        <label class="label_search" for="">{{ 'buscador.traslados.aeropuerto'|translate }}</label>
+                        <select class="custom-select" ngDefaultControl formControlName="aeropuerto">
+                            <option disabled [selected]="true" [value]="0">{{ 'buscador.traslados.selecciona-aeropuerto'|translate }}</option>
+                            <option *ngFor="let a of aeropuertos" [value]="a.idAeropuerto">{{ a.nombre }}</option>
+                        </select>
+                        <div *ngIf="submitted && require.ErrorAero == true" class="invalid-feedback d-block">
+                            {{ 'buscador.traslados.selecciona-aeropuerto'|translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-6 col-4" (click)="dpsf.show()">
+                            <label class="label_search">
+                                {{ 'buscador.traslados.fecha-servicio'|translate }}
+                            </label>
+                            <div class="d-flex">
+                                <div class="numbers-search">
+                                    {{ diaServicio | lpad: 2 }}
+                                </div>
+                                <div class="InOut align-self-center">
+                                    <p class="m-0">{{ mesServicio }}</p>
+                                    <p class="m-0">{{ anioServicio }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-4" *ngIf="tipo_viaj == 'round_trip'" (click)="dpsr.show()">
+                            <label class="label_search">
+                                {{ 'buscador.traslados.fecha-regreso'|translate }}
+                            </label>
+                            <div class="d-flex">
+                                <div class="numbers-search">
+                                    {{ diaRegreso | lpad: 2 }}
+                                </div>
+                                <div class="InOut align-self-center">
+                                    <p class="m-0">{{ mesRegreso }}</p>
+                                    <p class="m-0">{{ anioRegreso }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-auto">
+                    <input type="text"
+                    formControlName="fechaServicio"
+                    #dpsf="bsDatepicker"
+                    placeholder="Datepicker"
+                    class="form-control noShowDP"
+                    (bsValueChange)="ChangeFechaServicio($event)"
+                    [bsConfig]="bsConfig"
+                    bsDatepicker>
+                </div>
+                <div class="m-auto">
+                    <input type="text"
+                    formControlName="fechaRegreso"
+                    #dpsr="bsDatepicker"
+                    placeholder="Datepicker"
+                    class="form-control noShowDP"
+                    (bsValueChange)="ChangeFechaRegreso($event)"
+                    [bsConfig]="bsConfig"
+                    bsDatepicker>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 lateral-4">
+                <div class="d-flex justify-content-center">
+                    <div class="mr-4">
+                        <label class="label_search mb-0">{{ 'buscador.traslados.adultos'|translate }}</label>
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex flex-column mr-2">
+                                <div class="btn-pax btn-plus" (click)="addRemoveAdulto(f.adultos.value,'add')">+</div>
+                                <div class="btn-pax btn-minus mt-1" (click)="addRemoveAdulto(f.adultos.value,'rm')">-</div>
+                            </div>
+                            <span class="numbers-search">
+                                <p class="m-0">{{ f.adultos.value }}</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label_search mb-0">{{ 'buscador.traslados.menores'|translate }}</label>
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex flex-column mr-2">
+                                <div class="btn-pax btn-plus" (click)="addRemoveMenor(f.menores.value,'add')">+</div>
+                                <div class="btn-pax btn-minus mt-1" (click)="addRemoveMenor(f.menores.value,'rm')">-</div>
+                            </div>
+                            <span class="numbers-search">
+                                <p class="m-0">{{ f.menores.value }}</p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-2 align-self-center">
+                <button [disabled]="loading" class="btn btn-block btn-danger" type="submit">
+                    <span>{{ 'buscador.traslados.buscar'|translate }} </span><i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <p style="font-weight: bold;">{{ 'buscador.traslados.importante'|translate }}</p>
+    </div>
+</form>

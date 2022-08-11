@@ -1,0 +1,43 @@
+<div class="reservas-card">
+  <div class="row">
+      <div class="col-12 d-flex justify-content-between">
+          <div class="title">
+            {{ 'reservaciones.ultimas-reservaciones'|translate }}
+          </div>
+          <div>
+              <a class="float-right" [routerLink]="['/reservaciones']" >{{ 'reservaciones.ver-todas'|translate }}</a>
+          </div>
+      </div>
+  </div>
+  <div class="overflow">
+    <div class="sin-reservas" *ngIf="!ultimasReservas?.length">{{ 'reservaciones.no-reservas'|translate }}</div>
+      <table>
+          <tbody>
+              <tr *ngFor="let r of ultimasReservas; index as i">
+                  <td>
+                      <div class="d-flex align-items-center">
+                          <span class="badge-rounded badge-grey mr-2">{{ i + 1 }}</span>
+                          <span class="badge-rounded" [ngClass]="{ 'badge-green': r.datosreserva.status == 'CO', 'badge-blue': r.datosreserva.status == 'PA', 'badge-red': r.datosreserva.status == 'RE' || r.datosreserva.status == 'CA', 'badge-yellow': r.datosreserva.status == 'PE' }">
+                            {{ r.datosreserva.status }}</span>
+                      </div>
+                      <div class="font-weight-bold my-1">{{ r.datosreserva.idReserva }}</div>
+                      <div class="date">{{ r.datosreserva.fecha_reserva }}</div>
+                  </td>
+                  <td class="">
+                      <div class="font-weight-bold">{{r.datosreserva.nombre_hotel}}</div>
+                      <div>{{r.datosreserva.pax}}</div>
+                      <small class="d-block">{{r.datosreserva.nombre_room}}</small>
+                      <small class="text-orange">{{r.datosreserva.nombre_plan}}</small>
+                      <small class="d-block">Agente: <b>{{r.datosreserva.nombre_usuario}}</b></small>
+                  </td>
+                  <td class="">
+                      <div>{{r.datosreserva.fecha_limite_agencia }}</div>
+                      <div class="font-weight-bold">
+                          <span class="text-orange">{{ r.datosreserva.currency_agencia }}</span><span class="text-blue"> {{ r.datosreserva.importe_publico | currencyFormat }}</span>
+                      </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</div>

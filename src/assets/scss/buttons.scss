@@ -1,0 +1,200 @@
+.btn {
+    font-family: $font-primary;
+    border-radius: $border-radius;
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+    
+.disabled {
+    cursor: not-allowed !important;
+}
+
+
+.btn-green {
+    background-color: $successColor;
+    color: $successColorTxt;
+    &:hover {
+        color: $successColorTxt;
+        background-color: $successColor;
+        filter: brightness(90%)
+    }
+    &:focus {
+        color: $successColorTxt;
+        background-color: $successColor;
+        filter: brightness(80%)
+    }
+}
+.btn-blue {
+    background-color: $infoColor;
+    color: $infoColorTxt;
+    &:hover {
+        color: $infoColorTxt;
+        background-color: $infoColor;
+        filter: brightness(90%)
+    }
+    &:focus {
+        color: $infoColorTxt;
+        background-color: $infoColor;
+        filter: brightness(80%)
+    }
+}
+.btn-orange {
+    background-color: $warningColor;
+    color: $warningColorTxt;
+    &:hover {
+        color: $warningColorTxt;
+        background-color: $warningColor;
+        filter: brightness(90%)
+    }
+    &:focus {
+        color: $warningColorTxt;
+        background-color: $warningColor;
+        filter: brightness(80%)
+    }
+}
+.btn-red {
+    background-color: $dangerColor;
+    color: $dangerColorTxt;
+    &:hover {
+        color: $dangerColorTxt;
+        background-color: $dangerColor;
+        filter: brightness(90%)
+    }
+    &:focus {
+        color: $dangerColorTxt;
+        background-color: $dangerColor;
+        filter: brightness(80%)
+    }
+}
+.btn-yellow {
+    background-color: $colorPrimarioTres;
+    color: $white;
+    &:hover {
+        color: $white;
+        background-color: $colorPrimarioTres;
+    }
+    &:focus {
+        color: $white;
+        background-color: $colorPrimarioTresOscuro;
+    }
+}
+.btn-neutral {
+    background-color: $colorSombraDos;
+    color: $white;
+    &:hover {
+        color: $white;
+        background-color: $colorSombraHover;
+    }
+    &:focus {
+        color: $white;
+        background-color: $colorSombraTres;
+    }
+}
+
+.btn-white {
+    background-color: $white;
+    border: 1px solid $black;
+    color: $black;
+    &:hover {
+        color: $black;
+        background-color: #f8f8f8;
+    }
+    &:focus {
+        color: $black;
+        background-color: #f3f3f3;
+    }
+}
+
+.btn-grey {
+    background-color: $colorSombraUno;
+    color: $black;
+    &:hover {
+        color: $black;
+        background-color: $colorSombraHover;
+    }
+    &:focus {
+        color: $black;
+        background-color: $colorSombraTres;
+    }
+}
+
+.btn-outline-blue {
+    background-color: $white;
+    border: 1px solid $infoColor;
+    color: $infoColor;
+    &:hover {
+        color: $infoColor;
+        background-color: #f1f8fd;
+    }
+    &:focus {
+        color: $infoColor;
+        background-color: #d0e4f8;
+    }
+}
+.btn-outline-red {
+    background-color: $white;
+    border: 1px solid $dangerColor;
+    color: $dangerColor;
+    &:hover {
+        color: $dangerColor;
+        background-color: #fff0f0;
+    }
+    &:focus {
+        color: $dangerColor;
+        background-color: #fcd0d0;
+    }
+}
+.btn-outline-yellow {
+    background-color: $white;
+    border: 1px solid $colorPrimarioTres;
+    color: $colorPrimarioTres;
+    &:hover {
+        color: $colorPrimarioTres;
+        background-color: #fffbf4;
+    }
+    &:focus {
+        color: $colorPrimarioTres;
+        background-color: #fff0d8;
+    }
+}
+.btn-outline-neutral {
+    background-color: $white;
+    border: 1px solid $colorSombraDos;
+    color: $colorSombraDos;
+    &:hover {
+        color: $colorSombraDos;
+        background-color: #f8f8f8;
+    }
+    &:focus {
+        color: $colorSombraDos;
+        background-color: #d8d8d8;
+    }
+}
+.btn-outline-green {
+    background-color: $white;
+    border: 1px solid $successColor;
+    // color: $colorSecundarioDos;
+    color: $black;
+    &:hover {
+        color: $black;
+        background-color: #f5fdfb;
+    }
+    &:focus {
+        color: $black;
+        background-color: #d7f4ed;
+    }
+}
+.btn-outline-orange {
+    background-color: $white;
+    border: 1px solid $warningColor;
+    color: $warningColor;
+    &:hover {
+        color: $warningColor;
+        background-color: #fff6f0;
+    }
+    &:focus {
+        color: $warningColor;
+        background-color: #ffdfd0;
+    }
+}

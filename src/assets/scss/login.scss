@@ -1,0 +1,142 @@
+@import '../../styles.scss';
+.formulario{
+    background-color: #fff;
+}
+.padding-form-login{
+    padding-bottom:12px;
+    padding-top:12px;
+}
+.padding-form-{
+    padding: 12px 0px;
+}
+.form-login  {
+    border-radius: 4px;
+    font-family: 'Muli-Regular';
+}
+.login-links{
+    font-family: "Muli-Regular";
+    cursor: pointer;
+    color: #9E9E9E !important;
+    font-size: 12px;
+    text-align: right;
+    @include media-breakpoint-down(xs) {
+        text-align: center;
+    }
+    a{ color: #9E9E9E !important; }
+    a:hover{ color: #424242 !important; }
+}
+.sn-links{
+    font-family: 'Muli-Regular';
+    font-size: 12px;
+    a{ color: #9E9E9E !important; }
+    a:hover{ color: #424242 !important; }
+}
+.labels-login{
+    padding: 0;
+    text-align: right;
+    @include media-breakpoint-down(sm) {
+        padding-left: 15px;
+        text-align: left;
+    }
+    @include media-breakpoint-down(xs) {
+        padding-left: 15px;
+        text-align: left;
+    }
+}
+@mixin centerer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.img-fond-log{
+    background-image: url('/assets/img/fondo-login.jpg');
+    background-position: center;
+    background-size: cover;
+}
+.hola{
+    font-family: 'Muli-Bold';
+    padding-bottom: 25px;
+    @include media-breakpoint-down(md) {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+    @include media-breakpoint-down(xs) {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+}
+.logo-movil{
+    padding-bottom: 40px;
+}
+.icon-input{
+    background-color: #fff;
+    border-right: 0;
+    font-size: 20px;
+}
+.social-icon-movil{
+    padding-top: 50px;
+}
+
+.overflow{
+    overflow-y: scroll;
+}
+.signup {
+    h2{
+        font-family: 'Muli-SemiBold';
+        color: #424242;
+    }
+
+    .soc-net{
+        span{
+            &.fb{
+                background-color: #0098e8;
+            }
+            &.tw{
+                background-color: #00bed8;
+            }
+            &.in{
+                background-color: #fa54a0;
+            }
+            &.yt{
+                background-color: #ff3232;
+            }
+            margin-right: 10px;
+            border-radius: 4px;
+            width: 40px;
+            padding:0;
+            color: #fff;
+        }
+        input{
+            border-radius: 4px;
+        }
+    }
+    .anniv{
+        span{
+            background-color: #009ff1;
+            border: 0;
+            color: #fff;
+        }
+        input{
+            background-color: #009ff1;
+            border: 0;
+            color: #fff;
+            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color :#fff;
+                opacity: 1; /* Firefox */
+            }
+            &::-ms-input-placeholder { /* Microsoft Edge */
+                color :#fff;
+            }
+        }
+    }
+}
+.inputInValidFormat{
+    display: block !important;
+}
+.logo-agency{
+    width: 20%;
+    min-width: 280px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="modal-title ms-2 my-1" id="staticBackdropLabel">Pagar reserva</h5>
+            </div>
+            <div class="col-md-1 mb-1 mt-2">
+                <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"
+                    style="background-color: transparent;border-radius: none; border-color: transparent;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body" style="height: 1090px;">
+    <div class="col-12 text-center">
+        <ng-template #linkpay>
+            {{ 'vuelos.comparte-link-pago'|translate }}
+        </ng-template>
+        <button class="btn btn-primary mt-3" [tooltip]="linkpay" (click)="clipboardLinkk()">{{
+            'vuelos.liga-pago'|translate }} <i class="fa fa-credit-card"></i></button>
+    </div>
+    <iframe [src]="iframeUrl" width="100%" height="100%" frameborder="0" allowfullscreen="0" scrolling="no"
+        class="mt-4"></iframe>
+</div>

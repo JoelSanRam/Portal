@@ -1,0 +1,145 @@
+.card-agency {
+    background-color: $white;
+    padding: 1.5rem 2rem;
+    border-radius: $border-radius;
+    & .title {
+        font-size: 1.15rem;
+        font-family: $font-semiBold;
+    }
+    & label {
+        margin-left: 15px;
+    }
+    & input, select {
+        border-radius: $border-radius;
+    }
+
+    & .prepend-input {
+        border-radius: 0 $border-radius $border-radius 0;
+        border-left: none;
+        &:focus {
+            border: 1px solid #5499E5;
+        }
+    }
+    & .input-group-text {
+        border-right: none;
+        border-radius: $border-radius 0 0 $border-radius;
+        background-color: $white;
+    }
+}
+
+.card-users {
+    background-color: $white;
+    padding: 1.5rem 2rem;
+    border-radius: $border-radius;
+    // max-height: 430px;
+    & .title {
+        font-size: 1.15rem;
+        font-family: $font-semiBold;
+    }
+    
+    & .overflow {
+        max-height: 350px;
+        overflow: auto;
+        // &::-webkit-scrollbar {
+        //     width: 5px;
+        // }
+        // &::-webkit-scrollbar-thumb {
+        //     background-color: $colorSombraDos;
+            // border-radius: 8px;
+        // }
+        // &::-webkit-scrollbar-track {
+        //     background-color: $colorSombraUno;
+            // border-radius: 8px;
+        // }
+    }
+    & table {
+        width: 100%;
+        & thead > tr > th {
+            font-family: $font-bold;
+            font-size: .9rem;
+            // margin-left: 15px;
+            padding: 15px 0;
+        }
+        & tbody {
+            & tr {
+                &:nth-child(odd){
+                    background-color: $colorSombraUno;
+                    border-radius: $border-radius;
+                }
+            }
+    
+            & td {
+                padding: 15px;
+                font-size: .9rem;
+                &:first-child {
+                    border-top-left-radius: $border-radius;
+                    border-bottom-left-radius: $border-radius;
+                }
+                &:last-child {
+                    border-top-right-radius: $border-radius;
+                    border-bottom-right-radius: $border-radius;
+                }
+            }
+        }
+    }
+}
+
+.card-customize {
+    background-color: $white;
+    padding: 1.5rem 2rem;
+    border-radius: $border-radius;
+    & .title {
+        font-size: 1.15rem;
+        font-family: $font-semiBold;
+    }
+    & .logo-doc {
+        // border-radius: $border-radius;
+        position: relative;
+        & .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background 0.5s ease;
+            border-radius: $border-radius;
+        }
+        & .overlay-text {
+            color: $white;
+            font-size: 14px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+        &:hover {
+            & .overlay {
+                background: rgba(0, 0, 0, .5);
+            }
+            & .overlay-text {
+                opacity: 1;
+            }
+        }
+    }
+    & input, select {
+        border-radius: $border-radius;
+    }
+    & .colors{
+        & label {
+            font-size: .9rem;
+        }
+        & .row {
+            margin-bottom: 1.5rem;
+            & button {
+                width: 100%;
+                font-size: 1rem;
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+$lines-to-show: 1;
+
+div.collapsed{
+    display: -webkit-inline-box;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 80%;
+}
+.readMore{
+    margin-top: -3px;
+}

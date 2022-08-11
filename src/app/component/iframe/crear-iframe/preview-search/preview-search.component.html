@@ -1,0 +1,80 @@
+<div class="preview-search" [ngClass]="{'horizontal-preview': position == 'H', 'vertical-preview': position == 'V' }" [ngStyle]="{'background': colors.buscador.value.fondo}">
+  <div class="row">
+    <div class="col-12" *ngIf="position === 'H'">
+      <ul class="nav nav-tabs d-flex align-items-center">
+        <li class="nav-item" *ngIf="modulos?.hoteles"><a href="javascrip:voip(0)" [ngStyle]="{'color': colors.buscador.value.texto}" class="nav-link active">{{ 'iframe.hotel'|translate }}</a></li>
+        <li class="nav-item" *ngIf="modulos?.tours"><a href="javascrip:voip(0)" [ngStyle]="{'color': colors.buscador.value.texto}" class="nav-link">{{ 'iframe.tours'|translate }}</a></li>
+        <li class="nav-item" *ngIf="modulos?.traslados"><a href="javascrip:voip(0)" [ngStyle]="{'color': colors.buscador.value.texto}" class="nav-link">{{ 'iframe.traslados'|translate }}</a></li>
+        <li class="nav-item" *ngIf="modulos?.circuitos"><a href="javascrip:voip(0)" [ngStyle]="{'color': colors.buscador.value.texto}" class="nav-link">{{ 'iframe.circuitos'|translate }}</a></li>
+      </ul>
+    </div>
+    <div class="col-12 select-sec px-4 pt-2" *ngIf="position === 'V'">
+      <select class="custom-select" id="inputGroupSelect01">
+          <option *ngIf="modulos?.hoteles"  value="hotel"selected>{{ 'iframe.hotel'|translate }}</option>
+          <option *ngIf="modulos?.tours" value="tour">{{ 'iframe.tours'|translate }}</option>
+          <option *ngIf="modulos?.traslados" value="traslados">{{ 'iframe.traslados'|translate }}</option>
+          <option *ngIf="modulos?.circuitos" value="circuitos">{{ 'iframe.circuitos'|translate }}</option>
+          <!-- <option value="3">SEGUROS</option>
+          <option value="3">PAQUETES</option> -->
+      </select>
+    </div>
+  </div>
+  <!-- BUSCADOR -->
+  <div class="" [ngClass]="{'horizontal-position': position == 'H', 'vertical-position': position == 'V' }">
+    <div class="accommodation">
+      <div class="form-group">
+        <!-- <label [ngStyle]="{'color': colors.buscador.value.texto}" class="label_search">Destino / Hotel</label> -->
+        <label [ngStyle]="{'color': colors.buscador.value.texto}" class="label_search">{{ 'iframe.destino'|translate }}</label>
+        <div class="input-group">
+            <input type="text" class="form-control" readonly>
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="check">
+      <div class="d-flex justify-content-around py-2" [ngStyle]="{'color': colors.buscador.value.texto}">
+        <div class="pr-1">
+          <div class="label_search" [ngStyle]="{'color': colors.buscador.value.texto}">
+            {{ 'iframe.checkin'|translate }}
+          </div>
+          <div class="date">
+            <div class="day">06</div>
+            <div class="month">Junio</div>
+            <div class="year">2020</div>
+          </div>
+
+        </div>
+        <div class="pl-1">
+            <div class="label_search" [ngStyle]="{'color': colors.buscador.value.texto}">
+              Check Out
+            </div>
+            <div class="date">
+              <div class="day">12</div>
+              <div class="month">Junio</div>
+              <div class="year">2020</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="rooms">
+      <label [ngStyle]="{'color': colors.buscador.value.texto}" class="label_search">{{ 'iframe.habitaciones'|translate }}</label>
+      <div class="d-flex justify-content-center w-100">
+          <button class="btn">
+            <i class="fa fa-bed"></i> 1 <i class="fa fa-user"></i> 2
+          </button>
+      </div>
+    </div>
+    <div class="search">
+      <label [ngStyle]="{'color': colors.buscador.value.texto}" class="label_search">{{ 'iframe.nacionalidad-pasajero'|translate }}</label>
+      <div class="d-flex">
+        <select class="form-control mr-2" disabled>
+          <option selected>México</option>
+        </select>
+        <!-- <button class="btn btn-search" [ngStyle]="{'background-color': colors.botones.value.buscar.fondo, 'color': colors.botones.value.buscar.texto}"><i class="fa fa-search"></i></button> -->
+        <button class="btn btn-search" [ngStyle]="{'background-color': colors.botones.value.buscar.fondo, 'color': colors.botones.value.buscar.texto}" ><span class="d-flex d-md-none text-uppercasse">{{ 'iframe.buscar'|translate }} </span><i class="fa fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+</div>

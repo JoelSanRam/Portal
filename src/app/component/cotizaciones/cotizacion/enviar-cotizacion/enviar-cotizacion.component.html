@@ -1,0 +1,34 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ 'cotizaciones.generar-pdf'|translate }}</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="formCotizacion" (ngSubmit)="guardarCotizacion()">
+        <div class="form-group">
+            <label for="destinatario">{{ 'cotizaciones.dirigido-a'|translate }}:</label>
+            <input id="destinatario" class="form-control" type="text" formControlName="dirigido" [ngClass]="{ 'is-invalid': submitted && f.dirigido.errors }">
+            <div *ngIf="submitted && f.dirigido.errors" class="invalid-feedback">
+                <div *ngIf="f.dirigido.errors.required">{{ 'cotizaciones.ingresa-nombre'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">{{ 'cotizaciones.email-cliente'|translate }}:</label>
+            <input id="email" class="form-control" type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.email">{{ 'cotizaciones.mail-valido'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="my-textarea">{{ 'cotizaciones.observaciones'|translate }}:</label>
+            <textarea id="my-textarea" class="form-control" formControlName="observaciones" rows="5"></textarea>
+        </div>
+        <button class="btn btn-green btn-block" type="submit">{{ 'cotizaciones.generar-pdf'|translate }}
+            <span *ngIf="loading">
+                <i class="fa fa-spinner fa-spin"></i>
+            </span>
+        </button>
+    </form>
+</div>  
+	

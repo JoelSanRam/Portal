@@ -1,0 +1,26 @@
+<div class="modal-header">
+	<h4 class="modal-title">Liga de pago</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="container">
+        <div class="row" style="margin-bottom: 10px; text-align: right;">
+            <a href="javascript:void(0);" class="btn-copiar-liga" (click)="copyToClipboard(liga)" style="border: 1px solid;
+                padding: 6px 15px 6px 15px;
+                background-color: green;
+                border-radius: 10px;
+                color: #fff;
+                position: relative;">Copiar liga de pago </a> 
+        </div>
+        <div class="row">
+            <iframe [src]="urlSafe" width="100%" style="border: 1px solid #D7D7D7;" height="1000" frameborder="0" allowfullscreen="0" scrolling="yes"></iframe>
+        </div>
+
+		
+	</div>
+</div>  
+<div class="modal-footer">
+    <button class="btn btn-danger btn-md" (click)="activeModal.close('Cross click')">Cerrar</button>
+</div>

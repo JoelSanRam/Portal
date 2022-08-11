@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{textomodal}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+
+      <div class="form-group">
+        <div>
+          <div *ngIf="tipo==1">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="todosplan" (click)="changeplan()" [(ngModel)]="todosplan">
+              <label class="form-check-label" for="todosplan">
+                {{ 'hotel.todos-planes'|translate }}
+              </label>
+            </div>
+            <div class="form-check" *ngFor="let arr of arregloprincipal; let i = index">
+              <input class="form-check-input" type="checkbox" id="chk_plan_{{i}}" (click)="checkPlanes($event.target.checked,arr.idPlan)" [checked]="arr.selected">
+              <label class="form-check-label" for="chk_plan_{{i}}">
+                {{arr.plan}}
+              </label>
+            </div>
+          </div>
+          <div *ngIf="tipo==2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="todascat" (click)="changeplan()" [(ngModel)]="todascat">
+              <label class="form-check-label" for="todascat">
+                {{ 'hotel.todas-categorias'|translate }}
+              </label>
+            </div>
+            <div class="form-check" *ngFor="let arr of arregloprincipal; let i = index">
+              <input class="form-check-input" type="checkbox" id="chk_cat_{{i}}" (click)="checkCategorias($event.target.checked,arr.idCategoria)" [checked]="arr.selected">
+              <label class="form-check-label" for="chk_cat_{{i}}">
+                {{arr.categoria}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div> 
+<div class="modal-footer">
+  <button type="button" class="btn btn-cotizar btn-block" (click)="filtrar()">{{ 'hotel.aplicar-filtros'|translate }}</button>
+</div>

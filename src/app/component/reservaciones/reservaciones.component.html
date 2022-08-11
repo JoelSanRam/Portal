@@ -1,0 +1,566 @@
+<div class="container">
+	<div class="row">
+		<div class="col-12 mt-4 mb-2">
+			<h5 class="title-page">{{ 'reservaciones.reservaciones'|translate }}</h5>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="reservaciones">
+				<ul class="nav nav-pills vav-fill mb-4" id="myTab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="paqueteria-tab" data-toggle="tab" href="#Hotel" role="tab"
+							aria-controls="Hotel" aria-selected="false">{{ 'reservaciones.hotel'|translate }}</a>
+					</li>
+					<li class="nav-item" *ngIf="permisoUsuarioVuelos == 1 && permisoAgenciaVuelos == 1">
+						<a class="nav-link" id="seguros-tab" data-toggle="tab" href="#Aereos" role="tab"
+							aria-controls="Aereos" aria-selected="false">{{ 'reservaciones.vuelos'|translate }}</a>
+					</li>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade" id="Aereos" role="tabpanel" aria-labelledby="todos-tab">
+						<div class="row">
+							<div class="col-12">
+								<!-- Filtros -->
+								<form [formGroup]="filtroFormAereos" (ngSubmit)="filtrarAereos()">
+									<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 align-items-start">
+										<div class="col">
+											<div class="form-group">
+												<label for="id">ID</label>
+												<input formControlName="idAereos" type="text" id="id"
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.titular-reserva'|translate }}</label>
+												<input formControlName="titularAereos" type="text" id="pas-hot"
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.origen'|translate }}</label>
+												<!-- <input formControlName="origenAereos" type="text" id="pas-hot"
+                                                    class="form-control" /> -->
+												<input class="form-control" formControlName="origenAereos"
+													(ngModelChange)="autocompleteAirport($event)" [typeahead]="destinos"
+													[typeaheadMinLength]="2" [typeaheadScrollable]="true"
+													[typeaheadOptionsInScrollableView]="6" [typeaheadAsync]="true"
+													[typeaheadItemTemplate]="customItemTemplateOrigen"
+													(typeaheadOnSelect)="onSelectAirport($event, 'origen')">
+											</div>
+											<ng-template #customItemTemplateOrigen let-model="item" let-index="index">
+												<p class="m-0">
+													{{ model.ciudad + ', ' + model.pais + ' (' + model.codigo + ')' }}
+												</p>
+											</ng-template>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.destino'|translate }}</label>
+												<!-- <input formControlName="" type="text" id="pas-hot"
+                                                    class="form-control" /> -->
+												<input class="form-control" formControlName="destinoAereos"
+													(ngModelChange)="autocompleteAirport($event)" [typeahead]="destinos"
+													[typeaheadMinLength]="2" [typeaheadScrollable]="true"
+													[typeaheadOptionsInScrollableView]="6" [typeaheadAsync]="true"
+													[typeaheadItemTemplate]="customItemTemplateDestino"
+													(typeaheadOnSelect)="onSelectAirport($event, 'destino')">
+											</div>
+											<ng-template #customItemTemplateDestino let-model="item" let-index="index">
+												<p class="m-0">
+													<i class="fas fa-plane-departure" aria-hidden="true"></i>
+													{{ model.ciudad + ', ' + model.pais + ' (' + model.codigo + ')' }}
+												</p>
+											</ng-template>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.aerolinea'|translate }}</label>
+												<!-- <input formControlName="aereolineaAereos" type="text" id="pas-hot"
+													class="form-control" /> -->
+												<input class="form-control" formControlName="aereolineaAereos"
+													(ngModelChange)="autocompleteAirline($event)" [typeahead]="airlines"
+													[typeaheadMinLength]="2" [typeaheadScrollable]="true"
+													[typeaheadOptionsInScrollableView]="6" [typeaheadAsync]="true"
+													[typeaheadItemTemplate]="customItemTemplateAirlines"
+													(typeaheadOnSelect)="onSelectAirlines($event)">
+											</div>
+											<ng-template #customItemTemplateAirlines let-model="item" let-index="index">
+												<p class="m-0">
+													{{ model.name + ' (' + model.id + ')' }}
+												</p>
+											</ng-template>
+										</div>
+									</div>
+									<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 d-flex align-items-start">
+										<div class="col">
+											<div class="form-group">
+												<label for="id">{{ 'reservaciones.fecha-de'|translate }}</label>
+												<select #quantity class="custom-select">
+													<option value="sale" selected="selected">{{ 'reservaciones.venta'|translate }}</option>
+													<option value="departure">{{ 'reservaciones.salida'|translate }}</option>
+													<option value="arrival">{{ 'reservaciones.llegada'|translate }}</option>
+												</select>
+											</div>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.desde'|translate }}</label>
+												<!-- <input formControlName="desdeAereos" type="date" id="pas-hot"
+                                                    class="form-control" /> -->
+												<input formControlName="desdeAereos" type="text"
+													placeholder="Datepicker" class="form-control" bsDatepicker
+													[bsConfig]="{ isAnimated: true }">
+											</div>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.hasta'|translate }}</label>
+												<!-- <input formControlName="hastaAereos" type="date" id="hasta"
+                                                    class="form-control" /> -->
+												<input formControlName="hastaAereos" formControlName="hastaAereos"
+													type="text" placeholder="Datepicker" class="form-control"
+													bsDatepicker [bsConfig]="{ isAnimated: true }">
+											</div>
+										</div>
+										<div class="col">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.status-reserva'|translate }}</label>
+												<select class="custom-select" formControlName="statusAereos">
+													<option value="" desabled selected>{{ 'reservaciones.seleccione'|translate }}</option>
+													<option *ngFor="let status of statusSelect" [value]="status.id">{{status.status}}</option>
+												</select>
+											</div>
+										</div>
+
+										<div class=" col align-self-center mt-3">
+											<div class="form-group">
+												<button class=" btn btn-green btn-block" type="submit">
+													{{ 'reservaciones.filtrar'|translate }}
+												</button>
+											</div>
+										</div>
+									</div>
+								</form>
+
+								<div class="row">
+									<div class="col-12">
+										<hr />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="col-12 text-center" *ngIf="listAereos?.length>0">
+									<div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-center">
+										<pagination class="center-pagination" [boundaryLinks]="true"
+											[(ngModel)]="currentPage" [totalItems]="totalResultados" [itemsPerPage]="10"
+											[rotate]="true" [maxSize]="maxSize" [customFirstTemplate]="firstTemplate"
+											[customLastTemplate]="lastTemplate" [customPreviousTemplate]="prevTemplate"
+											[customNextTemplate]="nextTemplate" (click)="goToPage(currentPage)">
+										</pagination>
+
+										<ng-template #nextTemplate let-disabled="disabled"
+											let-currentPage="currentPage">
+											<ng-container>
+												<i class="fas fa-angle-right"></i>
+											</ng-container>
+										</ng-template>
+
+										<ng-template #prevTemplate let-disabled="disabled"
+											let-currentPage="currentPage">
+											<ng-container>
+												<i class="fas fa-angle-left"></i>
+											</ng-container>
+										</ng-template>
+
+										<ng-template #lastTemplate let-disabled="disabled"
+											let-currentPage="currentPage">
+											<i class="fas fa-angle-double-right"></i>
+										</ng-template>
+
+										<ng-template #firstTemplate let-disabled="disabled"
+											let-currentPage="currentPage">
+											<i class="fas fa-angle-double-left"></i>
+										</ng-template>
+									</div>
+								</div>
+								<div class="table-reservas">
+									<div class="table-header">
+										<div class="table-col">ID</div>
+										<div class="table-col">
+											{{ 'reservaciones.vuelo-reservacion'|translate }}
+										</div>
+										<div class="d-none d-md-flex table-col">
+											{{ 'reservaciones.fechas-viaje'|translate }}
+										</div>
+										<div class="d-none d-md-flex table-col">
+											{{ 'reservaciones.titular-pasajeros'|translate }}
+										</div>
+										<div class="d-none d-md-flex table-col"></div>
+									</div>
+									<div class="table-body">
+										<div class="table-row" *ngFor="let aereos of listAereos; index as i">
+											<div class="table-col d-flex">
+												<div class="w-50">
+													<div class="d-flex align-items-center">
+														<span class="mr-2 text-uppercase tag-vuelog-status" [ngClass]="{
+                                                                'badge-green': aereos.reservation_status == 'En curso',
+                                                                'badge-blue': aereos.reservation_status == 'Emitido',
+                                                                'badge-red': aereos.reservation_status ==  'Cancelada' ||  aereos.reservation_status ==  'Expirado' ||  aereos.reservation_status ==  'No emitido',
+                                                                'badge-yellow': aereos.reservation_status == 'Cambio',
+                                                                'badge-violet': aereos.reservation_status == 'Cotización'
+                                                            }">{{aereos.reservation_status}}</span>
+														<span class=" badge-rounded badge-green mr-2
+															">$</span>
+													</div>
+													<div class="font-weight-bold my-1">
+														{{aereos.reservation_id}}
+													</div>
+													<div class="text-6">
+														{{aereos.reservation_date}}
+													</div>
+													<div class="text-6">
+														{{ 'reservaciones.usuario'|translate }}: {{aereos.agency_auth_name}}
+													</div>
+												</div>
+												<div class="w-50">
+													<div class="font-weight-bold">
+														{{aereos.airline_name}}
+													</div>
+													<p class=" text-dark text-uppercase text-decoration-none p-m-b">
+														{{aereos.flight_origin_id}}-{{aereos.flight_destiny_id}}</p>
+													<small class="d-block">{{aereos.flight_type}}</small>
+													<small class="d-block">{{ 'reservaciones.confirmacion'|translate }}:
+														{{aereos.number_confirmation}}</small>
+													<small class="text-orange">{{aereos.rate_family}}</small>
+												</div>
+											</div>
+											<div class=" table-col d-none d-md-flex">
+												{{aereos.departure | date: 'dd/MM/yyyy' }} <span
+													*ngIf="aereos.flight_type != 'single'"> - </span> {{aereos.arrival |
+												date: 'dd/MM/yyyy' }}
+
+											</div>
+											<div class="table-col d-none d-md-flex ml-5">
+												<div class=" pb-3 d-flex flex-column align-items-center">
+													<div class="text-6">
+														{{aereos.client}}
+													</div>
+													<div class="text-6">
+														({{aereos.adults_amount}} {{ 'reservaciones.adulto'|translate }}, {{aereos.minors_amount}}
+														menores {{aereos.infants_amount}} {{ 'reservaciones.infantes'|translate }})
+													</div>
+												</div>
+											</div>
+											<div class="table-col ml-5">
+												<div class="btns pb-2">
+													<div class="text-center">
+														<div class="mb-2">
+															<span class=" text-orange font-weight-bold">MXN</span>
+															<span class="text-info">{{aereos.total | currency:'MXN'}}</span>
+														</div>
+														<div>
+															<a target="_blank" title="Voucher"
+																[href]="aereos.voucher_url"
+																class=" btn btn-blue text-light mr-2">
+																<i class="far fa-file-alt"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--! MOBILE -->
+								<!-- ! RESERVAS -->
+							</div>
+						</div>
+					</div>
+					<!-- Hoteleria -->
+					<div class="tab-pane fade show active" id="Hotel" role="tabpanel" aria-labelledby="hoteleria-tab">
+						<div class="row">
+							<div class="col-12">
+								<!-- Filtros -->
+								<form [formGroup]="filtroForm" (ngSubmit)="filtrar()">
+									<div class="row align-items-start">
+										<div class="col-12 col-sm-6 col-lg-2">
+											<div class="form-group">
+												<label for="id">ID</label>
+												<input formControlName="idReserva" type="text" id="id"
+													class="form-control" />
+											</div>
+										</div>
+										<div class="col-12 col-sm-6 col-lg-2">
+											<div class="form-group">
+												<label for="pas-hot">{{ 'reservaciones.pasajero-hotel'|translate }}</label>
+												<input formControlName="search" type="text" id="pas-hot" class="form-control" />
+											</div>
+										</div>
+										<div class="col-12 col-sm-6 col-lg-2">
+											<div class="form-group">
+												<label for="fecha">{{ 'reservaciones.fecha-de'|translate }}</label>
+												<select formControlName="tipofecha" id="fecha" class="form-control">
+													<option value="FRV" selected>{{ 'reservaciones.creacion-reserva'|translate }}</option>
+													<option value="FCI">{{ 'reservaciones.entrada-reserva'|translate }} (Check In)</option>
+													<option value="FCO">{{ 'reservaciones.salida-reserva'|translate }} (CheckOut)</option>
+													<option value="FLA">{{ 'reservaciones.limite-pago'|translate }}</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-12 col-sm-6 col-lg-2" (click)="drp.toggle()"
+											[attr.aria-expanded]="drp.isOpen">
+											<div class="row">
+												<div class="col-6 p-0">
+													<div class="form-group">
+														<label class="mb-0">{{ 'reservaciones.desde'|translate }}</label>
+														<div class="d-flex	align-items-center justify-content-center">
+															<div class="numbers-search">
+																<!-- <ng-datepicker formControlName="desde" [options]="options" [ngClass]="dateChekInOut" (click)="changeDate('IN')"></ng-datepicker> -->
+																<span>{{diaDesde | lpad: 2}}</span>
+															</div>
+															<div class="date-style">
+																<div>{{mesDesde}}</div>
+																<div>{{anioDesde}}</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-6">
+													<div class="form-group">
+														<label class="mb-0">{{ 'reservaciones.hasta'|translate }}</label>
+														<div class=" d-flex align-items-center justify-content-center">
+															<div class="numbers-search">
+																<!-- <ng-datepicker formControlName="hasta" [options]="options" [ngClass]="dateChekInOut" (click)="changeDate('OUT')"></ng-datepicker> -->
+																<span>{{diaHasta | lpad: 2}}</span>
+															</div>
+															<div class="date-style">
+																<div>{{mesHasta}}</div>
+																<div>{{anioHasta}}</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="m-auto h-0">
+													<input type="text" #drp="bsDaterangepicker" formControlName="range"
+														[bsConfig]="bsConfig" class="showNone" bsDaterangepicker
+														(bsValueChange)="	changeDate($event)" placement="bottom" />
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-lg-2">
+											<div class="form-group">
+												<label for="status">{{ 'reservaciones.status-reserva'|translate }}</label>
+												<ng-multiselect-dropdown [placeholder]="'Selecciona'" [settings]="dropdownSettings
+													" [data]="status" formNameControl="status" (onSelect)="
+														onItemSelect($event)
+													" (onDeSelect)="
+														onItemDeSelect($event)
+													" (onSelectAll)="
+														onSelectAll($event)
+													" (onDeSelectAll)="
+														onDeSelectAll($event)
+													">
+												</ng-multiselect-dropdown>
+											</div>
+										</div>
+										<div class=" col-12 col-lg-2 align-self-center mt-3">
+											<div class="form-group">
+												<button class="btn btn-green btn-block" type="submit">
+													{{ 'reservaciones.filtrar'|translate }}
+												</button>
+											</div>
+										</div>
+									</div>
+								</form>
+
+								<!-- Fitros link -->
+								<div class="row">
+									<div class="col-12 mt-2">
+										<ul class="reservas-list-filter">
+											<li>
+												<a href="javascript:void(0)" (click)="preFilters('ultimas100')
+													">{{ 'reservaciones.ultimas-100'|translate }}</a>
+											</li>
+											<li>
+												<a href="javascript:void(0)" (click)="preFilters('gastos')">{{ 'reservaciones.proximos-gastos'|translate }}</a>
+											</li>
+											<li>
+												<a href="javascript:void(0)" (click)="preFilters('entradas')">{{ 'reservaciones.proximas-entradas'|translate }}</a>
+											</li>
+											<li>
+												<a href="javascript:void(0)" (click)="preFilters('canceladas')">{{ 'reservaciones.canceladas'|translate }}</a>
+											</li>
+											<li>
+												<a href="javascript:void(0)" (click)="preFilters('pendientes')">{{ 'reservaciones.pendientes'|translate }}</a>
+											</li>
+										</ul>
+										<div class="col-12 col-lg-2align-self-center">
+											<div class="form-group">
+												<button class="btn btn-green btn-block" type="button" (click)="downloadCVS()"> {{ 'reservaciones.descargar-csv'|translate }}
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<hr />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<!-- SIN RESERVAS -->
+								<div class="sin-reservas" *ngIf="!listReservaciones.length">
+									{{ 'reservaciones.no-reservas'|translate }}
+								</div>
+								<!--! SIN RESERVAS -->
+
+								<!-- RESERVAS -->
+								<!-- MOBILE -->
+
+								<div class="table-reservas" *ngIf="listReservaciones.length">
+									<div class="table-header">
+										<div class="table-col">ID</div>
+										<div class="table-col">{{ 'reservaciones.hotel-pax'|translate }}</div>
+										<div class="d-none d-md-flex table-col">
+											{{ 'reservaciones.fechas-viaje'|translate }}
+										</div>
+										<div class="d-none d-md-flex table-col">
+											{{ 'reservaciones.fecha-limite'|translate }}
+										</div>
+										<div class="d-none d-md-flex table-col"></div>
+									</div>
+									<div class="table-body">
+										<div class="table-row" *ngFor="
+												let r of listReservaciones;
+												index as i
+											">
+											<div class="table-col d-flex">
+												<div class="w-50">
+													<div class=" d-flex align-items-center">
+														<span class=" badge-rounded badge-grey mr-2
+															">{{ i + 1 }}</span>
+														<span class=" badge-rounded mr-2
+															" [ngClass]="{
+																'badge-green': r.datosreserva.status =='CO',
+																'badge-blue': r.datosreserva.status =='PA',
+																'badge-red': r.datosreserva.status =='RE' || r.datosreserva.status =='CA',
+																'badge-yellow': r.datosreserva.status =='PE',
+																'badge-violet': r.datosreserva.status =='PC'
+															}">
+															{{r.datosreserva.status}}
+														</span>
+													</div>
+													<div class=" font-weight-bold my-1">{{r.datosreserva.idReserva}}
+													</div>
+													<div class="text-6">{{r.datosreserva.fecha_reserva}}
+													</div>
+													<div class="text-6">{{r.datosreserva.nombre_usuario}}
+													</div>
+												</div>
+												<div class="w-50">
+													<div class="font-weight-bold">{{r.datosreserva.nombre_hotel}}
+													</div>
+													<ng-template #popTemplate>
+														<div [innerHtml]="toolHtml(	r.detalles)"></div>
+													</ng-template>
+													<a href="javascript:void(0)" class=" text-dark text-uppercase text-decoration-none
+														" [tooltip]="popTemplate">{{r.datosreserva.pax}}</a>
+													<small class="d-block">{{r.datosreserva.nombre_room}}</small>
+													<small class="text-orange">{{r.datosreserva.nombre_plan}}</small>
+												</div>
+											</div>
+											<div class="table-cold-none d-md-flex" style="margin:auto;">
+												{{ r.datosreserva.fecha_viaje }}
+											</div>
+											<div class="table-cold-none d-md-flex" style="margin:auto;">
+												{{r.datosreserva.fecha_limite_agencia}}
+											</div>
+											<div class="table-col" style="margin:auto;">
+												<div class="pb-3d-flexflex-columnalign-items-center">
+													<small class="d-lg-none"><b>{{ 'reservaciones.fecha-viaje'|translate }}:
+														</b>{{r.datosreserva.fecha_viaje}}</small>
+													<small class="d-lg-none"><b>{{ 'reservaciones.fecha-limite'|translate }}:
+														</b>{{r.datosreserva.fecha_limite_agencia}}</small>
+													<ng-template #popTemplate2>
+														<div [innerHtml]="toolHtml2(r.datosreserva)"></div>
+													</ng-template>
+													<div class="d-flex" style="cursor: pointer" [tooltip]="popTemplate2"
+														triggers="click" [isDisabled]="user.nivel != 50">
+														<span
+															class="font-weight-bold text-orange">{{r.datosreserva.currency_agencia}}&nbsp;</span>
+														<span class=" font-weight-bold text-blue
+															">
+															{{r.datosreserva.importe_publico |
+															currencyFormat}}&nbsp;</span>
+														<!-- <span class="font-weight-bold">{{ '(' + r.datosreserva.utilidad + '%)' }}</span> -->
+													</div>
+												</div>
+												<div class="btns pb-2">
+													<!-- <button class="btn btn-orange mr-2" *ngIf="permisosPagos==1 && permisosPagosAgency==1" (click)="pagarRes(r)"> -->
+													<button [disabled]="r.datosreserva.status != 'CO'" class="btn btn-orange mr-2" *ngIf="permisosPagosAgency==1" (click)="pagarRes(r)">
+														{{ 'reservaciones.pagar'|translate }}
+													</button>
+													<button class="btn btn-green mr-2"
+														(click)="verDetalleReserva(r.datosreserva.encodeid)">
+														<i class="fas fa-eye"></i>
+													</button>
+													
+													<a [href]="r.datosreserva.pdf" target="_blank"
+														class="btn btn-blue mr-2"
+														[ngClass]="{
+															disabled: r.datosreserva.status == 	'CA' || r.datosreserva.status == 'RE' || r.datosreserva.status == 'PE' || (uData =='GLO' && r.datosreserva.status =='CO')}"><i
+															class=" far fa-file-alt"></i></a>
+													<a [href]="r.datosreserva.proforma" target="_blank"
+														class="btn btn-blue" [ngClass]="{
+															disabled:
+																r.datosreserva.status =='CA' ||
+																r.datosreserva.status =='RE' ||
+																r.datosreserva.status =='PE' ||
+																(uData == 'GLO' && r.datosreserva.status =='CO')
+														}"><i class=" fas fa-file-alt"></i></a>
+													<button class="btn btn-red ml-2"
+														(click)="cancelarReservaModalService(r.datosreserva.encodeid)"
+														>
+														<i class="fas fa-ban"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!--! MOBILE -->
+								<!-- ! RESERVAS -->
+							</div>
+						</div>
+					</div>
+					<!--! Hoteleria -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Anuncio -->
+	<div class="row">
+		<div class="col-12 mt-4">
+			<div class="border-rounded ads">
+				<a [href]="link1" target="_blank" [ngStyle]="link1 | ifExistLink">
+                    <img class="border-rounded" [src]="anuncio1" alt="Anuncio">
+                </a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ngx-spinner type="">
+	<!-- <img src='../../../assets/img/spinners/general.gif' /> -->
+	<img src="{{ imgruta }}" />
+</ngx-spinner>

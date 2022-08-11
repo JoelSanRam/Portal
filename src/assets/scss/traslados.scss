@@ -1,0 +1,28 @@
+.map-traslados {
+    .map-container{
+        border-radius: $border-radius;
+        width: 100%;
+        height: auto;
+        @include media-breakpoint-up(sm) {
+            height: 225px;
+        }
+        @include media-breakpoint-up(md) {
+            height: 325px;
+        }
+    }
+}
+
+.title-traslados{
+    color: $colorSombraTres;
+    // font-weight: bold;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    font-family: 'Muli-Bold';
+
+}
+
+.btn-alerts{
+    span{
+        cursor: pointer;
+    }
+}

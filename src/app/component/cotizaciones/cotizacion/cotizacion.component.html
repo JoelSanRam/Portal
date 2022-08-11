@@ -1,0 +1,160 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-4 mb-2">
+            <h5 class="title-page">{{ 'cotizaciones.crear-cotizacion'|translate }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="cotizaciones">
+                <div class="row">
+                    <div class="col-12 mb-5">
+                        <a class="btn btn-blue btn-sm" [routerLink]="['/cotizaciones']">{{ 'cotizaciones.regresar'|translate }}</a>
+                        <button class="btn btn-green btn-sm float-right"  type="button" (click)="cotizacionForm()" [disabled]="btnDisabled || btnDisabledGenerar">
+                            {{ 'cotizaciones.generar-cotizaciones'|translate }}
+                            <span [hidden]="!btnDisabledGenerar">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div class="d-flex align-items-end">
+                            <div class="mr-3">
+                                <label for="descuento">{{ 'cotizaciones.descuento'|translate }}:</label>
+                                <select id="descuento" class="form-control" [(ngModel)]="descuento">
+                                    <option value="-14"> -14 %</option>
+                                    <option value="-13"> -13 %</option>
+                                    <option value="-12"> -12 %</option>
+                                    <option value="-11"> -11 %</option>
+                                    <option value="-10"> -10 %</option>
+                                    <option value="-9"> -9 %</option>
+                                    <option value="-8"> -8 %</option>
+                                    <option value="-7"> -7 %</option>
+                                    <option value="-6"> -6 %</option>
+                                    <option value="-5"> -5 %</option>
+                                    <option value="-4"> -4 %</option>
+                                    <option value="-3"> -3 %</option>
+                                    <option value="-2"> -2 %</option>
+                                    <option value="-1"> -1 %</option>
+                                    <option value="0">  0 %</option>
+                                    <option value="+1"> +1 %</option>
+                                    <option value="+2"> +2 %</option>
+                                    <option value="+3"> +3 %</option>
+                                    <option value="+4"> +4 %</option>
+                                    <option value="+5"> +5 %</option>
+                                    <option value="+6"> +6 %</option>
+                                    <option value="+7"> +7 %</option>
+                                    <option value="+8"> +8 %</option>
+                                    <option value="+9"> +9 %</option>
+                                    <option value="+10"> +10 %</option>
+                                    <option value="+11"> +11 %</option>
+                                    <option value="+12"> +12 %</option>
+                                    <option value="+13"> +13 %</option>
+                                    <option value="+14"> +14 %</option>
+                                </select>
+                            </div>
+                            <div class="mr-3">
+                                <label for="sumaExtra">{{ 'cotizaciones.anadir-sobre-total'|translate }}:</label>
+                                <input id="sumaExtra" class="form-control" type="number" [(ngModel)]="sumaExtra">
+                            </div>
+                            <button class="btn btn-blue mr-3" (click)="sumarExtra()">{{ 'cotizaciones.anadir'|translate }}</button>
+                            <div class="" *ngIf="txtextra > 0">
+                                {{ txtextra | currencyFormat }}
+                                <a href="javascript:void(0)" (click)="borrarExtra()"><sup>[X]</sup></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-5">
+                        <div class="overflow">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="w-25">{{ 'cotizaciones.hotel-categoria'|translate }}</th>
+                                        <th scope="col" class="w-25">{{ 'cotizaciones.habitacion-plan'|translate }}</th>
+                                        <th scope="col" class="w-25">{{ 'cotizaciones.fechas'|translate }}</th>
+                                        <th scope="col">{{ 'cotizaciones.adultos'|translate }}</th>
+                                        <th scope="col">{{ 'cotizaciones.menores'|translate }}</th>
+                                        <th scope="col">{{ 'cotizaciones.juniors'|translate }}</th>
+                                        <th scope="col">{{ 'cotizaciones.extras'|translate }}</th>
+                                        <th scope="col" class="text-center w-25 text-uppercasse">{{ 'cotizaciones.total'|translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let c of cotizaciones;">
+                                        <th>
+                                            {{ c.hotel_nombre }}
+                                            <br>
+                                            <span>{{ c.hotel_direccion }}</span>
+                                            <br>
+                                            <div [innerHTML]="c.hotel_categoria | ratingHotel"></div>
+                                        </th>
+                                        <th>
+                                            ({{ c.numhab }}) {{ c.room_nombre }}
+                                            <br>
+                                            <span>{{ c.plan_nombre }}</span>
+                                        </th>
+                                        <td>{{ c.cotizacion_checkin + ' - ' + c.cotizacion_checkout }}</td>
+                                        <td class="text-center">{{ c.adultos }}</td>
+                                        <td class="text-center">{{ c.menores }}</td>
+                                        <td class="text-center">{{ c.juniors }}</td>
+                                        <td class="text-center">{{ c.extras }}</td>
+                                        <th>{{ calculoTDC(c.cotizacion_importe,c.cotizacion_tasa_cambio) | currencyFormat }} <span class="font-weight-bold text-orange">{{ user.currency }}</span></th>
+                                        <!-- <th>{{ calcularImporte(c.cotizacion_importe) | currencyFormat }} <span class="font-weight-bold text-orange">{{ c.cotizacion_divisa }}</span></th> -->
+                                        <!-- <th>{{ c.cotizacion_importe | currencyFormat }}</th> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="hoteles.length > 0">
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="title-page mb-2">{{ 'cotizaciones.hoteles'|translate }}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>{{ 'cotizaciones.hotel'|translate }}</th>
+                                        <th>{{ 'cotizaciones.ficha-tecnica'|translate }}</th>
+                                        <th>{{ 'cotizaciones.incluir-fotos'|translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let h of hoteles; let i = index;">
+                                        <td>{{ h.hotel_nombre }}</td>
+                                        <td>
+                                            <input [disabled]="btnDisabled" type="checkbox" id="ficha-{{i}}" [ngModel]="h.ficha == 1 ? true : h.ficha == 0 ? false : null" (ngModelChange)="h.ficha = $event ? 1 : 0">
+                                            <label for="ficha-{{i}}"></label>
+                                            <i [hidden]="!btnDisabled" class="fas fa-spinner fa-spin"></i>
+                                            <a [hidden]="btnDisabled" *ngIf="h.ficha" href="javascript:void(0)" [hidden]="h.ficha == 0" (click)="openDetalles(h.ficha_tecnica)">Ver</a>
+                                        </td>
+                                        <td>
+                                            <input [disabled]="btnDisabled" type="checkbox" id="fotos-{{i}}" [ngModel]="h.fotos == 1 ? true : h.fotos == 0 ? false : null" (ngModelChange)="h.fotos = $event ? 1 : 0">
+                                            <label for="fotos-{{i}}"></label>
+                                            <!-- <button class="btn btn-grey btn-orange btn-sm" [ngClass]="{'btn-orange': h.img_selected.length > 0}" (click)="openFotos()" type="button"><i class="fas fa-camera-retro"></i> {{ h?.img_selected?.length }}</button> -->
+                                            <button [disabled]="btnDisabled" [hidden]="h.fotos == 0" *ngIf="h.fotos" class="btn btn-orange btn-sm" [ngClass]="{'btn-grey': h?.img_selected?.length == 0 || !h?.img_selected, 'btn-orange': h?.img_selected?.length > 0}" (click)="openFotos(h)" type="button">
+                                                <i [hidden]="!btnDisabled" class="fas fa-spinner fa-spin"></i><i [hidden]="btnDisabled" class="fas fa-camera-retro"></i> {{ h?.img_selected?.length }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner type="" >
+	<!-- <img src='../../../assets/img/spinners/tarifas.gif' />  -->
+	<img src='{{imgruta}}'/>
+</ngx-spinner>

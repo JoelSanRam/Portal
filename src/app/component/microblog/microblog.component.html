@@ -1,0 +1,23 @@
+<div class="container ">
+    <div class="row">
+    <div class="col-12 mt-4">
+        <h5 class="title-page">{{ 'microblog.blog'|translate }}</h5>
+        <div class="card-white-img">
+            <div class="row mx-md-2 mx-1 py-md-3 py-4" *ngFor="let p of publicaciones">
+                <div class="col-md-5 col-12">
+                    <a [routerLink]="['./', p.idBlog]" class="linkPublicacion">
+                        <img src="{{p.url_thumbnail}}" class="img-fluid rounded thumb" alt="">
+                    </a>
+                </div>
+                <div class="col-md-7 col-12 my-2 d-flex align-items-start flex-column">
+                    <a [routerLink]="['./', p.idBlog]" class="nolink">
+                        <h1>{{ p.titulo }}</h1>
+                    </a>
+                    <div [innerHTML]="p.descripcion | truncateHtml"></div>
+                    <span class="mt-auto"><i class="far fa-clock date-pub"></i> {{p.fecha_publicacion}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

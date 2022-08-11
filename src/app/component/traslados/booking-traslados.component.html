@@ -1,0 +1,266 @@
+<div class="container">
+    <div class="row my-2">
+        <div class="col-12">
+            <a href="javascript:0" class="text-6" [routerLink]="['/traslados']"><< {{ 'traslados.volver-busqueda'|translate }} </a>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12 col-md-8">
+            <!-- CARD DETAILS -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="row">
+                            <div class="col-12 col-sm-8">
+                                <h5 class="text-1 text-uppercase font-weight-bold">{{ datosTraslado.info.nombre }}</h5>
+                                <span class="badge badge-border-blue font-weight-light my-2 px-2">
+                                    {{ 'traslados.on-request'|translate }}
+                                </span>
+                                <div [innerHTML]="datosTraslado.info.descripcion"></div>
+                            </div>
+                            <!--! HOTEL DESCRIPTION -->
+                            <!-- HOTEL IMG -->
+                            <div class="col-12 mt-2 col-sm-4 pl-sm-0">
+                                <div class="position-relative">
+                                    <div class="img-hotel-book" [ngStyle]="{'background-image': 'url(' + datosTraslado.info.url_thumb + ')' }"></div>
+                                    <!-- <span class="tag-promo">PROMOCIÓN</span> -->
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <hr>
+                        <div class="row ht-details">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <div class="pol text-6 pl-3">
+                                            <p class="m-0 font-weight-bold">{{ 'traslados.politicas-cancelacion'|translate }}:</p>
+                                            <p class="m-0" [innerHTML]="datosTraslado.politicas.politicasCancelacion"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="imp text-6 pl-3">
+                                            <p class="m-0 font-weight-bold">{{ 'traslados.informacion-importante'|translate }}:</p>
+                                            <p class="m-0" [innerHTML]="datosTraslado.info.descripcion"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--! CARD DETAILS -->
+
+            <!-- CARD CLIENT INFO -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="mb-3">
+                            <h5 class="text-1 text-blue font-weight-bold m-0">{{ 'traslados.datos-titular'|translate }}</h5>
+                            <small>{{ 'traslados.llenar-datos-titular'|translate }}</small>
+                        </div>
+                        <form class="text-6">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" >{{ 'traslados.nombres'|translate }}:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="dc.nombres" name="dc.nombres">
+                                </div>
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" >{{ 'traslados.apellidos'|translate }}:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="dc.apellidos" name="dc.apellidos">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" >{{ 'traslados.email'|translate }}:</label>
+                                    <input type="email" class="form-control" [(ngModel)]="dc.email" name="dc.email">
+                                </div>
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" >{{ 'traslados.telefonos'|translate }}:</label>
+                                    <input type="phone" class="form-control" [(ngModel)]="dc.telefonos" name="dc.telefonos">
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="mb-0 font-weight-bold">{{ 'traslados.observaciones'|translate }}:</label>
+                                <textarea class="form-control" name="dc.observaciones" [(ngModel)]="dc.observaciones" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="mb-3">
+                            <h5 class="text-1 text-blue font-weight-bold m-0">{{ 'traslados.datos-vuelo'|translate }}</h5>
+                        </div>
+                        <div class="text-6" *ngIf="datosTraslado.info.tipoTraslado == 'AH' && datosTraslado.info.tipoServicio == 'OW' || datosTraslado.info.tipoServicio == 'RT'" >
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'traslados.hora-llegada'|translate }}:</label>
+                                    <div class="row">
+                                        <div class="form-group col-12 col-md-6">
+                                            <select name="horaLlegada" class="form-control" [(ngModel)]="horaLlegada">
+                                                <option value disabled>HH</option>
+                                                <option [value]="h | lpad: 2" *ngFor="let h of horas()">{{h | lpad: 2}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6">
+                                            <select name="minutoLlegada"  class="form-control" [(ngModel)]="minutoLlegada">
+                                                <option value disabled>MM</option>
+                                                <option [value]="m | lpad: 2" *ngFor="let m of minutos()">{{m | lpad: 2}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'traslados.aerolinea-llegada'|translate }}:</label>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <select ngDefaultControl name="aerolineaLlegada" class="form-control" [(ngModel)]="aerolineaLlegada">
+                                                <option value selected disabled>{{ 'traslados.selecciona-aerolinea'|translate }}</option>
+                                                <option [value]="toStr(a)" *ngFor="let a of aerolineas">{{ a.nombre }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'traslados.no-vuelo'|translate }}:</label>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <input name="numVueloLlegada" class="form-control" type="text" [(ngModel)]="numVueloLlegada">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-6" *ngIf="datosTraslado.info.tipoTraslado == 'HA' && datosTraslado.info.tipoServicio == 'OW' || datosTraslado.info.tipoServicio == 'RT'" >
+                            <div class="form-row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'traslados.hora-salida'|translate }}:</label>
+                                    <div class="row">
+                                        <div class="form-group col-12 col-md-6">
+                                            <select name="horaSalida" class="form-control" [(ngModel)]="horaSalida">
+                                                <option value disabled>HH</option>
+                                                <option [value]="h | lpad: 2" *ngFor="let h of horas()">{{h | lpad: 2}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6">
+                                            <select name="minutoSalida"  class="form-control" [(ngModel)]="minutoSalida">
+                                                <option value disabled>MM</option>
+                                                <option [value]="m | lpad: 2" *ngFor="let m of minutos()">{{m | lpad: 2}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'traslados.aerolinea-salida'|translate }}:</label>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <select ngDefaultControl name="aerolineaSalida" class="form-control" [(ngModel)]="aerolineaSalida">
+                                                <option value selected disabled>{{ 'traslados.selecciona-aerolinea'|translate }}</option>
+                                                <option [value]="toStr(a)" *ngFor="let a of aerolineas">{{ a.nombre }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-12">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'traslados.no-vuelo'|translate }}:</label>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <input name="numVueloSalida" class="form-control" type="text" [(ngModel)]="numVueloSalida">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ! CARD CLIENT INFO -->
+        </div>
+        <div class="col-12 col-md-4">
+            <!-- CARD BOOKING -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="text-right mb-3">
+                            <h5 class="font-weight-bold">{{ 'traslados.total-precio-publico'|translate }}</h5>
+                            <div class="text-1 text-orange font-weight-bold">
+                                <span class="text-blue"><span class="color-currency"> {{ user.currency }} </span>{{ datosTraslado.total.publico | currencyFormat }}</span>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <input type="checkbox" name="terms" id="terms" (change)="toggleTerms($event)">
+                            <label for="terms" class="text-blue text-6 font-weight-bold"><a href="javascript:0" (click)="TeminosYCondiciones()">{{ 'traslados.terminos-condiciones' | translate }}</a></label>
+                        </div>
+                        <button type="button" class="btn btn-blue btn-block" [disabled]="!aceptTerms"  (click)="confirmarBook()">{{ 'traslados.RESERVAR' | translate }}</button>
+                        <hr>
+                        <div class="border-black rounded d-flex justify-content-between mb-2">
+                            <div>
+                                {{'traslados.fecha-salida' | translate }}: 
+                            </div>
+                            <div>
+                                {{datosTraslado.info.fechaSalida | date: 'dd-MM-yyyy'}}
+                            </div>
+                        </div>
+                        <div class="border-black rounded d-flex justify-content-between mb-2" *ngIf="datosTraslado.info.tipoServicio!='OW'">
+                            <div>
+                                {{'traslados.fecha-regreso' | translate }}: 
+                            </div>
+                            <div>
+                                {{datosTraslado.info.fechaRegreso | date: 'dd-MM-yyyy'}}
+                            </div>
+                        </div>
+                        <!-- <div class="border-black rounded d-flex justify-content-between mb-2">
+                            <div>
+                                Horario de Salida: 
+                            </div>
+                            <div>
+                            </div>
+                        </div> -->
+                        <div class="border-black rounded-top d-flex justify-content-between" *ngIf="datosTraslado.rooming.adultos!=='0'">
+                            <div>
+                                {{ 'traslados.adultos' | translate }}: 
+                            </div>
+                            <div>
+                                {{datosTraslado.rooming.adultos}}
+                            </div>
+                        </div>
+                        <div class="border-black rounded-bottom d-flex justify-content-between border-top-0" *ngIf="datosTraslado.rooming.mayores!=='0'">
+                            <div>
+                                {{ 'traslados.adultos-mayores' | translate }}: 
+                            </div>
+                            <div>
+                                {{datosTraslado.rooming.mayores}}
+                            </div>
+                        </div>
+                        <div class="border-black rounded-bottom d-flex justify-content-between border-top-0" *ngIf="datosTraslado.rooming.menores!=='0'">
+                            <div>
+                                {{ 'traslados.menores' | translate }}: 
+                            </div>
+                            <div>
+                                {{datosTraslado.rooming.menores}}
+                            </div>
+                        </div>
+                        <div class="border-black rounded-bottom d-flex justify-content-between border-top-0" *ngIf="datosTraslado.rooming.infantes!=='0'">
+                            <div>
+                                {{ 'traslados.infantes' | translate }}: 
+                            </div>
+                            <div>
+                                {{datosTraslado.rooming.infantes}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+</div>

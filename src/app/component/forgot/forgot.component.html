@@ -1,0 +1,115 @@
+<div class="container-fluid">
+    <div class="row vh-100">
+        <div class="col-lg-6 h-100 img-fond-log d-none d-lg-flex justify-content-center align-items-center">
+            <img src="./assets/img/azabache-blanco.svg" class="img-fluid" alt="">
+        </div>
+
+        <div class="col-lg-6 h-100 col-12 d-flex justify-content-center align-items-center formulario">
+            <div class="container">
+                <div class="container d-lg-none d-flex justify-content-center align-items-center">
+                    <img src="./assets/img/azabache-azul.svg" class="img-fluid logo-movil" alt="">
+                </div>
+                <div class="row">
+                    <div class="col-xl-10 offset-xl-2 col-lg-11 offset-lg-1 col-md-10 offset-md-1 col-sm-12">
+                        <form [formGroup]="forgotForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-lg-12 hola">
+                                    <h1>{{ 'forgot.olvide-pass'|translate }} :(</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 mb-3 login-links">
+                                    <a href="javascript:0" [routerLink]="['/login']"><u>{{ 'forgot.regresar'|translate }}</u></a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <p>{{ 'forgot.ingresa-usuario-correo'|translate }}</p>
+                                </div>
+                            </div>
+                          
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form-login">
+                                    <div class="row" *ngIf="metodorecuperar == false">
+                                        <div class="col-md-2 labels-login">
+                                            <label for="username" class="col-form-label">{{ 'forgot.usuario'|translate }}</label>
+                                        </div>
+                                        <div class="col-md-10 form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text form-login icon-input" [ngClass]="{ 'border-danger': submitted && f.usuario.errors }"> <i class="far fa-user-circle"></i></span>
+                                                </div>
+                                                <input type="text" formControlName="usuario" placeholder="{{ 'forgot.usuario'|translate }}" (keyup)="validateFormatInput('user', $event)" class="form-control form-login border-left-0" [ngClass]="{ 'is-invalid': submitted && f.usuario.errors }" required/>
+                                                <div *ngIf="submitted && f.usuario.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.usuario.errors.required">{{ 'forgot.campo-requerido'|translate }}</div>
+                                                </div>
+                                                <div *ngIf="userInvalid == true" class="invalid-feedback inputInValidFormat">
+                                                    <div>{{ 'forgot.formato-invalido'|translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 p-0">
+                                                <a href="javascript:0"  (click)="changeMethod()">{{ 'forgot.recuperar-correo'|translate }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf="metodorecuperar == true">
+                                        <div class="col-md-2 labels-login">
+                                            <label for="username" class="col-form-label">{{ 'forgot.e-amil'|translate }}</label>
+                                        </div>
+                                        <div class="col-md-10 form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text form-login icon-input" [ngClass]="{ 'border-danger': submitted && f.usuario.errors }"> <i class="far fa-envelope"></i></span>
+                                                </div>
+                                                <input type="text" formControlName="usuario" placeholder="correo@dominio.com" (keyup)="validateFormatInput('mail', $event)" class="form-control form-login border-left-0" [ngClass]="{ 'is-invalid': submitted && f.usuario.errors }" required/>
+                                                <div *ngIf="submitted && f.usuario.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.usuario.errors.required">{{ 'forgot.campo-requerido'|translate }}</div>
+                                                </div>
+                                                <div *ngIf="mailInvalid == true" class="invalid-feedback inputInValidFormat">
+                                                    <div>{{ 'forgot.formato-invalido'|translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 p-0">
+                                                <a href="javascript:0"  (click)="changeMethod()">{{ 'forgot.recuperar-usuario'|translate }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form-">
+                                    <div class="col-md-10 offset-md-2 form-group">
+                                        <button [disabled]="loading" class="btn btn-primary btn-md btn-block">{{ 'forgot.recuperar-pass'|translate }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form- social-icon-movil">
+                                    <div class="col-md-10 offset-md-2 text-center">
+                                        <ul class="list-inline">
+                                            <li *ngFor="let sociales of rsociales" class="list-inline-item">
+                                                <a *ngIf="sociales.tipo=='facebook'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='facebook'" src="./assets/img/social_icons/fb.png" width="30px" alt="">
+                                                </a>
+                                                <a *ngIf="sociales.tipo=='instagram'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='instagram'" src="./assets/img/social_icons/ig.png" width="30px" alt="">
+                                                </a>
+                                                <a *ngIf="sociales.tipo=='linkedin'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='linkedin'" src="./assets/img/social_icons/in.png" width="30px" alt="">
+                                                </a>
+                                                <a *ngIf="sociales.tipo=='youtube'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='youtube'" src="./assets/img/social_icons/yt.png" width="30px" alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+

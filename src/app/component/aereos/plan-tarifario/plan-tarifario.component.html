@@ -1,0 +1,48 @@
+<owl-carousel-o [options]="customOptions">
+    <ng-template carouselSlide *ngFor="let familia of familias; let i = index">
+        <div class="card-familia-tarifaria">
+            <div class="modal-bodyHeader">
+                <div class="title-plan" [ngClass]="{'tarifa-selected': familia.isChecked}">
+                    <h4 class="font-weight-bold text-center m-0">
+                        {{ familia.nombreFamilia }}
+                    </h4>
+                </div>
+                <div class="precios-plan">
+                    <input type="radio" [id]="'FT' + i" name="tipoFamilia" [ngValue]="familia" (change)="changeTipoTarifa($event, familia)" [checked]="familia.isChecked">
+                    <label class="" [for]="'FT' + i">{{ 'vuelos.total-vuelo'|translate }}</label>
+                    <div class="text-center">
+                        <!-- <span class="amount-plan">{{ familia.tarifa.diferencia_por_persona | currencyFormat }}</span> {{familia.tarifa.currency}} -->
+                        <span class="amount-plan">{{ familia.tarifa.costoFamiliaTarifaria  | currencyFormatSymbol }}</span> {{familia.tarifa.currency}} <br>
+                        <small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-bodyPlan">
+                <p [innerHtml]="familia.detalle"></p>
+            </div>
+        </div>
+    </ng-template>
+</owl-carousel-o>
+<div class="row">
+    <div class="col-12">
+        <div class="footer-familia-tarifaria">
+            <div class="row footer-description">
+                <div class="col-12 text-center">
+                    <p>{{ 'vuelos.beneficios-penalidades'|translate }}</p>
+                </div>
+            </div>
+            <div class="row footer-price">
+                <div class="col-12 col-md-4 text-center text-md-right">
+                    <h5 class="">{{ 'vuelos.tu-vuelo-con'|translate }} <span class="font-weight-bold">{{ tipoFamilia.nombreFamilia }}</span></h5>
+                </div>
+                <div class="col-12 col-md-4 text-center">
+                    <p class="m-0">{{ 'vuelos.precio-final-vuelo'|translate }}</p>
+                    <span class="amount-plan">{{ tipoFamilia.tarifa.costoFamiliaTarifaria | currencyFormat }}</span> MXN
+                </div>
+                <div class="col-12 col-md-4 text-center text-md-left">
+                    <button type="button" class="btn btn-plan" (click)="confirmFamily()">{{ 'vuelos.continuar'|translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

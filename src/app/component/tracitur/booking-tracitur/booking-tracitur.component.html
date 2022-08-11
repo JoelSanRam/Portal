@@ -1,0 +1,282 @@
+<div class="container">
+    <div class="row my-2">
+        <div class="col-12">
+            <a href="javascript:void(0)" (click)="goBackResults()" class="text-6">
+                << {{ 'tracitur.volver-busqueda'|translate }}</a>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12 col-md-8">
+            <!-- CARD DETAILS -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white-img">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- IMG -->
+                                <div class="crop">
+                                    <img class="img-resp" [src]="serviceBooking.info.url_thumb" alt="">
+                                    <!-- <span class="tag-promo">PROMOCIÓN</span> -->
+                                </div>
+                                <!--! IMG -->
+                                <!-- TITLE -->
+                                <h5 class="text-1 text-capitalize font-weight-bold my-2 my-md-0">
+                                    {{ serviceBooking.info.nombre }}
+                                </h5>
+                                <span class="badge badge-border-blue font-weight-light my-2 px-2">
+                                    {{ 'tracitur.on-request'|translate }}
+                                </span>
+                                <!-- ! TITLE -->
+                                <!-- DETAILS -->
+                                <div class="text-6 my-1">
+                                    <i class="fas fa-map-marker-alt text-orange mr-2"></i> {{ serviceBooking.info.destinoLlegada.destino }}
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <div class="text-6 my-1 mr-4" *ngIf="serviceBooking.info.ocupmin">
+                                        <i class="fas fa-user text-blue mr-2"></i> Min. Pax: {{ serviceBooking.info.ocupmin }}
+                                    </div>
+                                    <div class="text-6 my-1 mr-4" *ngIf="serviceBooking.info.destinoSalida.destino">
+                                        <i class="fas fa-arrow-circle-right text-green mr-2"></i> Saliendo de: {{ serviceBooking.info.destinoSalida.destino }}
+                                    </div>
+                                    <div class="text-6 my-1" *ngIf="serviceBooking.info.duracion">
+                                        <i class="far fa-clock text-green mr-2"></i> Duración: {{ serviceBooking.info.duracion }} <span *ngIf="serviceBooking.broker == 'SPTOUR'">Días</span>
+                                    </div>
+                                </div>
+                                <!--! DETAILS -->
+                                <!-- DESCRIPTION -->
+                                <p class="pt-3" [innerHTML]="serviceBooking.info.descripcion | replace: 'Nts':'Noche(s)'"></p>
+                                <!-- ! DESCRIPTION -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--! CARD DETAILS -->
+            <!-- CARD POLITICS -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-danger text-6 ht-details">
+                        <h6 class="font-weight-bold">{{ 'tracitur.politicas-cancelacion'|translate }}:</h6>
+                        <p class="m-0" [innerHTML]="serviceBooking.politicas.descripcion"></p>
+                        <p class="m-0" [innerHTML]="serviceBooking.politicas.politicasCancelacion"></p>
+                    </div>
+                </div>
+            </div>
+            <!-- ! CARD POLITICS -->
+            <!-- * CARD SCHEDULE -->
+            <div class="row mb-3" *ngIf="serviceBooking.info.type != 'TRA' && serviceBooking?.info?.horarios?.length > 0">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="form-row">
+                            <div class="col-12 col-sm-6">
+                                <label class="mb-0 font-weight-bold" for="name">{{ 'tracitur.hora-salida'|translate }}:</label>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <select class="form-control" [(ngModel)]="serviceBooking.horarioSalida" [ngClass]="{ 'is-invalid': submitted && !hourSelect }">
+                                    <option value="">{{ 'tracitur.seleccione-hora-salida'|translate }}</option>
+                                    <option *ngFor="let h of serviceBooking.info.horarios;" [value]="h">{{ h }}</option>
+                                </select>
+                                <div *ngIf="submitted && !hourSelect" class="invalid-feedback">
+                                    <div>{{ 'tracitur.seleccione-hora-salida'|translate }}.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ! CARD SCHEDULE -->
+            <!-- CARD PAX INFO -->
+            <div class="row mb-3" *ngIf="type == 'CIR'">
+                <div class="col-12">
+                    <div class="card-white">
+                        <h5 class="text-1 text-blue font-weight-bold">{{ 'tracitur.datos-pasajero'|translate }}</h5>
+                        <ng-container *ngFor="let hab of serviceBooking.ratesDetails; let i = index">
+                            <form class="text-6 mt-4" [formGroup]="servicePaxForm">
+                                <ng-container formArrayName="room">
+                                    <ng-container [formGroupName]="i">
+                                        <p class="text-blue">{{ 'tracitur.habitacion'|translate }} {{ '#' + (i + 1) + ': ' + hab.ttarifa }} <span *ngIf="hab.edadmenores.length > 0 ">{{ '+' + hab.edadmenores.length + ' MENORES' }}</span></p>
+                                        <input type="hidden" [ngModel]="hab.ttarifa" formControlName="tipoHab">
+                                        <div class="form-row">
+                                            <div class="form-group col-12 col-md-6">
+                                                <label class="mb-0 font-weight-bold" for="name-{{ i }}">{{ 'tracitur.nombres'|translate }}:</label>
+                                                <input type="text" formControlName="nombres" class="form-control" id="namePax-{{ i }}" [ngClass]="{ 'is-invalid': submitted && p[i].controls.nombres.errors }" required>
+                                                <div *ngIf="submitted && p[i].controls.nombres.errors" class="invalid-feedback">
+                                                    <div *ngIf="p[i].controls.nombres.errors.required">{{ 'tracitur.ingrese-nombres'|translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-12 col-md-6">
+                                                <label class="mb-0 font-weight-bold" for="surname-{{ i }}">{{ 'tracitur.apellidos'|translate }}:</label>
+                                                <input type="text" formControlName="apellidos" class="form-control" id="surname-{{ i }}" [ngClass]="{ 'is-invalid': submitted && p[i].controls.apellidos.errors }" required>
+                                                <div *ngIf="submitted && p[i].controls.apellidos.errors" class="invalid-feedback">
+                                                    <div *ngIf="p[i].controls.apellidos.errors.required">{{ 'tracitur.ingrese-apellidos'|translate }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label class="mb-0 font-weight-bold" for="observaciones-{{ i }}">{{ 'tracitur.observaciones'|translate }}:</label>
+                                            <textarea class="form-control" formControlName="observaciones" id="observaciones-{{ i }}" rows="3"></textarea>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+
+                            </form>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <!-- ! CARD PAX INFO -->
+            <!-- CARD CLIENT INFO -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="mb-3">
+                            <h5 class="text-1 text-blue font-weight-bold m-0">{{ 'tracitur.datos-titular'|translate }}</h5>
+                            <small>{{ 'tracitur.sugerencia-datos-titular'|translate }}</small>
+                        </div>
+                        <form class="text-6" [formGroup]="serviceForm">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" for="name">{{ 'tracitur.nombres'|translate }}:</label>
+                                    <input type="text" formControlName="nombres" class="form-control" id="name" [ngClass]="{ 'is-invalid': submitted && f.nombres.errors }" required>
+                                    <div *ngIf="submitted && f.nombres.errors" class="invalid-feedback">
+                                        <div *ngIf="f.nombres.errors.required">{{ 'tracitur.ingrese-nombres'|translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" for="surname">{{ 'tracitur.apellidos'|translate }}:</label>
+                                    <input type="text" formControlName="apellidos" class="form-control" id="surname" [ngClass]="{ 'is-invalid': submitted && f.apellidos.errors }" required>
+                                    <div *ngIf="submitted && f.apellidos.errors" class="invalid-feedback">
+                                        <div *ngIf="f.apellidos.errors.required">{{ 'tracitur.ingrese-apellidos'|translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" for="email">{{ 'tracitur.email'|translate }}:</label>
+                                    <input type="email" formControlName="email" class="form-control" id="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" required>
+                                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                        <div *ngIf="f.email.errors.required">{{ 'tracitur.ingrese-email'|translate }}</div>
+                                        <div *ngIf="f.email.errors.email">{{ 'tracitur.email-valido'|translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-6">
+                                    <label class="mb-0 font-weight-bold" for="phone">{{ 'tracitur.telefonos'|translate }}:</label>
+                                    <input type="phone" formControlName="telefonos" class="form-control" id="phone" [ngClass]="{ 'is-invalid': submitted && f.telefonos.errors }" required>
+                                    <div *ngIf="submitted && f.telefonos.errors" class="invalid-feedback">
+                                        <div *ngIf="f.telefonos.errors.required">{{ 'tracitur.ingrese-telefono'|translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="mb-0 font-weight-bold" for="observaciones">{{ 'tracitur.observaciones'|translate }}:</label>
+                                <textarea class="form-control" formControlName="observaciones" name="observaciones" id="observaciones" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- ! CARD CLIENT INFO -->
+        </div>
+        <div class="col-12 col-md-4">
+            <!-- CARD BOOKING -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="text-right mb-3">
+                            <h5 class="font-weight-bold">{{ 'tracitur.precio-total-publico'|translate }}</h5>
+                            <div class="text-1 text-orange font-weight-bold">
+                                {{ user.currency }}&nbsp;
+                                <span class="text-blue" *ngIf="serviceBooking.tarifas.divisa.tasatipo == 'D'">{{ calculateTDC(serviceBooking.total.publico, serviceBooking.tarifas.divisa?.currency_tc) | currencyFormat }}</span>
+                                <span class="text-blue" *ngIf="serviceBooking.tarifas.divisa.tasatipo == 'F'">{{ calculateTDC(serviceBooking.total.publico, serviceBooking.total.divisa?.currency_tc) | currencyFormat }}</span>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <input type="checkbox" name="terms" id="terms" (change)="toggleTerms($event)">
+                            <label for="terms" class="text-blue text-6 font-weight-bold"><a href="javascript:void(0)" (click)="TerminosYCondiciones()">{{ 'tracitur.terminos-condiciones'|translate }}</a></label>
+                        </div>
+                        <button type="button" class="btn btn-blue btn-block text-uppercasse" [disabled]="!aceptTerms" (click)="doBooking(serviceBooking, optionSelected)">{{ 'tracitur.reservar'|translate }}
+                            <span *ngIf="loading">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                        <!-- <button type="button"  class="btn btn-orange btn-block">PAGAR AHORA</button> -->
+                        <hr>
+                        <div class="border-black rounded d-flex justify-content-between mb-2">
+                            <div>
+                                {{ 'tracitur.fecha-salida'|translate }}:
+                            </div>
+                            <div>
+                                {{ serviceBooking.info.fechaSalida | date:'d/MM/yyyy' }}
+                            </div>
+                        </div>
+                        <div class="border-black rounded d-flex justify-content-between mb-2" *ngIf="serviceBooking.info.fechaRegreso && serviceBooking.info.tipoServicio != 'OW'">
+                            <div>
+                                {{ 'tracitur.fecha-regreso'|translate }}:
+                            </div>
+                            <div>
+                                {{ serviceBooking.info.fechaRegreso | date:'d/MM/yyyy' }}
+                            </div>
+                        </div>
+                        <div class="border-black rounded d-flex justify-content-between mb-2" *ngIf="serviceBooking.info.type != 'TRA' && serviceBooking.horarioSalida">
+                            <div>
+                                {{ 'tracitur.horario-salida'|translate }}:
+                            </div>
+                            <span>
+                                {{ serviceBooking.horarioSalida }}
+                            </span>
+                        </div>
+                        <div class="mb-2">
+                            <div class="border-black rounded-top d-flex justify-content-between" *ngIf="serviceBooking.rooming.adultos > 0" [ngClass]="{'rounded-bottom': serviceBooking.rooming.infantes == 0 || serviceBooking.rooming.menores == 0 || serviceBooking.rooming.mayores == 0}">
+                                <div>
+                                    {{ 'tracitur.adultos'|translate }}:
+                                </div>
+                                <div>
+                                    {{ serviceBooking.rooming.adultos }}
+                                </div>
+                            </div>
+                            <div class="border-black d-flex justify-content-between border-top-0" *ngIf="serviceBooking.rooming.infantes > 0" [ngClass]="{'rounded-bottom': serviceBooking.rooming.menores == 0 && serviceBooking.rooming.mayores == 0}">
+                                <div>
+                                    {{ 'tracitur.infantes'|translate }}:
+                                </div>
+                                <div>
+                                    {{ serviceBooking.rooming.infantes }}
+                                </div>
+                            </div>
+                            <div class="border-black d-flex justify-content-between border-top-0" *ngIf="serviceBooking.rooming.menores > 0" [ngClass]="{'rounded-bottom': serviceBooking.rooming.mayores == 0}">
+                                <div>
+                                    {{ 'tracitur.menores'|translate }}:
+                                </div>
+                                <div>
+                                    {{ serviceBooking.rooming.menores }}
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="type == 'CIR'">
+                            <div class="border-black d-flex justify-content-between" *ngFor="let hab of serviceBooking.ratesDetails;let i = index; let first = first; let last = last" [ngClass]="{'rounded-top': first, 'rounded-bottom': last}">
+                                <div class="text-uppercasse">
+                                    {{ 'tracitur.habitacion'|translate }} {{ i + 1 }}:
+                                </div>
+                                <div>
+                                    {{ hab.ttarifa }} <span *ngIf="hab.edadmenores.length > 0 " class="text-uppercasse"> + {{hab.edadmenores.length}} {{ 'tracitur.menores'|translate }} </span>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" *ngIf="serviceBooking.info.terminos && (serviceBooking.info.terminos != '' || serviceBooking.info.terminos != null)">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="text-center mb-3">
+                            <h5 class="font-weight-bold text-blue">{{ 'tracitur.terminos-y-condiciones'|translate }}</h5>
+                        </div>
+                        <hr>
+                        <div class="border-black mb-2" [innerHTML]="serviceBooking.info.terminos">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

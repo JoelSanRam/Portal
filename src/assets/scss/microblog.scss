@@ -1,0 +1,42 @@
+.sub-secc{
+    font-family: 'Muli-SemiBold';
+}
+
+.date-pub{
+    color: $colorPrimarioUnoOscuro;
+}
+
+.card-white-blog{
+    background-color: #fff;
+    border-radius: 8px;
+
+    .portada{
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        min-height: 450px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        @include media-breakpoint-down(xs) {
+            min-height: 200px;
+        }
+    }
+}
+.linkPublicacion{
+    color: unset;
+    &:hover{
+        img{
+            filter: saturate(180%);
+        }
+        color: unset;
+        text-decoration: none;
+    }
+}
+.thumb{
+    box-shadow: 0 0 7px #8080807a;
+}
+.nolink{
+    color: unset;
+    &:hover{
+        text-decoration: none;
+    }
+}

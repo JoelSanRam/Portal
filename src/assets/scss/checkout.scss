@@ -1,0 +1,84 @@
+/************ CHECKOUT AEREOS ************/
+.sticky-content {
+    @include media-breakpoint-up(md) {
+        position: sticky;
+        top: 59px;
+        // right: 34px;
+        z-index: 2;
+        background-color: #f3f3f3;
+        // width: 43%;
+    }
+    .countdown {
+        height: 45px;
+        width: 180px;
+        background-color: #f73c3c;
+        color: white;
+        border-radius: 50px;
+        margin-bottom: 1rem;
+        // float: right;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        & small {
+            font-size: 15px;
+        }
+        .numberscounter{
+            flex: 0 0 100%;
+            line-height: 20px;
+            margin-top: 6px;
+            text-align: center;
+        }
+        .msg{
+            font-size: 0.7rem;
+            flex: 0 0 100%;
+            text-align: center;
+        }
+    }
+}
+
+.passenger-card {
+    &:not(:last-child) {
+        border-bottom: 1px solid $colorSombraUno;
+        margin-bottom: 25px;
+    }
+    .form-control[readonly] {
+        background-color: transparent;
+    }
+}
+
+.bagage-card {
+    color: $color-aereo-primary;
+    display: flex;
+    column-gap: 40px;
+    align-items: center;
+    & .fa-shopping-bag {
+        font-size: 45px;
+    }
+}
+
+.small-img {
+    max-width: 45px;
+    max-height: 45px;
+}
+
+.btn-like-link{
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-size: 1.2rem;
+    cursor: pointer;
+    &:hover{
+        text-decoration: underline !important;
+        color: #069;
+    }
+    .btn-select{
+        text-align: center;
+        border-radius: 20px;
+        color: #ffffff;
+        border-color: red;
+        background-color: red;
+        font-size: 1.1em;
+    }
+}

@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{ 'reservaciones.monto-pagar'|translate }}Monto a pagar</h3>
+</div>
+<div class="modal-body">
+  <iframe *ngIf="tipo==1" [src]="urlSafe" width="100%" style="border: 1px solid #D7D7D7;" height="1040" frameborder="0" allowfullscreen="0" scrolling="no"></iframe>
+  <div *ngIf="tipo==2" class="row">
+    <form class="col-12" [formGroup]="correo" (ngSubmit)="enviocorreo()">
+      <div class="col-sm-12 col-md-12">
+        <div class="form-group">
+
+          <label class="text-center">
+            {{ 'reservaciones.liga-pago'|translate }}:
+            <!-- <span class="label-text">{{link}}</span> -->
+            <a href="{{link}}" target="_blank">{{link}}</a>
+        </label>
+          <br>
+            <label for="">{{ 'reservaciones.correo'|translate }}</label>
+            <input type="text" class="form-control" formControlName="correo" placeholder="{{ 'reservaciones.placeholder-correo'|translate }}">
+        </div>
+        <div class="col-sm-12 col-md-12">
+          <button class="btn btn-success btn-block"  type="submit">{{ 'reservaciones.enviar'|translate }}</button>
+      </div>
+    </div>
+    </form>  
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger btn-md" (click)="activeModal.dismiss('Cross click')">{{ 'reservaciones.cerrar'|translate }}</button>
+</div>

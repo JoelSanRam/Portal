@@ -1,0 +1,10 @@
+<router-outlet></router-outlet>
+<!-- <ngx-spinner type="" >
+    <img src='https://images.vexels.com/media/users/3/193297/isolated/preview/4752adfc1ac1732ee4ebb62297016c15-icono-de-dibujos-animados-de-covid-19-by-vexels.png' width="120" />" 
+</ngx-spinner> -->
+<div class="loader-container" *ngIf="showLoader">
+    <div  class="content">
+        <h1 *ngIf="textLoader">{{ textLoader }}</h1>
+        <ng-lottie [options]="options" [styles]="styles"></ng-lottie>
+    </div>
+</div>

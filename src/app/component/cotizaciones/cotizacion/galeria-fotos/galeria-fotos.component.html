@@ -1,0 +1,36 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ hotel?.nombre_nombre }}</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div *ngIf="vermensaje" class="modal-body">
+    <div class="row">
+        <div class="col-12">
+            <div class="float-right mb-3">
+                <button class="btn btn-blue btn-sm mr-2" type="button"(click)="saveChanges();">{{ 'modal.aceptar'|translate }}</button>
+                <button class="btn btn-red btn-sm" type="button" (click)="activeModal.dismiss('Cross click')">{{ 'modal.cancelar'|translate }}</button>
+            </div>
+        </div>
+    </div>
+	<div class="row">
+        <div *ngFor="let f of hotel.ficha_tecnica.imagenes; let i = index;" class="col-6 col-lg-4">
+            <div class="modal-fotos" [ngClass]="{'selected': f.selected}">
+                <input type="checkbox" id="" [value]="i" [(ngModel)]="f.selected" (click)="selectImg(f)">
+                <img class="" [src]="f.path" (click)="selectImg(f)">
+                <label for="">{{ f.titulo }}</label>
+            </div>
+        </div>
+        <!-- FOTOS CON TITULO -->
+	</div>
+</div>
+<div *ngIf="!vermensaje" class="modal-body">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger text-center" role="alert">
+                <strong>{{mensaje}}</strong>
+            </div>
+        </div>
+    </div>
+</div>
+	

@@ -1,0 +1,88 @@
+<div class="filtros-aereos" [class.show]="showFilters">
+    <div class="filtros-header">
+        <div>
+            <i class="fas fa-filter"></i> {{ 'vuelos.filtros'|translate }}
+        </div>
+        <button type="button" class="btn" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="filtros-body">
+        <div class="filtros-item">
+            <label class="filtros-label" for="order">{{ 'vuelos.ordenar-por'|translate }}: </label>
+            <select id="order" class="form-control" [(ngModel)]="newFilters.ordenar" (change)="selectOrder($event)">
+                <option value="menor">{{ 'vuelos.menor-precio'|translate }}</option>
+                <option value="mayor">{{ 'vuelos.mayor-precio'|translate }}</option>
+            </select>
+        </div>
+        <div class="filtros-item">
+            <a class="filtros-label" data-toggle="collapse" href="#collapseAirline" role="button" aria-expanded="true" aria-controls="collapseAirline">{{ 'vuelos.aerolineas'|translate }} </a>
+            <div class="collapse show" id="collapseAirline">
+                <div *ngFor="let airline of filtros?.aerolinea; let i = index;">
+                    <input #airlineCheckboxes type="checkbox" [id]="i" [value]="airline" (change)="selectAirline($event)"><label [for]="i">{{ airline }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="filtros-item">
+            <a class="filtros-label" data-toggle="collapse" href="#collapseStops" role="button" aria-expanded="true" aria-controls="collapseStops">{{ 'vuelos.escalas'|translate }}</a>
+            <div class="collapse show" id="collapseStops">
+                <div *ngIf="filtros?.escalas?.directo != null">
+                    <input #stopsCheckboxes type="checkbox" id="directo" value="directo" (change)="selectStop($event)" [disabled]="filtros?.escalas?.directo === 0"><label for="directo">{{ 'Directo (' + filtros?.escalas?.directo + ')' }}</label>
+                </div>
+                <div *ngIf="filtros?.escalas?.una_escala != null">
+                    <input #stopsCheckboxes type="checkbox" id="una_escala" value="una_escala" (change)="selectStop($event)" [disabled]="filtros?.escalas?.una_escala === 0"><label for="una_escala">{{ '1 Escala (' + filtros?.escalas?.una_escala + ')' }}</label>
+                </div>
+                <div *ngIf="filtros?.escalas?.dos_escalas != null">
+                    <input #stopsCheckboxes type="checkbox" id="dos_escalas" value="dos_escalas" (change)="selectStop($event)" [disabled]="filtros?.escalas?.dos_escalas === 0"><label for="dos_escalas">{{ '2 o más Escalas (' + filtros?.escalas?.dos_escalas + ')' }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="filtros-item">
+            <div *ngFor="let horario of horariosCheck; index as i ">
+                <a class="filtros-label" data-toggle="collapse" href="#collapseSchedule{{i}}" role="button" aria-expanded="true" aria-controls="collapseSchedule">{{ 'vuelos.horarios'|translate }} {{ showLabelSchedule(i) }} </a>
+
+                <div class="collapse show" id="collapseSchedule{{i}}">
+
+                    <div *ngFor="let hora of horario">
+                        <input  type="checkbox" id="{{hora.type+i}}" [checked]="hora.checked" [value]="hora.label" (change)="selectSchedule($event,i,horariosCheck.length)" [disabled]="hora.counter === 0"><label class="text-capitalize" for="{{hora.type+i}}">{{hora.label}} ({{hora.counter}}) [{{hora.rangeTime}}]</label>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="filtros-item">
+            <a class="filtros-label" data-toggle="collapse" href="#collapseDuration" role="button" aria-expanded="true" aria-controls="collapseDuration">{{ 'vuelos.duracion'|translate }}</a>
+            <div class="collapse show" id="collapseDuration">
+                <ng-container *ngIf="filtros?.duracion?.length > 0">
+                    <div *ngFor="let duracion of filtros.duracion; let i = index;">
+                        <label *ngIf="filtros?.duracion?.length === 1 ||filtros?.duracion?.length === 2 && i === 0"><i class="fas fa-plane-departure"></i> {{ 'vuelos.salida'|translate }}</label>
+                        <label *ngIf="filtros?.duracion?.length === 2 && i != 0 "><i class="fas fa-plane-arrival"></i> {{ 'vuelos.regreso'|translate }}</label>
+                        <label *ngIf="filtros?.duracion?.length > 2 "><i class="fas fa-plane-departure"></i> Tramo {{ i + 1 }}</label>
+                        <div class="filtros-range">
+                            <input (change)="selectDuration($event, i)" type="range" class="form-range" [min]="duracion?.minimo_duracion" [max]="duracion?.maximo_duracion" [value]="newFilters.duracion[i]" />
+                            <div class="range-det">
+                                <span>{{ duracion?.minimo_duracion | formatTime }}</span>
+                                <span>{{ newFilters.duracion[i] | formatTime }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="filtros-item">
+            <a class="filtros-label" data-toggle="collapse" href="#collapsePrice" role="button" aria-expanded="true" aria-controls="collapsePrice">{{ 'vuelos.precio'|translate }}</a>
+            <div class="collapse show" id="collapsePrice">
+                <div class="filtros-range" *ngIf="filtros?.precio_minimo || filtros?.precio_maximo">
+                    <input (change)="selectPrice($event)" type="range" class="form-range" [min]="filtros?.precio_minimo" [max]="filtros?.precio_maximo" [value]="newFilters.precio" />
+                    <div class="range-det">
+                        <span>{{ filtros?.precio_minimo | currencyFormat }}</span>
+                        <span>{{ newFilters.precio[0] | currencyFormat }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="filtros-footer">
+        <button type="button" class="btn btn-block btn-select" (click)="sendFilters()">{{ 'vuelos.aplicar'|translate }}</button>
+    </div>
+</div>

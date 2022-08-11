@@ -1,0 +1,94 @@
+.cotizaciones {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1rem;
+    & ul.nav-pills a.nav-link{
+        border-radius: $border-radius;
+        color: $infoColor;
+        padding: 6px .5rem;
+        &.active {
+            background-color: $infoColor;
+            color: $infoColorTxt;
+        }
+    }
+    & div.overflow {
+        overflow-x: auto;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    & table.table {
+        & thead tr th {
+            border-top: 0;
+            
+        }
+        & tbody th { 
+            & span {
+                font-weight: normal;
+            }
+            & .fa-star {
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+
+// MODAL COTIZACIONES INFO
+.services {
+    width: 100%;
+    max-height: 450px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $colorSombraDos;
+        border-radius: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: $colorSombraUno;
+        border-radius: 8px;
+    }
+    .table-services {
+        width: 100%;
+        tr {
+            & th {
+                font-family: $font-semiBold;
+                padding: 0.3rem;
+                border-radius: $border-radius;
+            }
+            &:nth-child(even){
+                background-color: $colorSombraUno;
+            }
+        }
+    }
+}
+
+// MODAL COTIZACIONES FOTOS
+.modal-fotos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: .5;
+    & img {
+        width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+    & label {
+        color: $white;
+        width: 100%;
+        text-transform: uppercase;
+        background-color: $black;
+        padding: 5px;
+    }
+    &.selected {
+        opacity: 1;
+        // & img {
+        // }
+        & label {
+            background-color: $colorSecundarioDos;
+        }
+    }
+}

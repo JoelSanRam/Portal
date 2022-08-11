@@ -1,0 +1,187 @@
+.reservaciones {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1rem;
+    & ul.nav-pills a.nav-link{
+        border-radius: $border-radius;
+        color: $infoColor;
+        padding: 4px 30px;
+        &.active {
+            background-color: $infoColor;
+            color: $infoColorTxt;
+            padding: 4px 30px;
+        }
+    }
+    & div.tab-content div.overflow {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    & .reservas-list-filter>li {
+        line-height: 20px;
+        a {
+            color: $colorSombraTres;
+            line-height: 10px;
+            &:hover{
+                color: $colorPrimarioUno;
+            }
+        }
+    }
+
+    & .table-reservas {
+      display: flex;
+      flex-direction: column;
+      & .table-header {
+        display: flex;
+        width: 100%;
+        background-color: $secondaryColor;
+        color: $secondaryColorTxt;
+        padding: 1rem;
+        border-radius: $border-radius;
+        margin-bottom: 1rem;
+        & .table-col {
+          width: 50%;
+          @include media-breakpoint-up(md) {
+            width: 20%;
+          }
+        }
+      }
+      & .table-body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        // @include media-breakpoint-up(md) {
+        // }
+        & .table-row {
+          border-radius: $border-radius;
+          padding: .5rem;
+          // display: flex;
+          @include media-breakpoint-up(lg) {
+            display: flex;
+          }
+          &:nth-of-type(even){
+            background-color: $colorSombraUno;
+          }
+          & .table-col {
+            width: 100%;
+            @include media-breakpoint-up(lg) {
+              // width: 15%;
+              &:first-child {
+                width: 40%;
+              }
+              &:nth-child(2) {
+                width: 18%;
+
+              }
+              &:nth-child(3) {
+                width: 15%;
+              }
+              &:nth-child(4) {
+                width: auto;
+
+              }
+            }
+          }
+        }
+      }
+    }
+
+    & .btns {
+      display: flex;
+      justify-content: space-evenly;
+    }
+}
+
+.sin-reservas {
+    width: 90%;
+    border: 1px solid red ;
+    border-radius: $border-radius;
+    padding: 5px 5px;
+    text-align: center;
+    margin: 0 5%;
+}
+
+// ULTIMAS RESERVAS
+.reservas-card {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1.5em 2em;
+    // height: 357px;
+    max-height: 450px;
+    & .title {
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+    & .overflow {
+        max-height: 355px;
+        overflow: auto;
+        &::-webkit-scrollbar {
+            // width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: $colorSombraDos;
+            border-radius: 8px;
+        }
+        &::-webkit-scrollbar-track {
+            background-color: $colorSombraUno;
+            border-radius: 8px;
+        }
+    }
+    & .date {
+        font-size: 14px;
+    }
+    & table>tbody {
+        & tr {
+            // line-height: 20px;
+            &:nth-child(even){
+                background-color: $colorSombraUno;
+                border-radius: $border-radius;
+            }
+        }
+
+        & td {
+            padding: 5px 10px;
+            &:nth-child(1) {
+                border-top-left-radius: $border-radius;
+                border-bottom-left-radius: $border-radius;
+                min-width: 160px;
+            }
+            &:nth-child(2) {
+                min-width: 250px;
+            }
+            &:nth-child(3) {
+                border-top-right-radius: $border-radius;
+                border-bottom-right-radius: $border-radius;
+                min-width: 160px;
+            }
+        }
+    }
+    @include media-breakpoint-up(md) {
+        height: 450px;
+        & .overflow {
+            height: 355px;
+        }
+    }
+}
+.badge-green{
+  background-color: $successColor !important;
+}
+
+.showNone {
+    height: 0;
+    opacity: 0;
+    border: 0;
+  }
+  
+.h-0 {
+    height: 0;
+}
+
+.tag-vuelog-status{
+  border-radius: 8%;
+  font-weight: 700;
+  text-align: center;
+  font-size: .7rem;
+  //padding:0 12px ;
+  width: 100px;
+}

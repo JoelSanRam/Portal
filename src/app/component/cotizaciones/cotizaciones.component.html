@@ -1,0 +1,257 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-4 mb-2">
+            <h5 class="title-page">{{ 'cotizaciones.cotizaciones'|translate }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="cotizaciones">
+                <ul class="nav nav-pills vav-fill" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="cotizaciones-tab" data-toggle="tab" href="#cotizaciones"
+                            role="tab" aria-controls="cotizaciones" aria-selected="true">{{ 'cotizaciones.items-cotizar'|translate }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="historial-tab" data-toggle="tab" href="#historial" role="tab"
+                            aria-controls="historial" aria-selected="false">{{ 'cotizaciones.historial-cotizaciones'|translate }}</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <!-- Cotizaciones -->
+                    <div class="tab-pane fade show active" id="cotizaciones" role="tabpanel"
+                        aria-labelledby="cotizaciones-tab">
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-4 col-12">
+                                        <div class="float-sm-left">
+                                            <label for="">{{ 'cotizaciones.mostrar'|translate }}</label>
+                                            <select [(ngModel)]="sizePage"
+                                                (change)="mostrarNumItems($event.target.value)" class="form-control"
+                                                aria-label="Default select example">
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 text-center">
+                                        <nav aria-label="Page navigation" *ngIf="paginacion">
+                                            <ul class="pagination justify-content-center">
+                                                <li *ngIf="paginacion.currentPage > 1">
+                                                    <a href="javascript:void(0);"
+                                                        (click)="goToPage(paginacion.currentPage-1,sizePage)"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li [ngClass]="{'active': paginacion.currentPage == p }"
+                                                    *ngFor="let p of paginacion.pages; let i = index">
+                                                    <a href="javascript:void(0);" (click)="goToPage(p,sizePage)">{{ p
+                                                        }}</a>
+                                                </li>
+                                                <!-- <li ng-class="{'active': paginacion.page==p }" ng-repeat="p in [] | rangesst:1:paginacion.pages track by p"><a href="javascript:void(0);" (click)="goToPage(resulthotel,p)" >{{ p }}</a></li> -->
+                                                <li *ngIf="paginacion.endPage < paginacion.totalPages">
+                                                    <a href="javascript:void(0);"
+                                                        (click)="goToPage(paginacion.currentPage+sizePage)"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <div class="float-sm-right">
+                                            <!-- <a routerLink="/preview" class="btn btn-sm btn-green mr-2">Crear</a> -->
+                                            <button class="btn btn-sm btn-green mr-2" [disabled]="isDisabled"
+                                                (click)="showPreview()">{{ 'cotizaciones.crear'|translate }}</button>
+                                            <button class="btn btn-sm btn-red" [disabled]="isDisabled"
+                                                (click)="delCotizacion()">{{ 'cotizaciones.eliminar'|translate }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <div class="overflow" (window:scroll)="loadMore($event)">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">
+                                                    <input type="checkbox" id="checkbox_cotizaciones" [(ngModel)]="all"
+                                                        (change)="selectAll(all, cotizaciones)">
+                                                    <label for="checkbox_cotizaciones"></label>
+                                                </th>
+                                                <th scope="col" class="w-25">{{ 'cotizaciones.hotel-categoria'|translate }}</th>
+                                                <th scope="col" class="w-25">{{ 'cotizaciones.habitacion-plan'|translate }}</th>
+                                                <th scope="col" class="w-25">{{ 'cotizaciones.fechas'|translate }}</th>
+                                                <th scope="col">{{ 'cotizaciones.adultos'|translate }}</th>
+                                                <th scope="col">{{ 'cotizaciones.menores'|translate }}</th>
+                                                <th scope="col">{{ 'cotizaciones.juniors'|translate }}</th>
+                                                <th scope="col">{{ 'cotizaciones.extras'|translate }}</th>
+                                                <th scope="col" class="text-center w-25 text-uppercasse">{{ 'cotizaciones.cotizaciones'|translate }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let c of cotizaciones | slice:0:limitResult; let i = index;"
+                                                (change)="getSelected(c)">
+                                                <th scope="row">
+                                                    <input type="checkbox" id="cot_{{i}}" [(ngModel)]="c.selected"
+                                                        [value]="c.cotizacion_id" (change)="getSelected(c)">
+                                                    <label for="cot_{{i}}"></label>
+                                                </th>
+                                                <th>
+                                                    {{c.hotel_nombre}}
+                                                    <br>
+                                                    <span>{{c.hotel_direccion}}</span>
+                                                    <br>
+                                                    <div [innerHTML]="c.hotel_categoria | ratingHotel"></div>
+                                                </th>
+                                                <th>
+                                                    ({{c.numhab}}) {{c.room_nombre}}
+                                                    <br>
+                                                    <span>{{c.plan_nombre}}</span>
+                                                </th>
+                                                <td>{{c.cotizacion_checkin +' - '+c.cotizacion_checkout}}</td>
+                                                <td class="text-center">{{c.adultos}}</td>
+                                                <td class="text-center">{{c.menores}}</td>
+                                                <td class="text-center">{{c.juniors}}</td>
+                                                <td class="text-center">{{c.extras}}</td>
+                                                <th>{{ calculoTDC(c.cotizacion_importe,c.cotizacion_tasa_cambio) |
+                                                    currencyFormat}} <span class="font-weight-bold text-orange">{{
+                                                        user.currency }}</span></th>
+                                                <!-- <th>{{c.cotizacion_importe | currencyFormat}} <span class="font-weight-bold text-orange">{{ c.cotizacion_divisa }}</span></th> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Historial -->
+                    <div class="tab-pane fade" id="historial" role="tabpanel" aria-labelledby="historial-tab">
+
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-4 col-12">
+                                        <div class="float-sm-left">
+                                            <label for="">{{ 'cotizaciones.mostrar'|translate }}</label>
+                                            <select [(ngModel)]="sizePageC"
+                                                (change)="mostrarNumItemsC($event.target.value)" class="form-control"
+                                                aria-label="Default select example">
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 text-center">
+                                        <nav aria-label="Page navigation" *ngIf="paginacionC">
+                                            <ul class="pagination justify-content-center">
+                                                <li *ngIf="paginacionC.currentPage > 1">
+                                                    <a href="javascript:void(0);"
+                                                        (click)="goToPageC(paginacionC.currentPage-1,sizePageC)"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li [ngClass]="{'active': paginacionC.currentPage == p }"
+                                                    *ngFor="let p of paginacionC.pages; let i = index">
+                                                    <a href="javascript:void(0);" (click)="goToPageC(p,sizePageC)">{{ p
+                                                        }}</a>
+                                                </li>
+                                                <li *ngIf="paginacionC.endPage < paginacionC.totalPages">
+                                                    <a href="javascript:void(0);"
+                                                        (click)="goToPageC(paginacionC.currentPage+sizePageC)"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <div class="float-sm-right">
+                                    <button class="btn btn-sm btn-red" [disabled]="isDisabledH"
+                                        (click)="delHistorial()">{{ 'cotizaciones.eliminar'|translate }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <div class="overflow">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" id="checkbox_historial"
+                                                        [(ngModel)]="allHistorial"
+                                                        (change)="selectAllHistorial(allHistorial, historial)">
+                                                    <label for="checkbox_historial"></label>
+                                                </th>
+                                                <th>{{ 'cotizaciones.cotizacion'|translate }}</th>
+                                                <th>{{ 'cotizaciones.fecha'|translate }}</th>
+                                                <th>{{ 'cotizaciones.dirigido-a'|translate }}</th>
+                                                <th>{{ 'cotizaciones.observaciones'|translate }}</th>
+                                                <th>{{ 'cotizaciones.descuento'|translate }}</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let h of historial; let i = index"
+                                                (change)="getSelectedHistorial(h)">
+                                                <td>
+                                                    <input id="his_{{i}}" type="checkbox" [(ngModel)]="h.selected"
+                                                        [value]="h.folio" (change)="getSelectedHistorial(h)">
+                                                    <label for="his_{{i}}"></label>
+                                                </td>
+                                                <td>{{ h.folio }}</td>
+                                                <td>{{ h.fecha_cotizacion }}</td>
+                                                <td>{{ h.dirigido }}</td>
+                                                <td>
+                                                    <div [innerHTML]="h.observaciones"></div>
+                                                </td>
+                                                <td>{{ h.descuento }} %</td>
+                                                <td>
+                                                    <button class="btn" tooltip="{{ h.generado }}"
+                                                        [ngClass]="{'btn-blue': h.generado == 'PENDIENTE', 'btn-yellow': h.generado == 'PROCESO', 'btn-green': h.generado == 'LISTO', 'btn-red':h.generado !== 'LISTO' && h.generado !== 'PENDIENTE' && h.generado !== 'PROCESO' && h.generado !== ''}"
+                                                        type="button" (click)="getPDF(h.folio)"><i
+                                                            class="fas fa-download"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Anuncio -->
+    <div class="row">
+        <div class="col-12 mt-4">
+            <div class="border-rounded ads">
+                <a [href]="link1" target="_blank" [ngStyle]="link1 | ifExistLink">
+                    <img class="border-rounded" [src]="anuncio1" alt="Anuncio">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner type="">
+    <!-- <img src='../../../assets/img/spinners/general.gif' /> -->
+    <img src='{{imgruta}}' />
+</ngx-spinner>

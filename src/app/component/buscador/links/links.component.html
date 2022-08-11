@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs buscador d-none d-sm-flex align-items-center" id="myTab" role="tablist">
+  <li class="nav-item" *ngIf="permisoshotel==1 && permisoshotelAgency==1">
+    <a class="nav-link" [ngClass]="{'active': ruta=='/hoteles'}"  [routerLink]="['/home']"  [state]="{ buscar: 'hoteles'}">{{ 'buscador.label-hotel'|translate }}</a>
+  </li>
+  <li class="nav-item" *ngIf="permisoVuelos ==1 && permisoVuelosAgency==1">
+    <a class="nav-link" [ngClass]="{'active': ruta=='/vuelos'}" [routerLink]="['/home']" [state]="{ buscar: 'vuelos'}">{{ 'buscador.label-vuelos'|translate }}</a>
+  </li>
+  <li class="nav-item" *ngIf="permisostour==1 && permisostourAgency==1">
+    <a class="nav-link" [ngClass]="{'active': ruta=='/tours'}" [routerLink]="['/home']" [state]="{ buscar: 'tours'}">{{ 'buscador.label-tour'|translate }}</a>
+  </li>
+  <li class="nav-item" *ngIf="permisostraslados==1 && permisostrasladosAgency==1">
+    <a class="nav-link" [ngClass]="{'active': ruta=='/traslados'}" [routerLink]="['/home']" [state]="{ buscar: 'traslados'}">{{ 'buscador.label-traslados'|translate }}</a>
+  </li>
+  <li class="nav-item" *ngIf="permisoscircuitos==1  && permisoscircuitosAgency==1">
+    <a class="nav-link" [ngClass]="{'active': ruta=='/circuitos'}" [routerLink]="['/home']" [state]="{ buscar: 'circuitos'}">{{ 'buscador.label-circuitos'|translate }}</a>
+  </li>
+</ul>

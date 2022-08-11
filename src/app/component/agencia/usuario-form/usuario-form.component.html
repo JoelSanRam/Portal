@@ -1,0 +1,62 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ 'agencia.crear-usuario'|translate }}</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="newUserForm" (ngSubmit)="crearUsuario()">
+        <div class="form-group">
+            <label for="nombre">{{ 'agencia.nombre'|translate }}</label>
+            <input id="nombre" class="form-control" type="text" formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && d.nombre.errors }" required>
+            <div *ngIf="submitted && d.nombre.errors" class="invalid-feedback">
+                <div *ngIf="d.nombre.errors.required">{{ 'agencia.ingrese-nombre-usuario'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="usuario">{{ 'agencia.usuario'|translate }}</label>
+            <input id="usuario" class="form-control" type="text" formControlName="usuario">
+            <div *ngIf="submitted && d.usuario.errors" class="invalid-feedback">
+              <div *ngIf="d.usuario.errors.required">{{ 'agencia.ingrese-usuario'|translate }}</div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" class="form-control" type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && d.email.errors }">
+            <div *ngIf="submitted && d.email.errors" class="invalid-feedback">
+                <!-- <div *ngIf="d.email.errors.required">Ingrese el email</div> -->
+                <div *ngIf="d.email.errors.email">{{ 'agencia.email-valido'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="pass">{{ 'agencia.password'|translate }}</label>
+            <input id="pass" class="form-control" type="password" formControlName="pass" [ngClass]="{ 'is-invalid': submitted && d.pass.errors || noMatch }">
+            <div *ngIf="submitted && d.pass.errors" class="invalid-feedback">
+              <div *ngIf="d.pass.errors.required">{{ 'agencia.ingrese-pass'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="repeat">{{ 'agencia.repetir-pass'|translate }}</label>
+            <input id="repeat" class="form-control" type="password" formControlName="repeat" [ngClass]="{ 'is-invalid': submitted && d.repeat.errors || noMatch }">
+            <div *ngIf="submitted && d.repeat.errors" class="invalid-feedback">
+              <div *ngIf="d.repeat.errors.required">{{ 'agencia.ingrese-pass-confirmacion'|translate }}</div>
+            </div>
+            <div *ngIf="noMatch" class="invalid-feedback">{{ 'agencia.pass-no-coincide'|translate }}</div>
+        </div>
+        <div class="form-group">
+            <label for="tipousuario">{{ 'agencia.rol'|translate }}</label>
+            <select id="tipousuario" class="form-control" formControlName="tipousuario">
+                <option value="Agente">{{ 'agencia.agente'|translate }}</option>
+                <option value="Administrador">{{ 'agencia.administrador'|translate }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-green btn-block text-uppercasse" type="submit">{{ 'agencia.guardar'|translate }}
+                <span *ngIf="loading">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </span>
+            </button>
+        </div>
+    </form>
+</div>  
+	

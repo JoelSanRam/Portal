@@ -1,0 +1,53 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ 'reservaciones.pagar-reserva'|translate }}</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="container">
+		<div class="row mb-3">
+			<div class="col-12 col-sm-6 text-center mb-5 mb-sm-0">
+				<h5 class="title-page">{{ 'reservaciones.total-reserva'|translate }}</h5>
+				<div class="font-weight-bold pb-2"><span class="text-blue">{{precioNe | currencyFormat}}</span>&nbsp;<span class="text-orange">MXN</span> NETA</div>
+				<small><span class="text-blue">{{precioPu | currencyFormat}}</span>&nbsp;<span class="text-orange">MXN</span> PÚBLICA</small>
+			</div>
+			<div class="col-12 col-sm-6 text-center">
+				<h5 class="title-page">{{ 'reservaciones.saldo'|translate }}</h5>
+				<div class="font-weight-bold"><span class="text-blue">{{saldo | currencyFormat}}</span>&nbsp;<span class="text-orange">MXN</span></div>
+			</div>
+		</div>
+		<div class="row d-flex align-items-stretch">
+			<div class="col-12 col-lg-5 mb-3">
+				<button class="btn btn-blue btn-block" type="button" (click)="modalPagar(1,precioNe,precioPu,datosRes)">{{ 'reservaciones.pagar-neta'|translate }}: {{precioNe | currencyFormat}} MXN</button>
+			</div>
+			<div class="col-12 col-lg-5 mb-3">
+				<button class="btn btn-green btn-block" type="button" (click)="modalPagar(2,precioPu,precioPu,datosRes)">{{ 'reservaciones.pagar-publica'|translate }}: {{precioPu | currencyFormat}} MXN</button>
+			</div>
+			<div class="col-12 col-lg-2 mb-3">
+				<button class="btn btn-yellow btn-block" type="button" (click)="modalPagar(3,0,precioPu,datosRes)">{{ 'reservaciones.abonar'|translate }}</button>
+			</div>
+		</div>
+		<table class="table table-light" *ngIf="depositos.length > 0">
+			<thead>
+				<tr>
+					<th>{{ 'reservaciones.idDeposito'|translate }}</th>
+					<th>{{ 'reservaciones.importe'|translate }}</th>
+					<th>{{ 'reservaciones.estatus'|translate }}</th>
+					<th>{{ 'reservaciones.fecha-pago'|translate }}</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let l of depositos;">
+					<td>{{ l.idDeposito }}</td>
+					<td>{{ l.importe }}</td>
+					<td>{{ l.status }}</td>
+					<td>{{ l.fechaPago }}</td>
+					<td><i class="fa fa-info" (click)="showDetalle(l.detalles)"></i></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>  
+	

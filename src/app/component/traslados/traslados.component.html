@@ -1,0 +1,397 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 body-cotizador">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 px-0">
+						<app-links></app-links>
+					</div>
+                    <div class="col-12 py-2">
+                        <app-buscador-traslado></app-buscador-traslado>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4" *ngIf="encontrados != 0">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="">
+                <google-map
+                    class="map-info" 
+                    [zoom]="zoom"
+                    [center]="centerMap"
+                    [options]="options">
+                        <map-marker *ngFor="let mk of markers"
+                            [position]="mk.position"
+                            [options]="mk.options">
+                        </map-marker>
+                </google-map>
+                <!-- <iframe class="map-traslados border-rounded" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d954813.4619503752!2d-88.03433145954521!3d20.801800483531046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f4e4d76264b36e3%3A0x7db660e55fb2bd60!2sRiviera%20Maya%2C%20Q.R.!5e0!3m2!1ses!2smx!4v1589578873111!5m2!1ses!2smx" frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="traslados_compartidos.length>0">
+        <div class="col-12">
+            <h5 class="title-traslados">{{ 'traslados.COMPARTIDO'|translate }}</h5>
+            <p>{{ 'traslados.compartir-traslado'|translate }}</p>
+        </div>
+    </div>
+
+    <div class="row mb-4" *ngFor="let tc of traslados_compartidos; let i = index;">
+        <div class="col-12">
+            <div class="card-white-img">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <div class="crop">
+                            <img class="" src="{{ tc.info.url_thumb}}" onerror="this.src='//pbs.twimg.com/profile_images/600060188872155136/st4Sp6Aw.jpg';" alt="">
+                        </div>
+                        <div class="position-relative d-flex align-items-center flex-wrap">
+                            <h5 class="text-1 text-uppercase font-weight-bold m-0 mr-3 mb-2">
+                                {{tc.info.nombre}}
+                            </h5>
+                            <span class="badge badge-border-blue font-weight-light px-2 mb-2">
+                                {{ 'traslados.on-request'|translate }}
+                            </span>
+                        </div>
+                        <div class="mb-2 btn-alerts">
+                            <span class="badge badge-blue mr-2 px-2" (click)="showInformation(tc.info.informacion)">{{ 'traslados.informacion'|translate }}</span>
+                            <span class="badge badge-red px-2" (click)="showPolitics(tc.politicas)">{{ 'traslados.politicas-cancelacion'|translate }}</span>
+                        </div>
+                        <div class="d-flex align-items-center flex-wrap mb-2 mb-sm-4">
+                            <div class="text-6 my-1 mr-4">
+                                <i class="fas fa-user text-blue mr-2"></i> {{ 'traslados.min-pax'|translate }}: {{tc.occupancyRules.ocupmin}}
+                            </div>
+                            <div class="text-6 my-1 mr-4">
+                                <i class="fas fa-users text-blue mr-2"></i> {{ 'traslados.max-pax'|translate }}: {{tc.occupancyRules.ocupmax}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 p-md-0">
+                                <div class="row">
+                                    <div class="col-6 mb-2">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.adultos'|translate }}</p>
+                                                    <div *ngIf="tc.tarifas.promocion && tc.tarifas.publica.adulto_ant">
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.adulto_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.adulto_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    </div>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.adulto,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.adulto,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <!-- <p class="my-1" >$500.00 <span class="text-orange">MXN</span></p> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-2" *ngIf="tc.occupancyRules.mayores">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.adulto-mayor'|translate }} <span class="font-weight-light">> {{tc.occupancyRules.edadadultomayor}} {{ 'traslados.edad'|translate }}</span></p>
+                                                    <div *ngIf="tc.tarifas.promocion && tc.tarifas.publica.mayor_ant">
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.mayor_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.mayor_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    </div>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.mayor,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.mayor,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <!-- <p class="my-1"><span class="text-blue">GRATIS</span></p> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-2" *ngIf="tc.occupancyRules.menores">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.menor'|translate }} <span class="font-weight-light">{{tc.occupancyRules.edadmenormin}} - {{tc.occupancyRules.edadmenormax}} {{ 'traslados.edad'|translate }}</span></p>
+                                                    <div *ngIf="tc.tarifas.promocion && tc.tarifas.publica.menor_ant">
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.menor_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.menor_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    </div>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.menor,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.menor,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <!-- <p class="my-1"><span class="text-blue">GRATIS</span></p> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-2" *ngIf="tc.occupancyRules.infantes">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.infantes'|translate }} <span class="font-weight-light">{{tc.occupancyRules.edadinfantemin}} - {{tc.occupancyRules.edadinfantemax}} {{ 'traslados.edad'|translate }}</span></p>
+                                                    <div *ngIf="tc.tarifas.promocion && tc.tarifas.publica.infante_ant">
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.infante_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                        <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.infante_ant,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    </div>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'D'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.infante,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <p *ngIf="tc.tarifas.divisa.tasatipo == 'F'" class="my-1" [innerHTML]="calculateTDC(tc.tarifas.publica.infante,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                                    <!-- <p class="my-1"><span class="text-blue">GRATIS</span></p> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="row mb-3">
+                            <div class="col-12 d-none d-lg-block text-right">
+                                <p class="m-0">{{ 'traslados.servicio-desde'|translate }}:</p>
+                                <p class="m-0 text-1" *ngIf="tc.tarifas.divisa.tasatipo == 'D'" [innerHTML]="priceSince(tc.tarifas.publica.adulto,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                <p class="m-0 text-1" *ngIf="tc.tarifas.divisa.tasatipo == 'F'" [innerHTML]="priceSince(tc.tarifas.publica.adulto,user.currency,tc.tarifas.divisa.currency_tc)"></p>
+                                <div *ngIf="tc.tarifas.promocion && tc.tarifas.publica.adulto_ant">
+                                    <p class="m-0">{{ 'traslados.antes'|translate }}:</p>
+                                    <p [innerHTML]="calculateTDC(tc.tarifas.publica.adulto_ant,user.currency,'')"></p>
+                                </div>
+                                <p class="m-0">{{ 'traslados.impuestos-incluidos'|translate }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-8 offset-sm-4">
+                                <a href="#select-{{i}}"  data-toggle="collapse" class="btn btn-block btn-orange" (click)="prebookForm(tc)">{{ 'traslados.seleccionar'|translate }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row collapse" *ngIf="tc.prebook" id="select-{{i}}">
+                    <div class="col-12 col-lg-9 ">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-12">
+                                        <label for="">{{ 'traslados.adultos'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tc.book.rooming.adultos" (change)="calculateTotal(tc.book)">
+                                            <option [value]="o" *ngFor="let o of tc.book.ocupancyOptions.adultos.options">{{o}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-12" *ngIf="tc.book.ocupancyOptions.mayores.active">
+                                        <label for="">{{ 'traslados.adultos-mayores'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tc.book.rooming.mayores" (change)="calculateTotal(tc.book)">
+                                            <option [value]="o" *ngFor="let o of tc.book.ocupancyOptions.mayores.options">{{o}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-12" *ngIf="tc.book.ocupancyOptions.menores.active">
+                                        <label for="">{{ 'traslados.menores'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tc.book.rooming.menores" (change)="calculateTotal(tc.book)">
+                                            <option [value]="o" *ngFor="let o of tc.book.ocupancyOptions.menores.options">{{o}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-12" *ngIf="tc.book.ocupancyOptions.infantes.active">
+                                        <label for="">{{ 'traslados.infantes'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tc.book.rooming.infantes" (change)="calculateTotal(tc.book)">
+                                            <option [value]="o" *ngFor="let o of tc.book.ocupancyOptions.infantes.options">{{o}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <p>{{ 'traslados.total-vehiculos'|translate }}: {{tc.book.totalVehiculos}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-12">
+                        <div class="row">
+                            <div class="col-12 text-center text-md-right">
+                                <p class="font-weight-bold m-0">{{ 'traslados.TOTAL-RESERVA'|translate }}</p>
+                                <p class="font-weight-bold text-1" [innerHTML]="priceSince(tc.book.total.publico,tc.book.total.currency,tc.tarifas.divisa.currency_tc)">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-11 offset-sm-1">
+                                <button class="btn btn-block btn-blue" (click)="gotoBook(tc.book)">{{ 'traslados.reservar'|translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="traslados_privados.length>0">
+        <div class="col-12">
+            <h5 class="title-traslados">{{ 'traslados.PRIVADO'|translate }}</h5>
+            <p>{{ 'traslados.no-compartir-vehiculo'|translate }}</p>
+        </div>
+    </div>
+
+    <div class="row mb-4" *ngFor="let tp of traslados_privados; let i = index;">
+        <div class="col-12">
+            <div class="card-white-img">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <div class="crop">
+                            <!-- <img class="" src="./assets/img/transp-03.jpg" alt=""> -->
+                            <img class="" src="{{tp.info.url_thumb}}" alt="" onerror="this.src='//pbs.twimg.com/profile_images/600060188872155136/st4Sp6Aw.jpg';">
+                        </div>
+                        <div class="position-relative d-flex align-items-center flex-wrap">
+                            <h5 class="text-1 text-uppercase font-weight-bold m-0 mr-3 mb-2">
+                                {{tp.info.nombre}}
+                            </h5>
+                            <span class="badge badge-border-blue font-weight-light px-2 mb-2">
+                               {{ 'traslados.on-request'|translate }}
+                            </span>
+                        </div>
+                        <div class="mb-2 btn-alerts">
+                            <span class="badge badge-blue mr-2 px-2" (click)="showInformation(tp.info.informacion)">{{ 'traslados.informacion'|translate }}</span>
+                            <span class="badge badge-red px-2" (click)="showPolitics(tp.politicas)">{{ 'traslados.politicas-cancelacion'|translate }}</span>
+                        </div>
+                        <div class="d-flex align-items-center flex-wrap mb-2 mb-sm-4">
+                            <div class="text-6 my-1 mr-4">
+                                <i class="fas fa-user text-blue mr-2"></i> {{ 'traslados.min-pax'|translate }}: {{tp.occupancyRules.ocupmin}}
+                            </div>
+                            <div class="text-6 my-1 mr-4">
+                                <i class="fas fa-users text-blue mr-2"></i> {{ 'traslados.max-pax'|translate }}: {{tp.occupancyRules.ocupmax}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 p-md-0">
+                                <div class="text-6 my-1 mr-4" *ngIf="tp.tarifas.promocion && tp.tarifas.publica.adulto_ant">
+                                    <p>{{ 'traslados.antes'|translate }}: </p>
+                                    <p [innerHTML]="calculateTDC(tp.tarifas.publica.adulto_ant,user.currency,'')"></p>
+                                </div>
+                                <div class="text-6 my-1 mr-4">
+                                    <strong class="d-inline">{{ 'traslados.servicio'|translate }}: </strong>
+                                    <p *ngIf="tp.tarifas.divisa.tasatipo == 'D'" class="my-1 d-inline" [innerHTML]="calculateTDC(tp.tarifas.publica.adulto,user.currency,tp.tarifas.divisa.currency_tc)"></p>
+                                    <p *ngIf="tp.tarifas.divisa.tasatipo == 'F'" class="my-1 d-inline" [innerHTML]="calculateTDC(tp.tarifas.publica.adulto,user.currency,tp.tarifas.divisa.currency_tc)"></p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.adultos'|translate }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" *ngIf="tp.occupancyRules.mayores">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.adulto-mayor'|translate }} <span class="font-weight-light">> {{tp.occupancyRules.edadadultomayor}} {{ 'traslados.edad'|translate }}</span></p>                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" *ngIf="tp.occupancyRules.menores">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.infantes'|translate }} <span class="font-weight-light">{{tp.occupancyRules.edadmenormin}} - {{tp.occupancyRules.edadmenormax}} {{ 'traslados.edad'|translate }}</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" *ngIf="tp.occupancyRules.infantes">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="text-6">
+                                                    <p class="font-weight-bold m-0">{{ 'traslados.infantes'|translate }} <span class="font-weight-light">{{tp.occupancyRules.edadinfantemin}} - {{tp.occupancyRules.edadinfantemax}} {{ 'traslados.edad'|translate }}</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="row mb-3">
+                            <div class="col-12 d-none d-lg-block text-right">
+                                <p class="m-0">{{ 'traslados.servicio-desde'|translate }}:</p>
+                                <p class="m-0 text-1" *ngIf="tp.tarifas.divisa.tasatipo == 'D'" [innerHTML]="priceSince(tp.tarifas.publica.adulto,user.currency,tp.tarifas.divisa.currency_tc)"></p>
+                                <p class="m-0 text-1" *ngIf="tp.tarifas.divisa.tasatipo == 'F'" [innerHTML]="priceSince(tp.tarifas.publica.adulto,user.currency,tp.tarifas.divisa.currency_tc)"></p>
+                                <div *ngIf="tp.tarifas.promocion && tp.tarifas.publica.adulto_ant">
+                                    <p class="m-0">{{ 'traslados.antes'|translate }}:</p>
+                                    <p [innerHTML]="calculateTDC(tp.tarifas.publica.adulto_ant,user.currency,'')"></p>
+                                </div>
+                                <p class="m-0">{{ 'traslados.impuestos-incluidos'|translate }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-8 offset-sm-4">
+                                <a href="#select-tp-{{i}}"  data-toggle="collapse" class="btn btn-block btn-orange" (click)="prebookForm(tp)">{{ 'traslados.seleccionar'|translate }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row collapse" *ngIf="tp.prebook" id="select-tp-{{i}}">
+                    <div class="col-12 col-lg-9 ">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-12">
+                                        <label for="">{{ 'traslados.adultos'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tp.book.rooming.adultos" (change)="calculateTotal(tp.book)">
+                                            <option [value]="o" *ngFor="let o of tp.book.ocupancyOptions.adultos.options">{{o}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-12" *ngIf="tp.book.ocupancyOptions.mayores.active">
+                                        <label for="">{{ 'traslados.adultos-mayores'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tp.book.rooming.mayores" (change)="calculateTotal(tp.book)">
+                                            <option [value]="o" *ngFor="let o of tp.book.ocupancyOptions.mayores.options">{{o}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-12" *ngIf="tp.book.ocupancyOptions.menores.active">
+                                        <label for="">{{ 'traslados.menores'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tp.book.rooming.menores" (change)="calculateTotal(tp.book)">
+                                            <option [value]="o" *ngFor="let o of tp.book.ocupancyOptions.menores.options">{{o}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-12" *ngIf="tp.book.ocupancyOptions.infantes.active">
+                                        <label for="">{{ 'traslados.infantes'|translate }}</label>
+                                        <select class="form-control" [(ngModel)]="tp.book.rooming.infantes" (change)="calculateTotal(tp.book)">
+                                            <option [value]="o" *ngFor="let o of tp.book.ocupancyOptions.infantes.options">{{o}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <p>{{ 'traslados.total-vehiculos'|translate }}: {{tp.book.totalVehiculos}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-12">
+                        <div class="row">
+                            <div class="col-12 text-center text-md-right">
+                                <p class="font-weight-bold m-0">{{ 'traslados.TOTAL-RESERVA'|translate }}</p>
+                                <p class="font-weight-bold text-1" [innerHTML]="priceSince(tp.book.total.publico,tp.book.total.currency,tp.tarifas.divisa.currency_tc)">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-11 offset-sm-1">
+                                <button class="btn btn-block btn-blue" (click)="gotoBook(tp.book)">{{ 'traslados.reservar'|translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4" *ngIf="encontrados == 0">
+    <div class="alert alert-danger text-center" role="alert">
+        {{ 'traslados.no-traslados-disponibles'|translate }}
+    </div>
+</div>
+
+<ngx-spinner type="" >
+    <!-- <img src='../../../assets/img/spinners/tarifas.gif' /> -->
+    <img src='{{imgruta}}'/>
+</ngx-spinner>

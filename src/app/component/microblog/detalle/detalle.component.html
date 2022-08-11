@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-2">
+            <a href="javascript:0" class="text-6" [routerLink]="['/microblog']"><< {{ 'microblog.regresar'|translate }}</a>
+        </div>
+        <div class="col-12 mt-4">
+            <div class="card-white-blog" *ngIf="publicacion">
+                <div class="row">
+                    <div class="col-12">
+                        <iframe *ngIf="publicacion?.idTipo == 2 && publicacion?.url_video; else elseBlock" width="100%" height="500" [src]="publicacion.video_embed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <ng-template #elseBlock>
+                            <!-- <img src="{{ publicacion.url_img }}" class="img-fluid portada" alt="" srcset=""> -->
+                            <div class="portada" [ngStyle]="{'background-image': 'url(' + publicacion.url_img + ')' }"></div>
+                        </ng-template>
+                    </div>
+                    <div class="col-12 px-5 py-4">
+                        <div class="row">
+                            <div class="col-md-9 col-12">
+                                <h1>{{ publicacion.titulo }}</h1>
+                            </div>
+                            <div class="col-md-3 col-12">
+                                <span class="float-md-right float-sm-left"><i class="far fa-clock date-pub"></i> {{publicacion.fecha_publicacion}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 px-5 mb-3" [innerHTML]="publicacion.descripcion"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" [hidden]="!publicacion?.prev && !publicacion?.next">
+        <div class="col-12 mt-4">
+            <div class="card-white-blog py-3">
+                <div class="row">
+                    <div class="col-md-6 col-12 px-5">
+                        <div *ngIf="publicacion?.prev">
+                            <a routerLink="../{{publicacion.prev.idBlog}}" class="linkPublicacion">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4><i class="fas fa-chevron-left"></i> {{ 'microblog.publicacion-anterior'|translate }}</h4>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- <img src="./assets/img/blog/blog.jpg" class="img-fluid rounded" alt=""> -->
+                                        <img src="{{ publicacion.prev.url_thumbnail }}" class="img-fluid rounded thumb" alt="">
+                                    </div>
+                                    <div class="col-8">
+                                        <h5>{{ publicacion.prev.titulo }}</h5>
+                                        <div [innerHTML]="publicacion.prev.descripcion | truncateHtml"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 px-5 text-right">
+                        <div *ngIf="publicacion?.next">
+                            <a routerLink="../{{publicacion?.next.idBlog}}" class="linkPublicacion">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4>{{ 'microblog.publicacion-siguiente'|translate }} <i class="fas fa-chevron-right"></i></h4>
+                                    </div>
+                                    <div class="col-8">
+                                        <h5>{{ publicacion.next.titulo }}</h5>
+                                        <div [innerHTML]="publicacion.next.descripcion | truncateHtml"></div>
+                                    </div>
+                                    <div class="col-4">
+                                        <img src="{{ publicacion.next.url_thumbnail }}" class="img-fluid rounded thumb" alt="">
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

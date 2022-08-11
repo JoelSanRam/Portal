@@ -1,0 +1,67 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-4 mb-2">
+            <h5 class="title-page">{{ 'flyers.flyers'|translate }}</h5>
+        </div>
+    </div>
+
+    <!-- FLYERS -->
+    <div class="row">
+        <div class="col-12 my-2">
+            <div class="promos">
+                <div class="p-3 bg-white border-rounded">
+                    <ul class="nav nav-pills vav-fill" id="pills-tab" role="tablist">
+                        <li class="nav-item" *ngFor="let flyer of listFlyersSection">
+                            <a class="nav-link" [ngClass]="{'active': flyer.active }" data-toggle="tab" [href]="'#' + flyer.idSeccion" [attr.aria-selected]="flyer.active == true" role="tab" (click)="setActive(flyer)">{{ flyer.seccion }}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="tab-content mt-3" id="pills-tabContent">
+                    <div *ngFor="let flyer of listFlyersSection" class="tab-pane fade" [ngClass]="{'show active': flyer.active }" [id]="flyer.idSeccion" role="tabpanel">
+                        <div class="">
+                            <div class="row">
+                                <div *ngFor="let f of flyer.flyers" class="col-12 col-md-6 col-lg-3 flyers mb-3">
+                                    <div class="position-relative">
+                                        <img class="img-fluid" [src]="f.url_thumbnail" alt="f.descripcion">
+                                        <div class="date">
+                                            {{f.fecha_inicio | date:'dd/MM/yy'}} - {{f.fecha_fin | date:'dd/MM/yy'}}
+                                        </div>
+                                        <div class="overlay"></div>
+                                    </div>
+                                    <div class="buttons">
+                                        <p class="text-white">{{ 'flyers.descargar-flyer'|translate }}:</p>
+                                        <a [href]="f.url_flyer + '/' + token" target="_blank" class="btn btn-green btn-block">{{ 'flyers.personalizado'|translate }}</a>
+                                        <a [href]="f.url" target="_blank" class="btn btn-info btn-block">{{ 'flyers.solo-imagen'|translate }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--! FLYERS -->
+
+
+
+
+    <!-- ADS -->
+    <div class="row">
+        <div class="col-12 my-2">
+            <div class="border-rounded ads">
+                <a [href]="link1" target="_blank" [ngStyle]="link1 | ifExistLink">
+                    <img class="border-rounded" [src]="anuncio1" alt="Anuncio">
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--! ADS -->
+</div>
+
+<ngx-spinner type="">
+    <!-- <img src='../../../assets/img/spinners/general.gif' /> -->
+    <img src='{{imgruta}}'/>
+</ngx-spinner>

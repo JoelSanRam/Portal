@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 p-0">
+            <div class="jumbotron py-2 px-6 m-0">
+                <ul class="nav nav-tabs buscador d-none d-sm-flex align-items-center" id="myTab" role="tablist">
+                    <li class="nav-item" *ngIf='permisoshotel==1 && permisoshotelAgency==1'>
+                        <a class="nav-link" [ngClass]="[tabActive == 'hoteles' ? 'active' : '' ]"  id="hotel-tab" data-toggle="tab" href="#hotel" role="tab" aria-controls="HOTEL" aria-selected="true">{{ 'buscador.label-hotel'|translate }}</a>
+                    </li>
+                    <li *ngIf='permisoVuelos==1 && permisoVuelosAgency==1' class="nav-item">
+                        <a class="tab nav-link" [ngClass]="[tabActive == 'vuelos' ? 'active' : '' ]" id="aereos-tab" data-toggle="tab" href="#aereos" role="tab" aria-controls="AEREOS" aria-selected="false">{{ 'buscador.label-vuelos'|translate }}</a>
+                    </li>
+                    <li class="nav-item" *ngIf='permisostour==1 && permisostourAgency==1'>
+                        <a class="nav-link" [ngClass]="[tabActive == 'tours' ? 'active' : '' ]" id="tour-tab" data-toggle="tab" href="#tours" role="tab" aria-controls="TOUR" aria-selected="false">{{ 'buscador.label-tour'|translate }}</a>
+                    </li>
+                    <li class="nav-item" *ngIf='permisostraslados==1 && permisostrasladosAgency==1'>
+                        <a class="nav-link" [ngClass]="[tabActive == 'traslados' ? 'active' : '' ]" id="traslados-tab" data-toggle="tab" href="#traslados" role="tab" aria-controls="TRASLADOS" aria-selected="false">{{ 'buscador.label-traslados'|translate }}</a>
+                    </li>
+                    <li class="nav-item" *ngIf='permisoscircuitos==1 && permisoscircuitosAgency==1' >
+                        <a class="nav-link" [ngClass]="[tabActive == 'circuitos' ? 'active' : '' ]" id="circuitos-tab" data-toggle="tab" href="#circuitos" role="tab" aria-controls="CIRCUITOS" aria-selected="false">{{ 'buscador.label-circuitos'|translate }}</a>
+                    </li>
+                </ul>
+                <div class="col-12 my-3 px-0 d-block d-sm-none select-sec">
+                    <select class="custom-select" (change)="selectTab($event.target.value)" id="inputGroupSelect01">
+                        <option *ngIf='permisoshotel==1 && permisoshotelAgency==1' value="hotel" selected>{{ 'buscador.label-hotel'|translate }}</option>
+                        <option *ngIf='permisoVuelos==1' value="aereos" >{{ 'buscador.label-vuelos'|translate }}</option>
+                        <option *ngIf='permisostour==1' value="tours">{{ 'buscador.label-tour'|translate }}</option>
+                        <option *ngIf='permisostraslados==1' value="traslados">{{ 'buscador.label-traslados'|translate }}</option>
+                        <option *ngIf='permisoscircuitos==1' value="circuitos">{{ 'buscador.label-circuitos'|translate }}</option>
+                        <!-- <option value="3">SEGUROS</option>
+                        <option value="3">PAQUETES</option> -->
+                    </select>
+                </div>
+                <div class="tab-content py-1 buscador-style" id="myTabContent">
+                    <div *ngIf='permisoshotel==1' [ngClass]="{'show active': ruta == 'hoteles'}" class="tab-pane fade" id="hotel" role="tabpanel" aria-labelledby="home-tab">
+                        <app-buscador-hotel></app-buscador-hotel>
+                    </div>
+                    <div *ngIf='permisoVuelos==1' [ngClass]="{'show active': ruta == 'vuelos'}" class="tab-pane fade show active" id="aereos" role="tabpanel" aria-labelledby="aereos-tab">
+                        <app-buscador-aereo></app-buscador-aereo>
+                    </div>
+                    <div  *ngIf='permisostour==1' [ngClass]="{'show active': ruta == 'tours'}" class="tab-pane fade" id="tours" role="tabpanel" aria-labelledby="tour-tab">
+                        <app-buscador-tour></app-buscador-tour>
+                    </div>
+                    <div *ngIf='permisostraslados==1'  [ngClass]="{'show active': ruta == 'traslados'}" class="tab-pane fade" id="traslados" role="tabpanel" aria-labelledby="traslados-tab">
+                        <app-buscador-traslado></app-buscador-traslado>
+                    </div>
+                    <div *ngIf='permisoscircuitos==1' [ngClass]="{'show active': ruta == 'circuitos'}" class="tab-pane fade" id="circuitos" role="tabpanel" aria-labelledby="circuitos-tab">
+                        <app-buscador-circuito></app-buscador-circuito>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

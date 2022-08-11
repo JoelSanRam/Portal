@@ -1,0 +1,121 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{informacionHotel.datoshotel.nombre}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body modal-terminosCondiciones">
+    <div class="row">
+		<!-- galleria -->
+        <div class="col-lg-12">
+			<gallery [items]="images" thumbPosition="left"></gallery>
+        </div> 
+        <div class="col-12">
+            <p class="small bold">{{informacionHotel.datoshotel.direccion}}</p><br>
+            <p class="small bold" [innerHTML]="informacionHotel.datoshotel.info"></p><br>
+        </div>
+        <div class="col-xs-12 col-lg-12" *ngIf="  informacionHotel.servicios?.length >0">
+			<h4> {{ 'hotel.servicios'|translate }} </h4>
+			<table class="table table-sm table-striped">
+				<thead>
+					<tr>
+						<th>{{ 'hotel.servicio'|translate }}</th>
+						<th>{{ 'hotel.descripcion'|translate }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let s of informacionHotel.servicios; let $i = index">
+						<td>{{s.nombre}}</td>
+						<td [innerHTML]="s.descripcion"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="col-12" *ngIf="informacionHotel.mapa.latitud != null || informacionHotel.mapa.latitud">
+				<google-map 
+					class="map-info" 
+					[center]="center"
+					[zoom]="zoom">
+						<map-marker
+							[position]="center"
+							[options]="options">
+						</map-marker>
+				</google-map>
+		</div>
+
+        <div class="col-lg-6" *ngIf=" informacionHotel.instalaciones.restaurantes?.length>0">
+			<h4> {{ 'hotel.restaurantes'|translate }} </h4>
+			<table class="table table-sm table-striped">
+				<thead>
+					<tr>
+						<th>{{ 'hotel.nombre'|translate }}</th>
+						<th>{{ 'hotel.descripcion'|translate }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let i of informacionHotel.instalaciones.restaurantes; let $i = index">
+						<td>{{i.nombre}}</td>
+						<td [innerHTML]="i.descripcion"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+        
+        <div class="co-lg-6" *ngIf=" informacionHotel.instalaciones.bares?.length>0">
+			<h4> {{ 'hotel.bares'|translate }} </h4>
+			<table class="table table-sm table-striped">
+				<thead>
+					<tr>
+						<th>{{ 'hotel.nombre'|translate }}</th>
+						<th>{{ 'hotel.descripcion'|translate }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let b of informacionHotel.instalaciones.bares">
+						<td>{{b.nombre}}</td>
+						<td [innerHTML]="b.descripcion"></td>
+					</tr>
+				</tbody>
+			</table>
+        </div>
+        
+        <div class="co-lg-6" *ngIf="informacionHotel.idBroker !=='HTBD' && informacionHotel.instalaciones.dicos?.length>0">
+			<h2> {{ 'hotel.discotecas'|translate }} </h2>
+			<table class="table table-sm table-striped">
+				<thead>
+					<tr>
+						<th>{{ 'hotel.nombre'|translate }}</th>
+						<th>{{ 'hotel.descripcion'|translate }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let d of informacionHotel.instalaciones.discos">
+						<td>{{d.nombre}}</td>
+						<td [innerHTML]="d.descripcion"></td>
+					</tr>
+				</tbody>
+			</table>
+        </div>
+        
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  *ngIf="informacionHotel.idBroker == 'HTBD'">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" *ngFor="let i of informacionHotel.instalaciones">
+					<h4> {{i.nombre}} </h4>
+					<table class="table table-sm table-striped">
+						<thead>
+							<tr>
+								<th>{{ 'hotel.nombre'|translate }}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let j of i.facilities">
+								<td>{{j}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>		
+		</div>
+    </div>
+</div> 

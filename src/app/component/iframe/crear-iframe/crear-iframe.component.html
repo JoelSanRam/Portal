@@ -1,0 +1,268 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 mt-4 mb-2">
+      <a href="#" class="text-6" [routerLink]="['/iframe']"><< {{ 'iframe.regresar'|translate }}</a>
+    </div>
+    <div class="col-12 mb-2">
+      <h5 class="title-page">{{ 'iframe.crear-iframe'|translate }}</h5>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-md-6 mb-3">
+      <form [formGroup]="iframeForm" (ngSubmit)="validForm()">
+        <div class="card-iframe-create">
+          <h6 class="title">{{ 'iframe.nombre'|translate }}</h6>
+          <input type="text" class="form-control" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" required>
+          <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+            <div *ngIf="f.name.errors.required">{{ 'iframe.ingrese-nombre-iframe'|translate }}</div>
+          </div>
+          <hr>
+          <h6 class="title">{{ 'iframe.posicion'|translate }}</h6>
+          <div class="row">
+            <div class="col-6">
+              <input id="horizontal" type="radio" checked value="H" formControlName="position">
+              <label for="horizontal" class="text-uppercasse">{{ 'iframe.horizontal'|translate }}</label>
+              <div class="horizontal"></div>
+            </div>
+            <div class="col-6">
+              <input id="vertical" type="radio" value="V" formControlName="position">
+              <label for="vertical" class="text-uppercasse">{{ 'iframe.vertical'|translate }}</label>
+              <div class="vertical"></div>
+            </div>
+          </div>
+          <hr>
+          <h6 class="title">{{ 'iframe.fondo'|translate }}</h6>
+          <div class="row">
+            <div class="col-6">
+              <input id="default" type="radio" value="#f3f3f3" formControlName="background">
+              <label for="default">{{ 'iframe.default'|translate }}</label>
+              <div class="default"></div>
+            </div>
+            <div class="col-6">
+              <input id="transparente" type="radio" checked value="transparent" formControlName="background">
+              <label for="transparente">{{ 'iframe.transparente'|translate }}</label>
+              <div class="transparente"></div>
+            </div>
+          </div>
+          <hr>
+          <h6 class="title">{{ 'iframe.bestprice'|translate }}</h6>
+          <div class="row">
+            <div class="col-12 mb-2">
+              <small>{{ 'iframe.text-bestprice'|translate }}</small>
+            </div>
+            <div class="col-6">
+              <input id="bestact" type="radio" value="A" formControlName="bestprice">
+              <label for="bestact">{{ 'iframe.activar'|translate }}</label>
+              <div class="bestact"></div>
+            </div>
+            <div class="col-6">
+              <input id="bestdes" type="radio" checked value="D" formControlName="bestprice">
+              <label for="bestdes">{{ 'iframe.desactivar'|translate }}</label>
+              <div class="bestdes"></div>
+            </div>
+          </div>
+          <hr>
+          <h6 class="title">{{ 'iframe.colores'|translate }}</h6>
+          <ng-container formGroupName="colors">
+            <div class="row" formGroupName="buscador">
+              <div class="col-6">
+                <label class="text-uppercasse">{{ 'iframe.fondo-buscador'|translate }}</label>
+                <input id="buscadorFondo" class="color-picker" type="color" formControlName="fondo" [value]="c.buscador.value.fondo">
+                <label for="buscadorFondo" [ngStyle]="{ 'background-color': c.buscador.value.fondo,
+                'color': c.buscador.value.texto }" class="fake-btn">{{c.buscador.value.fondo}}</label>
+              </div>
+              <div class="col-6">
+                <label class="text-uppercasse">{{ 'iframe.texto-buscador'|translate }}</label>
+                <input id="buscadorTexto" class="color-picker" type="color" formControlName="texto" [value]="c.buscador.value.texto">
+                <label for="buscadorTexto" [ngStyle]="{ 'background-color': c.buscador.value.fondo,
+                'color': c.buscador.value.texto }" class="fake-btn">{{c.buscador.value.texto}}</label>
+              </div>
+            </div>
+            <div class="row" formGroupName="filtro">
+              <div class="col-6">
+                <label class="text-uppercasse">{{ 'iframe.fondo-filtro'|translate }}</label>
+                <input id="filtroFondo" class="color-picker" type="color" formControlName="fondo" [value]="c.filtro.value.fondo">
+                <label for="filtroFondo" [ngStyle]="{ 'background-color': c.filtro.value.fondo,
+                'color': c.filtro.value.texto }" class="fake-btn">{{c.filtro.value.fondo}}</label>
+              </div>
+              <div class="col-6">
+                <label class="text-uppercasse">{{ 'iframe.texto-filtro'|translate }}</label>
+                <input id="filtroTexto" class="color-picker" type="color" formControlName="texto" [value]="c.filtro.value.texto">
+                <label for="filtroTexto" [ngStyle]="{ 'background-color': c.filtro.value.fondo,
+                'color': c.filtro.value.texto }" class="fake-btn">{{c.filtro.value.texto}}</label>
+              </div>
+            </div>
+            <div formGroupName="botones">
+              <div class="row" formGroupName="buscar">
+                <div class="col-6">
+                  <label class="text-uppercasse">{{ 'iframe.fondo-btn-buscar'|translate }}</label>
+                  <input id="botonBuscarFondo" class="color-picker" type="color" formControlName="fondo" [value]="c.botones.value.buscar.fondo">
+                  <label for="botonBuscarFondo" [ngStyle]="{ 'background-color': c.botones.value.buscar.fondo,
+                  'color': c.botones.value.buscar.texto }" class="fake-btn">{{c.botones.value.buscar.fondo}}</label>
+                </div>
+                <div class="col-6">
+                  <label class="text-uppercasse">{{ 'iframe.texto-btn-buscar'|translate }}</label>
+                  <input id="botonBuscarTexto" class="color-picker" type="color" formControlName="texto" [value]="c.botones.value.buscar.texto">
+                  <label for="botonBuscarTexto" [ngStyle]="{ 'background-color': c.botones.value.buscar.fondo,
+                  'color': c.botones.value.buscar.texto }" class="fake-btn">{{c.botones.value.buscar.texto}}</label>
+                </div>
+              </div>
+              <div class="row" formGroupName="reservar">
+                <div class="col-6">
+                  <label class="text-uppercasse">{{ 'iframe.fondo-btn-reservar'|translate }}</label>
+                  <input id="botonReservarFondo" class="color-picker" type="color" formControlName="fondo" [value]="c.botones.value.reservar.fondo">
+                  <label for="botonReservarFondo" [ngStyle]="{ 'background-color': c.botones.value.reservar.fondo,
+                  'color': c.botones.value.reservar.texto }" class="fake-btn">{{c.botones.value.reservar.fondo}}</label>
+                </div>
+                <div class="col-6">
+                  <label class="text-uppercasse">{{ 'iframe.texto-btn-reservar'|translate }}</label>
+                  <input id="botonReservarTexto" class="color-picker" type="color" formControlName="texto" [value]="c.botones.value.reservar.texto">
+                  <label for="botonReservarTexto" [ngStyle]="{ 'background-color': c.botones.value.reservar.fondo,
+                  'color': c.botones.value.reservar.texto }" class="fake-btn">{{c.botones.value.reservar.texto}}</label>
+                </div>
+              </div>
+              <div class="row" formGroupName="cotizar">
+                <div class="col-6">
+                  <label class="text-uppercasse">{{ 'iframe.fondo-btn-cotizar'|translate }}</label>
+                  <input id="botonCotizarFondo" class="color-picker" type="color" formControlName="fondo" [value]="c.botones.value.cotizar.fondo">
+                  <label for="botonCotizarFondo" [ngStyle]="{ 'background-color': c.botones.value.cotizar.fondo,
+                  'color': c.botones.value.cotizar.texto }" class="fake-btn">{{c.botones.value.cotizar.fondo}}</label>
+                </div>
+                <div class="col-6">
+                  <label class="text-uppercasse">{{ 'iframe.texto-btn-cotizar'|translate }}</label>
+                  <input id="botonCotizarTexto" class="color-picker" type="color" formControlName="texto" [value]="c.botones.value.cotizar.texto">
+                  <label for="botonCotizarTexto" [ngStyle]="{ 'background-color': c.botones.value.cotizar.fondo,
+                  'color': c.botones.value.cotizar.texto }" class="fake-btn">{{c.botones.value.cotizar.texto}}</label>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <hr>
+          <h6 class="title text-uppercasse">{{ 'iframe.limite-horizontal'|translate }}</h6>
+          <div class="row">
+            <div class="col-6">
+              <input id="classContainer" type="radio" value="container" formControlName="classWidth">
+              <label for="classContainer">{{ 'iframe.contenedor'|translate }}</label>
+              <div class="transparente"></div>
+            </div>
+            <div class="col-6">
+              <input id="classFluid" type="radio" value="container-fluid" formControlName="classWidth">
+              <label for="classFluid">{{ 'iframe.fluido'|translate }}</label>
+              <div class="default"></div>
+            </div>
+          </div>
+          <hr>
+          <h6 class="title">{{ 'iframe.modulos'|translate }}Módulos</h6>
+          <ng-container formGroupName="modulos">
+            <input type="checkbox" id="hoteles" formControlName="hoteles">
+            <label for="hoteles" class="mr-2 text-uppercasse">{{ 'iframe.hoteleria'|translate }}</label>
+            <input type="checkbox" id="tours" formControlName="tours">
+            <label for="tours" class="mr-2 text-uppercasse">{{ 'iframe.tours'|translate }}</label>
+            <input type="checkbox" id="traslados" formControlName="traslados">
+            <label for="traslados" class="mr-2 text-uppercasse">{{ 'iframe.traslados'|translate }}</label>
+            <input type="checkbox" id="circuitos" formControlName="circuitos">
+            <label for="circuitos" class="mr-2 text-uppercasse">{{ 'iframe.circuitos'|translate }}</label>
+            <input type="checkbox" id="vuelos" formControlName="vuelos">
+            <label for="vuelos" class="mr-2 text-uppercasse">{{ 'iframe.vuelos'|translate }}</label>
+          </ng-container>
+          <hr>
+          <!-- <h6 class="title">Mark up</h6>
+          <small>Seleccione el porcentaje añadido a la tarifa pública.</small>
+          <div class="form-group">
+            <input type="text" class="form-control w-50" formControlName="mkp">
+          </div>
+          <hr> -->
+          <h6 class="title">{{ 'iframe.url-resultado'|translate }}</h6>
+          <input type="text" class="form-control" formControlName="url_resultado" [ngClass]="{ 'is-invalid': submitted && f.url_resultado.errors }" required>
+          <div *ngIf="submitted && f.url_resultado.errors" class="invalid-feedback">
+            <div *ngIf="f.url_resultado.errors.required">{{ 'iframe.ingrese-url'|translate }}</div>
+          </div>
+          <hr>
+          <h6 class="title">{{ 'iframe.loader'|translate }}</h6>
+          <ng-container formGroupName="loader">
+            <div class="form-group position-relative">
+              <small>{{ 'iframe.texto-resultados'|translate }}</small>
+              <textarea class="form-control" formControlName="texto" rows="1" maxlength="100"></textarea>
+              <div class="max-caracter">{{ (100 - f.loader.value.texto.length) + '/100' }}</div>
+            </div>
+            <div class="form-group">
+              <small>{{ 'iframe.url-resultados'|translate }}</small>
+              <input id="my-input" class="form-control" type="text" formControlName="url" placeholder="https://">
+            </div>
+          </ng-container>
+          <hr>
+          <h6 class="title">{{ 'iframe.usuario'|translate }}</h6>
+          <small>{{ 'iframe.seleccione-usuario'|translate }}</small>
+          <button class="btn btn-sm btn-blue d-block mt-3" type="button" (click)="modalUsuarioForm(newUsuario)">{{ 'iframe.nuevo-usuario'|translate }}</button>
+          <table class="table-users my-4">
+            <thead class="">
+              <tr>
+                <th></th>
+                <th>{{ 'iframe.usuario'|translate }}</th>
+                <th>{{ 'iframe.tipo-usuario'|translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let u of usuariosList; let i = index;">
+                <td>
+                  <input type="radio" formControlName="usuario" [value]="u.uid" [id]="i">
+                  <label [for]="i" class="mr-2"></label>
+                </td>
+                <td>
+                  {{ u.usuario }}
+                </td>
+                <td>
+                  <div class="user-type" [ngClass]="{'admin': u.nivel == 50, 'agent': u.nivel == 10 }" >{{ u.tipousuario }}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="btn btn-blue btn-lg btn-block" type="submit">{{ 'iframe.guardar-iframe'|translate }}
+            <span *ngIf="loading">
+              <i class="fa fa-spinner fa-spin"></i>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+
+
+
+    <div class="col-12 col-md-6">
+      <div class="card-iframe-create">
+        <h6 class="title">{{ 'iframe.previo-buscador'|translate }}</h6>
+        <div class="row">
+          <div class="col-12 mb-4">
+            <app-preview-search [colors]="c" [position]="f.position.value" [modulos]="f.modulos.value"></app-preview-search>
+          </div>
+        </div>
+        <h6 class="title">{{ 'iframe.previo-resultados'|translate }}</h6>
+        <div class="row">
+          <div class="col-12 mb-4">
+            <app-preview-results [colors]="c" [mkp]="f.mkp.value"></app-preview-results>
+          </div>
+        </div>
+        <h6 class="title">{{ 'iframe.codigo-iframe-buscador'|translate }}</h6>
+        <div class="form-group">
+          <textarea [ngModel]="code" class="form-control bg-white" rows="5" readonly></textarea>
+        </div>
+        <button class="btn btn-green btn-lg btn-block" type="buttom" (click)="copyCode(code);">{{ 'iframe.copiar-codigo'|translate }}</button>
+        <h6 class="title mt-4">{{ 'iframe.codigo-iframe-resultados'|translate }}</h6>
+        <p class="mb-0"><b class="text-danger">{{ 'iframe.requerido'|translate }}:</b> {{ 'iframe.script-iframe-incluir'|translate }} <i>&lt;head&gt;&lt;/head&gt;</i> {{ 'iframe.script-iframe-incluir-pag'|translate }}:</p>
+        <code>
+          &lt;script src="https://d3ux0q8zd2sb0d.cloudfront.net/iframe/iframe-result.js"&gt;&lt;/script&gt;
+        </code>
+        <p class="mt-4 mb-0"><b class="text-danger">{{ 'iframe.requerido'|translate }}:</b> {{ 'iframe.script-iframe-incluir'|translate }} <i>&lt;body&gt;&lt;/body&gt;</i> {{ 'iframe.script-iframe-incluir-pag'|translate }}:</p>
+        <code>
+          &lt;div  id="iframe-tms"&gt;&lt;/div&gt;
+        </code>
+        <p class="mt-4 mb-0"><b class="text-success">{{ 'iframe.opcional'|translate }}:</b> {{ 'iframe.script-iframe-incluir'|translate }} <i>&lt;head&gt;&lt;/head&gt;</i> {{ 'iframe.script-iframe-incluir-pag'|translate }}:</p>
+        <code>
+          &lt;style&gt; #iframe-tms&#123;position: absolute; height: 89vh; width: 100%;&#125;  &lt;/style&gt;
+        </code>
+      </div>
+    </div>
+  </div>
+</div>

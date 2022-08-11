@@ -1,0 +1,266 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-3 col-md-5">
+            <form [formGroup]="formGrupos" (ngSubmit)="sendMail()" class="grupos-form">
+                <div class="d-flex">
+                    <h5 class="font-weight-bold mr-2">{{ 'grupo.GRUPOS'|translate }}</h5>
+                    <!-- <select class="form-control" name="" id="">
+                        <option selected>OTROS SERVICIOS</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select> -->
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label>{{ 'grupo.hotel'|translate }}</label>
+                    <ng-container formArrayName="hotel">
+                        <div *ngFor="let htl of hoteles.controls; let i = index">
+                            <select [formControlName]="i" class="form-control mb-2" [ngClass]="{ 'is-invalid': submitted && g.hotel.errors }">
+                                <optgroup *ngFor="let region of regiones" label={{region}}>
+                                    <ng-container *ngFor="let h of hotelesList" >
+                                        <option *ngIf="h.region === region" [ngValue]="h">
+                                            {{h.nombre}}
+                                        </option>
+                                    </ng-container>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </ng-container>
+                    <button class="btn btn-red btn-sm mr-2" type="button" (click)="delHotel()"><i class="fas fa-times"></i></button>
+                    <button class="btn btn-blue btn-sm" type="button" (click)="addHotel()"><i class="fas fa-plus"></i> {{ 'grupo.agregar-hotel'|translate }}</button>
+                </div>
+
+
+                <div class="form-group">
+                    <ng-container formArrayName="fechas">
+                        <div *ngFor="let fecha of fechas.controls; let i = index">
+                            <ng-container [formGroup]="fecha">
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <label for="check-in">{{ 'grupo.fechas'|translate }}:</label>
+                                        <div class="input-group flex-nowrap">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-calendar-alt" aria-hidden="true"></i></span>
+                                            </div>
+                                            <!-- <ng-datepicker formControlName="finicio" [options]="options" (click)="changeDate(i)"></ng-datepicker> -->
+                                            <input type="text" formControlName="range" [bsConfig]="bsConfig" class="form-control" bsDaterangepicker>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-12 col-sm-6 col-md-12 col-lg-6">
+                                        <label for="check-out">Salida:</label>
+                                        <div class="input-group flex-nowrap">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-calendar-alt" aria-hidden="true"></i></span>
+                                            </div>
+                                            <ng-datepicker formControlName="ffinal" [options]="options"></ng-datepicker>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <button class="btn btn-red btn-sm mr-2" type="button" (click)="delFechas()"><i class="fas fa-times"></i></button>
+                    <button class="btn btn-blue btn-sm" type="button" (click)="addFechas()"><i class="fas fa-plus"></i> {{ 'grupo.fecha-tentativa'|translate }}</button>
+                </div>
+
+
+                <ng-container formGroupName="tipoGrupo">
+                    <div class="form-group">
+                        <label for="tipo-grupo">{{ 'grupo.tipo-grupo'|translate }}</label>
+                        <select formControlName="nombre" id="tipo-grupo" class="form-control" [ngClass]="{ 'is-invalid': submitted && g.tipoGrupo.errors }">
+                            <option *ngFor="let tipo of tipoGrupo" [value]="tipo.nombre">{{ tipo.nombre }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" *ngIf="formGrupos.value.tipoGrupo.nombre == 'Otro'">
+                        <label for="tipo-grupo">{{ 'grupo.especifica-evento'|translate }}:</label>
+                        <input type="text" class="form-control" formControlName="otro">
+                    </div>
+                </ng-container>
+
+                <div class="row d-flex align-items-end">
+                    <div class="col-12 col-sm-3 col-md-12 col-lg-3">
+                            <div class="form-group">
+                                <label for="nhab">{{ 'grupo.no-habitaciones'|translate }}:</label>
+                                <input formControlName="nhab" type="number" min="10" class="form-control" [ngClass]="{ 'is-invalid': submitted && g.nhab.errors }">
+                                <div *ngIf="submitted && g.nhab.errors" class="invalid-feedback">
+                                    <div *ngIf="g.nhab.errors.min">{{ 'grupo.habitaciones-minimo'|translate }}</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-12 col-sm-9 col-md-12 col-lg-9">
+                        <div class="form-group">
+                            <label>{{ 'grupo.tipo-ocupacion'|translate }}:</label>
+                            <div>
+                                <div class="form-check form-check-inline" formArrayName="tipoHabs" *ngFor="let hab of arrhabs; let i = index">
+                                    <input type="checkbox" [formControlName]="i" id="{{ 'hab_' + i }}">
+                                    <label for="{{ 'hab_' + i }}" class="mr-2">{{ habitaciones[i].tipo }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="plan-alimentos">{{ 'grupo.plan-alimentos'|translate }}</label>
+                    <select formControlName="planes" id="plan-alimentos" class="form-control">
+                        <option *ngFor="let plan of planes" [value]="plan.nombre">{{ plan.nombre }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>{{ 'grupo.menores'|translate }}</label>
+                    <div class="">
+                        <div class="form-check form-check-inline">
+                          <input id="noMin" type="radio" value="NO" formControlName="menores" checked>
+                          <label for="noMin">{{ 'grupo.no'|translate }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input id="yesMin" type="radio" value="SI" formControlName="menores">
+                          <label for="yesMin">{{ 'grupo.si'|translate }}</label>
+                          <!-- <div *ngIf="submitted && g.menores.errors" class="invalid-feedback">
+                              <div *ngIf="g.menores.errors.required">Debe seleccionar una opción.</div>
+                          </div> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ 'grupo.zona-eventos-banquetes'|translate }}</label>
+                    <div class="">
+                        <input type="checkbox" value="SI" id="zonaEvento" [checked]="zonaEvento" (change)="zonaEvento = !zonaEvento">
+                        <label for="zonaEvento">{{ 'grupo.si'|translate }}</label>
+                    </div>
+                </div>
+                <ng-container formGroupName="evento" *ngIf="zonaEvento">
+                    <div class="form-group">
+                        <label>{{ 'grupo.tipo-Evento'|translate }}:</label>
+                        <select formControlName="tipoEvento" class="form-control">
+                            <option *ngFor="let e of eventos" [value]="e.nombre">{{ e.nombre }}</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group" >
+                                <label for="">{{ 'grupo.no-personas'|translate }}:</label>
+                                <input formControlName="nPer" class="form-control" type="number" min="1">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group" >
+                                <label for="">{{ 'grupo.dia'|translate }}:</label>
+                                <select formControlName="dia" class="form-control">
+                                    <option value="Todos los días">{{ 'grupo.todos-dias'|translate }}</option>
+                                    <option value="Primer día">{{ 'grupo.primer-dia'|translate }}</option>
+                                    <option value="Último día">{{ 'grupo.ultimo-dia'|translate }}</option>
+                                    <option value="">-----------</option>
+                                    <option value="Domingo">{{ 'grupo.domingo'|translate }}</option>
+                                    <option value="Lunes">{{ 'grupo.lunes'|translate }}</option>
+                                    <option value="Martes">{{ 'grupo.martes'|translate }}</option>
+                                    <option value="Miércoles">{{ 'grupo.miercoles'|translate }}</option>
+                                    <option value="Jueves">{{ 'grupo.jueves'|translate }}</option>
+                                    <option value="Viernes">{{ 'grupo.viernes'|translate }}</option>
+                                    <option value="Sábado">{{ 'grupo.sabado'|translate }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group" >
+                                <label for="">{{ 'grupo.hora'|translate }}:</label>
+                                <input formControlName="hora" class="form-control" type="time">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group" >
+                                <label for="">{{ 'grupo.duracion'|translate }}:</label>
+                                <select formControlName="duracion" class="form-control">
+                                    <option value="30 minutos">{{ 'grupo.30-minutos'|translate }}</option>
+                                    <option value="1 Hora">{{ 'grupo.1-hora'|translate }}</option>
+                                    <option value="1 Hora 30 minutos">{{ 'grupo.1-hora-30'|translate }}</option>
+                                    <option value="2 Horas">{{ 'grupo.2-horas'|translate }}</option>
+                                    <option value="2 Horas 30 minutos">{{ 'grupo.2-horas-30'|translate }}</option>
+                                    <option value="3 Horas">{{ 'grupo.3-horas'|translate }}</option>
+                                    <option value="3 Horas 30 minutos">{{ 'grupo.3-horas-30'|translate }}</option>
+                                    <option value="4 Horas">{{ 'grupo.4-horas'|translate }}</option>
+                                    <option value="4 Horas 30 minutos">{{ 'grupo.4-horas-30'|translate }}</option>
+                                    <option value="5 Horas">{{ 'grupo.5-horas'|translate }}</option>
+                                    <option value="5 Horas 30 minutos">{{ 'grupo.5-horas-30'|translate }}</option>
+                                    <option value="6 Horas">{{ 'grupo.6-horas'|translate }}</option>
+                                    <option value="6 Horas 30 minutos">{{ 'grupo.6-horas-30'|translate }}</option>
+                                    <option value="7 Horas">{{ 'grupo.7-horas'|translate }}</option>
+                                    <option value="7 Horas 30 minutos">{{ 'grupo.7-horas-30'|translate }}</option>
+                                    <option value="8 Horas">{{ 'grupo.8-horas'|translate }}</option>
+                                    <option value="8 Horas 30 minutos"> {{ 'grupo.8-horas-30'|translate }}</option>
+                                    <option value="9 Horas">{{ 'grupo.9-horas'|translate }}</option>
+                                    <option value="9 Horas 30 minutos">{{ 'grupo.9-horas-30'|translate }}</option>
+                                    <option value="10 Horas">{{ 'grupo.10-horas'|translate }}</option>
+                                    <option value="10 Horas 30 minutos">{{ 'grupo.10-horas-30'|translate }}</option>
+                                    <option value="11 Horas">{{ 'grupo.11-horas'|translate }}</option>
+                                    <option value="11 Horas 30 minutos">{{ 'grupo.11-horas-30'|translate }}</option>
+                                    <option value="12 Horas">{{ 'grupo.12-horas'|translate }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ 'grupo.servicios'|translate }}:</label>
+                        <div formArrayName="servicios" *ngFor="let s of serviciosFormData.controls; let i = index">
+                            <input [formControlName]="i" id="{{ 'serv_' + i }}" type="checkbox">
+                            <label for="{{ 'serv_' + i }}" class="mr-2">{{ servicios[i].nombre }}</label>
+                        </div>
+                        <!-- <div class="form-group" *ngIf="otroServ">
+                            <label for="tipo-grupo">Especifica los servicios:</label>
+                            <input type="text" class="form-control" (ngModel)="otroServicios">
+                        </div> -->
+                    </div>
+                </ng-container>
+
+                <div class="form-group">
+                    <label for="observaciones">{{ 'grupo.observaciones'|translate }}</label>
+                    <textarea formControlName="obser" id="observaciones" class="form-control" name="" rows="3"></textarea>
+                </div>
+                <button class="btn btn-blue btn-block" type="submit">{{ 'grupo.cotizar'|translate }}
+                    <span *ngIf="loading">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+            </form>
+        </div>
+
+
+
+
+
+
+
+        <div class="col-12 mt-3 col-md-7">
+            <div class="grupos-historial">
+                <h5 class="font-weight-bold">{{ 'grupo.historial-cotizaciones'|translate }}</h5>
+                <hr>
+                <div class="sin-reservas" *ngIf="!gruposHistorial.length">Aún no tienes cotizaciones para grupos.</div>
+                <div class="historial">
+                    <div *ngFor="let g of gruposHistorial" class="cotizacion">
+                        <div class="d-flex align-items-center">
+                            <span class="badge-rounded" [ngClass]="{ 'badge-green': g.status == 'CO', 'badge-blue': g.status == 'SE', 'badge-red': g.status == 'CA', 'badge-yellow': g.status == 'RE' }">{{g.status}}</span>
+                        </div>
+                        <div>
+                            <p class="font-weight-bold">{{g.hotel}}</p>
+                            <p>Folio: {{g.folio}}</p>
+                            <p>Fecha de cotización: {{g.creacion}}</p>
+                            <p>Última actualización: {{g.actualizacion}}</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-green mr-lg-2 mb-2 mb-xl-0" (click)="getDetalle(g)"><i class="fas fa-info"></i></button>
+                            <button class="btn btn-info" (click)="getMensaje(g)"><i class="fas fa-envelope"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner type="">
+    <!-- <img src='../../../assets/img/spinners/general.gif' /> -->
+    <img src='{{imgruta}}'/>
+</ngx-spinner>

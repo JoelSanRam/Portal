@@ -1,0 +1,153 @@
+<form autocomplete="off" [formGroup]="circuitosForm" class="row" (ngSubmit)="searchCircuitos()">
+    <div class="col-md-11">
+        <div class="row mr-movil buscador-style">
+            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 align-self-start destino lateral">
+                <div class="form-group">
+                    <label for="destinoCircuito" class="label_search">{{ 'buscador.circuitos.destino'|translate }}</label>
+                    <div class="input-group">
+                        <input formControlName="d" [typeahead]="destinos" container="body" [typeaheadMinLength]="2" [typeaheadAsync]="true" [typeaheadItemTemplate]="customItemTemplate" (typeaheadOnSelect)="onSelect($event)" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                    </div>
+                    <ng-template #customItemTemplate let-model="item" let-index="index">
+                        <i class="fas" [ngClass]="setIconClass(model)" aria-hidden="true"></i>
+                        {{model.label}}
+                    </ng-template>
+                    <div *ngIf="submitted && f.d.errors" class="invalid-feedback d-block">
+                        {{ 'buscador.circuitos.selecciona-destino'|translate }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-12 pb-3 rooms lateral">
+                <label for="habitaciones" class="label_search">{{ 'buscador.circuitos.habitaciones'|translate }}</label>
+                <div class="dropdown">
+                    <button class="btn btn-block habs" type="button" id="dropdownMenuCircuitos" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-6"> <i class="fa fa-bed" aria-hidden="true"></i> {{ numHab }}</div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-6"><i class="fa fa-user" aria-hidden="true"></i> {{ personas }}</div>
+                        </div>
+                    </button>
+    
+                    <div class="dropdown-menu cuartos dropdown-menu-right">
+                        <form class="px-4 py-3">
+                            <div class="row">
+                                <div class="col-xl-7 col-lg-7 col-md-7 col-7 align-self-center label-no-hab">
+                                    {{ 'buscador.circuitos.num-habitaciones'|translate }}
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+                                            <span (click)="AddRemoveHab('rm')" class="btn"><i class="fas fa-minus-circle"></i></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-4 numbers-search">
+                                            <p class="numhab">{{ numHab }}</p>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+                                            <button (click)="AddRemoveHab('add')" class="btn"><i class="fas fa-plus-circle"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="row" *ngFor="let item of habitaciones; index as i">
+                                <div class="col-xl-9 offset-xl-3 col-lg-9 offset-lg-3 col-md-9 offset-md-3 col-9 offset-3">
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-6 text-center">{{ 'buscador.circuitos.adultos'|translate }}</div>
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-6 text-center">{{ 'buscador.circuitos.menores'|translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 py-1 fondoHab">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-3 lbl-hab align-self-center text-center">
+                                            {{ 'buscador.circuitos.habitacion'|translate }} {{i+1}}
+                                        </div>
+                                        <div class="col-xl-9 col-lg-9 col-md-9 col-9">
+                                            <div class="row">
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6 input-hab">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-outline-secondary btn-hab" (click)="addRemoveAdulto(i,'rm')" type="button">-</button>
+                                                        </div>
+                                                        <div class="form-control cant-hab">{{ item.adultos }}</div>
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary btn-hab" (click)="addRemoveAdulto(i,'add')" type="button">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6 input-hab">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-outline-secondary btn-hab" (click)="addRemoveMenor(item,'rm')" type="button">-</button>
+                                                        </div>
+                                                        <div class="form-control cant-hab">{{ item.edadmenores.length }}</div>
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary btn-hab" (click)="addRemoveMenor(item,'add')" type="button">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 py-1 fondoHab" *ngIf="item.edadmenores.length > 0">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-3 lbl-hab align-self-center text-center">
+                                            {{ 'buscador.circuitos.edad-menor'|translate }}
+                                        </div>
+                                        <div class="col-xl-9 col-lg-9 col-md-9 col-9">
+                                            <div class="row">
+                                                <div class="col-xl-4 col-lg-4 col-md-4 col-4 input-hab" *ngFor="let menor of item.edadmenores; index as e">
+                                                    <select (change)="edadMenor(i,e,$event.target.value)" class="edad-menor">
+                                                        <option [selected]="ed == menor.edad" *ngFor="let ed of edadMenores" value="{{ed}}">{{ed}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 align-self-center lateral" (click)="dpfs.show()">
+                <div class="row mx-0">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 label_search">
+                        {{ 'buscador.circuitos.fecha-salida'|translate }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 text-center numbers-search">
+                        {{ day | lpad : 2 }}
+                        <!-- <ng-datepicker id="dtTour" formControlName="dt" [options]="options" (click)="changeDate()" class="d-flex justify-content-end"></ng-datepicker> -->
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 InOut noline-height align-self-end px-0">
+                        <p>{{ month }}</p>
+                        <p>{{ year }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-2 col-6 align-self-end text-left">
+                <div class="form-group">
+                    <button [disabled]="loading" class="btn btn-block btn-danger" type="submit">
+                        <span class="">{{ 'buscador.circuitos.buscar'|translate }} </span><i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <!-- <button type="button" class="btn btn-danger btn-circuito" (click)="searchCircuitos()">
+                    <span class="d-sm-none">BUSCAR </span><i class="fa fa-search"></i>
+                </button> -->
+            </div>
+            <div class="m-auto">
+                <input type="text"
+                formControlName="dt"
+                #dpfs="bsDatepicker"
+                placeholder="Datepicker"
+                class="form-control noShowDP"
+                (bsValueChange)="changeFecha($event)"
+                [bsConfig]="bsConfig"
+                bsDatepicker>
+            </div>
+        </div>
+    </div>
+</form>

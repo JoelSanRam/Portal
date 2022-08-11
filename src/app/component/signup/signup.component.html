@@ -1,0 +1,298 @@
+<div class="container-fluid">
+    <div class="row vh-100">
+        <div class="col-lg-6 h-100 img-fond-log d-none d-lg-flex justify-content-center align-items-center">
+            <img src="./assets/img/azabache-blanco.svg" class="col-9 img-fluid" alt="">
+        </div>
+
+        <div class="col-lg-6 col-12 h-100 formulario overflow py-5">
+                <div class="container">
+                    <div class="container d-lg-none d-flex justify-content-center align-items-center">
+                            <img src="./assets/img/azabache-azul.svg" class="img-fluid logo-movil" alt="">
+                    </div>
+                    <div class="row">
+                            <div class="col-xl-10 offset-xl-1 col-lg-11 offset-lg-1 col-md-10 offset-md-1 col-sm-12 signup">
+                                <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 mb-3">
+                                            <h2 class="text-md-left text-center">{{ 'signup.registrar-agencia'|translate }}:</h2>
+                                        </div>
+                                        <div class="col-lg-6 col-12 mb-3 login-links align-self-center">
+                                            <a href="javascript:0" [routerLink]="['/login']"><u>{{ 'signup.regresar'|translate }}</u></a>
+                                        </div>
+                                        <div class="col-md-8 col-12">
+                                            <label>{{ 'signup.nombre-agencia'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="nomAgencia" [ngClass]="{ 'is-invalid': submitted && f.nomAgencia.errors }">
+                                            <div *ngIf="submitted && f.nomAgencia.errors" class="invalid-feedback">
+                                                <div *ngIf="f.nomAgencia.errors.required">{{ 'signup.ingrese-nombre-agencia'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <label>{{ 'signup.aniversario'|translate }}:</label>
+                                            <div class="input-group mb-3 anniv">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-calendar-alt" aria-hidden="true"></i></span>
+                                                    </div>
+                                                    <input type="text" 
+                                                    class="form-control text-center" 
+                                                    #dpfa="bsDatepicker"
+                                                    formControlName="fecha_aniversario"
+                                                    placeholder="dd/mm/yyyy" 
+                                                    bsDatepicker
+                                                    [maxDate]="maxDate"
+                                                    [bsConfig]="bsConfig"/>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <label>{{ 'signup.direccion-agencia'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="dirAgencia" [ngClass]="{ 'is-invalid': submitted && f.dirAgencia.errors }">
+                                            <div *ngIf="submitted && f.dirAgencia.errors" class="invalid-feedback">
+                                                <div *ngIf="f.dirAgencia.errors.required">{{ 'signup.ingrese-direccion-agencia'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-12">
+                                            <label>{{ 'signup.pais'|translate }}:</label>
+                                            <select [compareWith]="compareFn" class="form-control mb-3" formControlName="pais" (change)="changePais()">
+                                                <option disabled [ngValue]="null">{{ 'signup.seleccione'|translate }}</option>
+                                                <option *ngFor="let pais of listPaises;" [ngValue]="pais.id">{{ pais.nombre }}</option>
+                                            </select>
+                                            <div *ngIf="submitted && f.pais.errors" class="invalid-feedback">
+                                                <div *ngIf="f.pais.errors.required">{{ 'signup.ingrese-pais'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-12">
+                                                <label>{{ labelEstado }}:</label>
+                                                <select class="form-control mb-3" formControlName="estado" (change)="changeEstado()">
+                                                    <option disabled [ngValue]="null">{{ 'signup.seleccione'|translate }}</option>
+                                                    <option *ngFor="let estado of listEstados" [ngValue]="estado.id">{{ estado.nombre }}</option>
+                                                </select>
+                                                <div *ngIf="submitted && f.estado.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.estado.errors.required">Ingrese el {{labelEstado}} de la agencia.</div>
+                                                </div>
+                                        </div>
+                                        <div class="col-lg-4 col-12">
+                                                <label>{{ 'signup.ciudad'|translate }}:</label>
+                                                <select class="form-control mb-3" formControlName="ciudad">
+                                                    <option disabled [ngValue]="null">{{ 'signup.seleccione'|translate }}</option>
+                                                    <option *ngFor="let ciudad of listCiudades" [ngValue]="ciudad.id">{{ ciudad.nombre }}</option>
+                                                </select>
+                                                <div *ngIf="submitted && f.ciudad.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.ciudad.errors.required">{{ 'signup.ingrese-ciudad'|translate }}</div>
+                                                </div>
+                                        </div>
+                                        <div class="col-lg-4 col-4">
+                                            <label>{{labelLada}}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="telefono_lada" [ngClass]="{ 'is-invalid': submitted && f.telefono_lada.errors }">
+                                            <div *ngIf="submitted && f.telefono_lada.errors" class="invalid-feedback">
+                                                <div *ngIf="f.telefono_lada.errors.required">
+                                                    Ingrese 
+                                                    <span *ngIf="labelLada == 'Lada'">la</span>
+                                                    <span *ngIf="labelLada != 'Lada'">el</span>
+                                                     {{labelLada}} de la agencia.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-8">
+                                            <label>{{ 'signup.telefono'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="telefono" [ngClass]="{ 'is-invalid': submitted && f.telefono.errors }">
+                                            <div *ngIf="submitted && f.telefono.errors" class="invalid-feedback">
+                                                <div *ngIf="f.telefono.errors.required">{{ 'signup.ingrese-telefono'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-12">
+                                            <label>{{ 'signup.celular'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="celular"[ngClass]="{ 'is-invalid': submitted && f.celular.errors }">
+                                            <div *ngIf="submitted && f.celular.errors" class="invalid-feedback">
+                                                <div *ngIf="f.celular.errors.required">{{ 'signup.ingrese-celular'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <label for="nacionalidad">{{ 'signup.nacionalidad'|translate }}:</label>
+                                            <select formControlName="nacionalidad" id="nacionalidad" class="form-control mb-3" [ngClass]="{ 'is-invalid': false }">
+                                                <option disabled [ngValue]="null">{{ 'signup.seleccione'|translate }}</option>
+                                                <option *ngFor="let nationality_search of listNacionalidades" [ngValue]="nationality_search.code">{{ nationality_search.name }}</option>
+                                            </select>
+                                            <div *ngIf="submitted && false" class="invalid-feedback">
+                                                <div *ngIf="false">{{ 'signup.ingrese-nacionalidad'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12" *ngIf="idOperador == 'AZAMID' || idOperador == 'AZAMTY' || idOperador == 'AZAMX' || idOperador == 'AZACR' || idOperador == 'AZABR' || idOperador == 'AZAPTY' || idOperador == 'AZALTM' ">
+                                            <label>{{ 'signup.seleccione-sucursal'|translate }}:</label>
+                                            <select class="form-control mb-3" (change)="sucursalOpe($event)" formControlName="operadorSelec" >
+                                                <option value="">{{ 'signup.seleccione-sucursal'|translate }}</option>
+                                                <option value="AZAMID">Azabache México Sureste</option>
+                                                <option value="AZAMTY">Azabache México Norte</option>
+                                                <option value="AZAMX">Azabache México Centro</option>
+                                                <option value="AZACR">Azabache Costa Rica</option>
+                                                <option value="AZAPTY">Azabache Panamá</option>
+                                                <option value="AZALTM">Azabache Colombia</option>
+                                                <option value="AZABR">Azabache Brazil</option>
+                                            </select>
+                                            <div *ngIf="operadorSelec.invalid  && signupForm.dirty" class="invalid-feedback">
+                                                <div >{{ 'signup.seleccione-sucursal'|translate }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-mg-6 col-12">
+                                            <label>{{ 'signup.sitio-web'|translate }}:</label>
+                                            <div class="input-group mb-3 soc-net">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text d-flex justify-content-center bg-success"><i class="fa fa-globe" aria-hidden="true"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control " formControlName="redsocial">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="input-group mb-3 soc-net">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text d-flex justify-content-center fb"><fa-icon [icon]="faFacebookF"></fa-icon></span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="fb.com/">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="input-group mb-3 soc-net">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text d-flex justify-content-center tw"><fa-icon [icon]="faTwitter"></fa-icon></span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="tw.com/">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="input-group mb-3 soc-net">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text d-flex justify-content-center in"><fa-icon [icon]="faInstagram"></fa-icon></span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="instgr.com/">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="input-group mb-3 soc-net">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text d-flex justify-content-center yt"><fa-icon [icon]="faYoutube"></fa-icon></span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="yt.com/">
+                                            </div>
+                                        </div>
+                                        
+                                        <hr style="width: 100%; height:2px;border-width:0;color:gray;background-color:gray">
+                                        <div class="col-lg-4 col-12">
+                                            <label>{{labelRFC}}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="rfc" [ngClass]="{ 'is-invalid': submitted && f.rfc.errors }">
+                                            <div *ngIf="submitted && f.rfc.errors" class="invalid-feedback">
+                                                <div *ngIf="f.rfc.errors.required">Ingrese el {{labelRFC}} de la agencia.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8 col-12">
+                                            <label>{{ 'signup.razon-social'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="razonSocial" [ngClass]="{ 'is-invalid': submitted && f.razonSocial.errors }">
+                                            <div *ngIf="submitted && f.razonSocial.errors" class="invalid-feedback">
+                                                <div *ngIf="f.razonSocial.errors.required">{{ 'signup.ingrese-razon-social'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="idOperador != 'AZALTM'">
+                                            <div class="col-md-7 col-12">
+                                                <label>{{ 'signup.direccion-fiscal'|translate }}:</label>
+                                                <input type="text" id="direccFiscal" class="form-control mb-3" formControlName="direccionFiscal" [ngClass]="{ 'is-invalid': submitted && f.direccionFiscal.errors }">
+                                                <div *ngIf="submitted && f.direccionFiscal.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.direccionFiscal.errors.required">{{ 'signup.ingrese-direccion-fiscal'|translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 col-12 align-self-center">
+                                                <div class="pt-2">
+                                                    <input type="checkbox" name="dirFiscal" id="dirFiscal" (change)="direFiscal($event)">
+                                                    <label for="dirFiscal" class="text-blue text-6"> {{ 'signup.direccion-misma'|translate }}</label>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="col-12">
+                                            <label>{{ 'signup.registro-nac'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="rnt" [ngClass]="{ 'is-invalid': submitted && f.rnt.errors }">
+                                            <div *ngIf="submitted && f.rnt.errors" class="invalid-feedback">
+                                                <div *ngIf="f.rnt.errors.required">{{ 'signup.ingrese-rnt'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <hr style="width: 100%; height:2px;border-width:0;color:gray;background-color:gray">
+                                        <div class="col-12">
+                                            <h2>{{ 'signup.datos-usuario'|translate }}:</h2>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label>{{ 'signup.nombre-completo'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }">
+                                            <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                                                <div *ngIf="f.nombre.errors.required">{{ 'signup.ingrese-nombre-usuario'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label>{{ 'signup.email'|translate }}:</label>
+                                            <input type="text" class="form-control mb-3" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                                            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                                <div *ngIf="f.email.errors.required">{{ 'signup.ingrese-correo-usuario'|translate }}</div>
+                                                <div *ngIf="f.email.errors.email">{{ 'signup.email-valido'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <h2>{{ 'signup.datos-acceso'|translate }}:</h2>
+                                        </div>
+                                        <div class="col-12 px-0">
+                                            <div class="col-md-6 col-12">
+                                                <label>{{ 'signup.usuario'|translate }}:</label>
+                                                <input type="text" class="form-control mb-3" formControlName="usuario" [ngClass]="{ 'is-invalid': submitted && f.usuario.errors }">
+                                            <div *ngIf="submitted && f.usuario.errors" class="invalid-feedback">
+                                                <div *ngIf="f.usuario.errors.required">{{ 'signup.ingrese-usuario'|translate }}</div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label>{{ 'signup.pass'|translate }}:</label>
+                                            <input type="password" class="form-control mb-3" formControlName="pass" [ngClass]="{ 'is-invalid': submitted && f.pass.errors }">
+                                            <div *ngIf="submitted && f.pass.errors" class="invalid-feedback">
+                                                <div *ngIf="f.pass.errors.required">{{ 'signup.ingrese-pass'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label>Confirmar contraseña:</label>
+                                            <input type="password" class="form-control mb-3" formControlName="pass2" [ngClass]="{ 'is-invalid': submitted && f.pass2.errors }">
+                                            <div *ngIf="submitted && f.pass2.errors" class="invalid-feedback">
+                                                <div *ngIf="f.pass2.errors.required">{{ 'signup.repita-pass'|translate }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="pt-2">
+                                                <input type="checkbox" name="terms" id="terms" (change)="toggleTerms($event)">
+                                                <label for="terms" class="text-blue text-6 font-weight-bold">
+                                                    <a href="javascript:void(0)" (click)="TerminosYCondiciones()"> {{ 'signup.terminos-condiciones'|translate }}</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button [disabled]="!aceptTerms || loading" class="btn btn-primary btn-md btn-block text-uppercasse">{{ 'signup.registrar'|translate }}</button>
+                                        </div>
+                                        <div class="col-12 text-center py-5">
+                                            <ul class="list-inline">
+                                                <li *ngFor="let sociales of rsociales" class="list-inline-item">
+                                                    <a *ngIf="sociales.tipo=='facebook'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                        <img *ngIf="sociales.tipo=='facebook'" src="./assets/img/social_icons/fb.png" width="30px" alt="">
+                                                    </a>
+                                                    <a *ngIf="sociales.tipo=='instagram'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                        <img *ngIf="sociales.tipo=='instagram'" src="./assets/img/social_icons/ig.png" width="30px" alt="">
+                                                    </a>
+                                                    <a *ngIf="sociales.tipo=='linkedin'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                        <img *ngIf="sociales.tipo=='linkedin'" src="./assets/img/social_icons/in.png" width="30px" alt="">
+                                                    </a>
+                                                    <a *ngIf="sociales.tipo=='youtube'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                        <img *ngIf="sociales.tipo=='youtube'" src="./assets/img/social_icons/yt.png" width="30px" alt="">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+

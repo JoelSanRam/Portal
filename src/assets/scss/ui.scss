@@ -1,0 +1,154 @@
+.title-page {
+    font-family: $font-bold;
+    font-size: 1.3rem;
+    color: $colorSombraTres;
+}
+
+.text-1 {
+    font-size: 1.4rem;
+}
+.text-2 {
+    font-size: 1.3rem;
+}
+.text-3 {
+    font-size: 1.2rem;
+}
+.text-4 {
+    font-size: 1.1rem;
+}
+.text-5 {
+    font-size: 1rem;
+}
+.text-6 {
+    font-size: 0.9rem;
+}
+.text-7 {
+    font-size: .8rem;
+}
+.text-8 {
+    font-size: .7rem;
+}
+
+.text-dark {
+    color: $colorSombraTres;
+}
+
+.text-blue {
+    color: $colorPrimarioUno;
+}
+.text-orange {
+    color: $colorSecundarioTres;
+}
+.text-green {
+    color: $colorSecundarioDos;
+}
+.text-grey {
+    color: $colorSombraDos;
+}
+
+// .text-white
+// .text-red
+// .text-yellow
+// .text-purple
+
+.bg-blue {
+  background-color: $colorPrimarioUno;
+  color: $white;
+}
+
+.bg-orange {
+  background-color: $colorSecundarioTres;
+  color: $white;
+}
+
+.bg-green {
+  background-color: $colorSecundarioDosOscuro;
+  color: $white;
+}
+
+
+.alert {
+    border: none;
+}
+.alert-primary {
+    color: #007ce1;
+    background-color: #bfecfb;
+}
+.alert-success {
+    color: #00d0ab;
+    background-color: #cff8f3;
+}
+.alert-warning {
+    color: #ffb824;
+    background-color: #fff5df;
+}
+.alert-danger {
+    color: #f91111;
+    background-color: #ffd7d7;
+}
+
+// Badge
+
+.badge-rounded {
+    width: 35px;
+    line-height: 35px;
+    border-radius: 50%;
+    font-weight: 700;
+    text-align: center;
+}
+.badge-white {
+    background-color: $white;
+    color: $colorPrimarioUno;
+}
+.badge-orange {
+    background-color: $colorSecundarioTres;
+    color: $white;
+}
+.badge-red {
+    background-color: $colorPrimarioDos;
+    color: $white;
+}
+.badge-blue {
+    background-color: $colorPrimarioUno;
+    color: $white;
+}
+.badge-grey {
+    background-color: $colorSombraDos;
+    color: $white;
+}
+.badge-green {
+    background-color: $colorSecundarioDos;
+    color: $white;
+}
+.badge-yellow {
+    background-color: $colorPrimarioTres;
+    color: $white;
+}
+.badge-border-blue {
+    background-color: $white;
+    border: 1px solid $colorPrimarioUno;
+    color: $black;
+}
+.badge-violet {
+    background-color: #9b59b6;
+    color: #fff;
+}
+.breadcrumb {
+    font-size: 0.9rem;
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: '>';
+    }
+}
+
+.rounded-img {
+    border-radius: 50%;
+}
+
+.promo-ant {
+    color: $colorPrimarioDos;
+    text-decoration: line-through;
+}
+
+.p-m-b{
+    margin-bottom: 0rem!important;
+}

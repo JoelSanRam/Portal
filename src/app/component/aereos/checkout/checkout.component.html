@@ -1,0 +1,1019 @@
+<div class="container">
+    <div class="row">
+        <div class="modal-pagos col-12 col-md-6 mt-4 order-last order-md-first" *ngIf="!formcheck">
+            <div>
+                <a class="text-6 btn-efect" (click)="formcheck = true"> <i class="fa fa-angle-double-left"></i> {{
+                    'vuelos.regresar-formulario'|translate }} </a>
+            </div>
+            <div class="col-12 text-center">
+                <ng-template #linkpay>
+                    {{ 'vuelos.comparte-link-pago'|translate }}
+                </ng-template>
+                <button class="btn btn-primary mt-3" [tooltip]="linkpay" (click)="clipboardLinkk()">{{
+                    'vuelos.liga-pago'|translate }} <i class="fa fa-credit-card"></i></button>
+            </div>
+            <iframe [src]="iframeUrl" width="100%" height="100%" frameborder="0" allowfullscreen="0" scrolling="no"
+                class="mt-4"></iframe>
+        </div>
+        <div class="col-12 col-md-6 mt-4" *ngIf="formcheck">
+            <div>
+                <a class="text-6 btn-efect" [routerLink]="['/vuelos']" [state]="{searchParams: searchParams}"> <i
+                        class="fa fa-angle-double-left"></i> {{ 'vuelos.volver-busqueda'|translate }}</a>
+            </div>
+            <form [formGroup]="formPax" class="mt-3">
+                <!-- * PASSENGER DATA -->
+                <section>
+                    <h5 class="text-1  font-weight-bold d-flex justify-content-between">{{
+                        'vuelos.confirma-datos-vuelo'|translate }} <i class="far fa-address-card"></i></h5>
+                    <div formArrayName="adultos" class="card-white">
+                        <h5>{{ 'vuelos.quienes-viajan'|translate }}</h5>
+                        <ng-container *ngIf="pasajeros?.adultos > 0">
+                            <ng-container *ngFor="let adulto of adultos.controls; let i = index;">
+                                <div [formGroup]="adulto" class="passenger-card">
+                                    <p class="text-blue mb-0">{{ 'vuelos.adulto'|translate }} {{ i + 1 }}</p>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.titulo'|translate }}:</label>
+                                                <select class="form-control" formControlName="titulo_id">
+                                                    <option *ngFor="let titulo of listTitulos" [value]="titulo.id">
+                                                        {{titulo.person_title}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.nombres'|translate }}:</label>
+                                                <input type="text" class="form-control" formControlName="nombres"
+                                                    placeholder="{{ 'vuelos.placeholder-documento'|translate }}"
+                                                    [class.is-invalid]="adultos.controls[i].controls.nombres.invalid && (adultos.controls[i].controls.nombres.dirty || adultos.controls[i].controls.nombres.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="adultos.controls[i].controls.nombres.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="adultos.controls[i].controls.nombres.errors.required">
+                                                        {{ 'vuelos.ingrese-nombre'|translate }}.
+                                                    </div>
+                                                    <div *ngIf="adultos.controls[i].controls.nombres.errors.symbols">
+                                                        {{ 'vuelos.validacion-caracteres'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.apellidos'|translate }}:</label>
+                                                <input type="text" class="form-control" formControlName="apellidos"
+                                                    placeholder="{{ 'vuelos.placeholder-documento'|translate }}"
+                                                    [class.is-invalid]="adultos.controls[i].controls.apellidos.invalid && (adultos.controls[i].controls.apellidos.dirty || adultos.controls[i].controls.apellidos.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="adultos.controls[i].controls.apellidos.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="adultos.controls[i].controls.apellidos.errors.required">
+                                                        {{ 'vuelos.ingrese-apellido'|translate }}
+                                                    </div>
+                                                    <div *ngIf="adultos.controls[i].controls.apellidos.errors.symbols">
+                                                        {{ 'vuelos.validacion-caracteres'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-group text-danger" *ngIf="!uniqueNames">
+                                            <small>{{ 'vuelos.pasajeros-repetidos'|translate }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" *ngIf="documentacion == 'Internacional'">
+                                        <label for="">{{ 'vuelos.tipo-numero-documento'|translate }}:</label>
+                                        <div class="form-row">
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <select class="form-control" formControlName="tipo_documento_id">
+                                                    <option *ngFor="let documents of listDocuments"
+                                                        [value]="documents.id">{{documents.document_type}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <input type="text" maxlength="9"  class="form-control"
+                                                    formControlName="documento"
+                                                    placeholder="{{ 'vuelos.numero-documento'|translate }}"
+                                                    [class.is-invalid]="adultos.controls[i].controls.documento.invalid && (adultos.controls[i].controls.documento.dirty || adultos.controls[i].controls.documento.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="adultos.controls[i].controls.documento.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="adultos.controls[i].controls.documento.errors.required">
+                                                        {{ 'vuelos.ingrese-numero-documento'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <input readonly type="text" class="form-control"
+                                                    formControlName="fecha_expiracion"
+                                                    placeholder="{{ 'vuelos.fecha-expiracion-documento'|translate }}"
+                                                    [bsConfig]="bsConfigExp" bsDatepicker
+                                                    [class.is-invalid]="adultos.controls[i].controls.fecha_expiracion.invalid && (adultos.controls[i].controls.fecha_expiracion.dirty || adultos.controls[i].controls.fecha_expiracion.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="adultos.controls[i].controls.fecha_expiracion.errors"
+                                                    class="invalid-feedback">
+                                                    <div
+                                                        *ngIf="adultos.controls[i].controls.fecha_expiracion.errors.required">
+                                                        {{ 'vuelos.ingrese-fecha-expiracion-documento'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-group text-danger" *ngIf="!uniquePasaports">
+                                            <small>{{ 'vuelos.pasaporte-repetido'|translate }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.fecha-nacimiento'|translate }}:</label>
+                                        <input readonly type="text" class="form-control"
+                                            formControlName="fecha_nacimiento" placeholder="DD/MM/AAAA"
+                                            [bsConfig]="bsConfig" bsDatepicker (onShown)="onOpenCalendar($event)"
+                                            [class.is-invalid]="adultos.controls[i].controls.fecha_nacimiento.invalid && (adultos.controls[i].controls.fecha_nacimiento.dirty || adultos.controls[i].controls.fecha_nacimiento.touched || submitted)"
+                                            required />
+                                        <div *ngIf="adultos.controls[i].controls.fecha_nacimiento.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="adultos.controls[i].controls.fecha_nacimiento.errors.required">
+                                                {{ 'vuelos.ingrese-fecha-nacimiento'|translate }}.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.nacionalidad'|translate }}:</label>
+                                        <select class="form-control" formControlName="pais">
+                                            <option *ngFor="let pais of listPaises" [value]="pais.id">{{ pais.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.sexo'|translate }}:</label>
+                                        <div class="">
+                                            <div class="form-check form-check-inline">
+                                                <input [id]="'A-M_'+i" type="radio" value="M" checked
+                                                    formControlName="sexo">
+                                                <label [for]="'A-M_'+i">{{ 'vuelos.masculino'|translate }}</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input [id]="'A-F_'+i" type="radio" value="F" formControlName="sexo">
+                                                <label [for]="'A-F_'+i">{{ 'vuelos.femenino'|translate }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label for="">Número de cliente frecuente:</label>
+                                        <input type="text" class="form-control" formControlName="numero_cliente" placeholder="(Opcional)">
+                                    </div> -->
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="pasajeros?.infantes > 0">
+                            <ng-container *ngFor="let infante of infantes.controls; let i = index;">
+                                <div [formGroup]="infante" class="passenger-card">
+                                    <p class="text-blue mb-0">{{ 'vuelos.infante'|translate }} {{ i + 1 }}</p>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.titulo'|translate }}:</label>
+                                                <select class="form-control" formControlName="titulo_id">
+                                                    <option *ngFor="let titulo of listTitulos" [value]="titulo.id">
+                                                        {{titulo.person_title}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.nombres'|translate }}:</label>
+                                                <input type="text" class="form-control" formControlName="nombres"
+                                                    placeholder="{{ 'vuelos.placeholder-documento'|translate }}"
+                                                    [class.is-invalid]="infantes.controls[i].controls.nombres.invalid && (infantes.controls[i].controls.nombres.dirty || infantes.controls[i].controls.nombres.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="infantes.controls[i].controls.nombres.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="infantes.controls[i].controls.nombres.errors.required">
+                                                        {{ 'vuelos.ingrese-nombre'|translate }}.</div>
+                                                    <div *ngIf="infantes.controls[i].controls.nombres.errors.symbols">
+                                                        {{ 'vuelos.validacion-caracteres'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.apellidos'|translate }}:</label>
+                                                <input type="text" class="form-control" formControlName="apellidos"
+                                                    placeholder="{{ 'vuelos.placeholder-documento'|translate }}"
+                                                    [class.is-invalid]="infantes.controls[i].controls.apellidos.invalid && (infantes.controls[i].controls.apellidos.dirty || infantes.controls[i].controls.apellidos.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="infantes.controls[i].controls.apellidos.errors"
+                                                    class="invalid-feedback">
+                                                    <div
+                                                        *ngIf="infantes.controls[i].controls.apellidos.errors.required">
+                                                        {{ 'vuelos.ingrese-apellido'|translate }}.
+                                                    </div>
+                                                    <div *ngIf="infantes.controls[i].controls.apellidos.errors.symbols">
+                                                        {{ 'vuelos.validacion-caracteres'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-group text-danger" *ngIf="!uniqueNames">
+                                            <small>{{ 'vuelos.pasajeros-repetidos'|translate }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="documentacion == 'Internacional'">
+                                        <label for="">{{ 'vuelos.tipo-numero-documento'|translate }}:</label>
+                                        <div class="form-row">
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <select class="form-control" formControlName="tipo_documento_id">
+                                                    <option *ngFor="let documents of listDocuments"
+                                                        [value]="documents.id">{{documents.document_type}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <input maxlength="9" minlength="9" type="text" class="form-control"
+                                                    formControlName="documento"
+                                                    placeholder="{{ 'vuelos.numero-documento'|translate }}"
+                                                    [class.is-invalid]="infantes.controls[i].controls.documento.invalid && (infantes.controls[i].controls.documento.dirty || infantes.controls[i].controls.documento.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="infantes.controls[i].controls.documento.errors"
+                                                    class="invalid-feedback">
+                                                    <div
+                                                        *ngIf="infantes.controls[i].controls.documento.errors.required">
+                                                        {{ 'vuelos.ingrese-numero-documento'|translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <input readonly type="text" class="form-control"
+                                                    formControlName="fecha_expiracion"
+                                                    placeholder="{{ 'vuelos.fecha-expiracion-documento'|translate }}"
+                                                    [bsConfig]="bsConfigExp" bsDatepicker
+                                                    [class.is-invalid]="infantes.controls[i].controls.fecha_expiracion.invalid && (infantes.controls[i].controls.fecha_expiracion.dirty || infantes.controls[i].controls.fecha_expiracion.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="infantes.controls[i].controls.fecha_expiracion.errors"
+                                                    class="invalid-feedback">
+                                                    <div
+                                                        *ngIf="infantes.controls[i].controls.fecha_expiracion.errors.required">
+                                                        {{ 'vuelos.ingrese-fecha-expiracion-documento'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-group text-danger" *ngIf="!uniquePasaports">
+                                            <small>{{ 'vuelos.pasaporte-repetido'|translate }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.fecha-nacimiento'|translate }}:</label>
+                                        <input readonly type="text" class="form-control"
+                                            formControlName="fecha_nacimiento" placeholder="DD/MM/AAAA"
+                                            [bsConfig]="bsConfig" bsDatepicker
+                                            [minDate]="subtractYear(pasajeros.edadinfantes[i])"
+                                            (onShown)="onOpenCalendar($event)"
+                                            [class.is-invalid]="infantes.controls[i].controls.fecha_nacimiento.invalid && (infantes.controls[i].controls.fecha_nacimiento.dirty || infantes.controls[i].controls.fecha_nacimiento.touched || submitted)"
+                                            required />
+                                        <div *ngIf="infantes.controls[i].controls.fecha_nacimiento.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="infantes.controls[i].controls.fecha_nacimiento.errors.required">
+                                                {{ 'vuelos.ingrese-fecha-nacimiento'|translate }}.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.nacionalidad'|translate }}:</label>
+                                        <select class="form-control" formControlName="pais">
+                                            <option *ngFor="let pais of listPaises" [value]="pais.id">{{ pais.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.nacionalidad'|translate }}:</label>
+                                        <div class="">
+                                            <div class="form-check form-check-inline">
+                                                <input [id]="'I-M_'+i" type="radio" value="M" checked
+                                                    formControlName="sexo">
+                                                <label [for]="'I-M_'+i">{{ 'vuelos.masculino'|translate }}</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input [id]="'I-F_'+i" type="radio" value="F" formControlName="sexo">
+                                                <label [for]="'I-F_'+i">{{ 'vuelos.femenino'|translate }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="pasajeros?.menores > 0">
+                            <ng-container *ngFor="let menor of menores.controls; let i = index;">
+                                <div [formGroup]="menor" class="passenger-card">
+                                    <p class="text-blue mb-0">{{ 'vuelos.menor'|translate }} {{ i + 1 }}</p>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.titulo'|translate }}:</label>
+                                                <select class="form-control" formControlName="titulo_id">
+                                                    <option *ngFor="let titulo of listTitulos" [value]="titulo.id">
+                                                        {{titulo.person_title}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.nombres'|translate }}:</label>
+                                                <input type="text" class="form-control" formControlName="nombres"
+                                                    placeholder="{{ 'vuelos.placeholder-documento'|translate }}"
+                                                    [class.is-invalid]=" menores.controls[i].controls.nombres.invalid && ( menores.controls[i].controls.nombres.dirty || menores.controls[i].controls.nombres.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="menores.controls[i].controls.nombres.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="menores.controls[i].controls.nombres.errors.required">
+                                                        {{ 'vuelos.ingrese-nombre'|translate }}.
+                                                    </div>
+                                                    <div *ngIf="menores.controls[i].controls.nombres.errors.symbols">
+                                                        {{ 'vuelos.validacion-caracteres'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="">{{ 'vuelos.apellidos'|translate }}:</label>
+                                                <input type="text" class="form-control" formControlName="apellidos"
+                                                    placeholder="{{ 'vuelos.placeholder-documento'|translate }}"
+                                                    [class.is-invalid]="menores.controls[i].controls.apellidos.invalid && (menores.controls[i].controls.apellidos.dirty || menores.controls[i].controls.apellidos.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="menores.controls[i].controls.apellidos.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="menores.controls[i].controls.apellidos.errors.required">
+                                                        {{ 'vuelos.ingrese-apellido'|translate }}.</div>
+                                                    <div *ngIf="menores.controls[i].controls.apellidos.errors.symbols">
+                                                        {{ 'vuelos.validacion-caracteres'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-group text-danger" *ngIf="!uniqueNames">
+                                            <small>{{ 'vuelos.pasajeros-repetidos'|translate }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" *ngIf="documentacion == 'Internacional'">
+                                        <label for="">{{ 'vuelos.tipo-numero-documento'|translate }}:</label>
+                                        <div class="form-row">
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <select class="form-control" formControlName="tipo_documento_id">
+                                                    <option *ngFor="let documents of listDocuments"
+                                                        [value]="documents.id">{{documents.document_type}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <input type="text" maxlength="9" minlength="9" class="form-control"
+                                                    formControlName="documento"
+                                                    placeholder="{{ 'vuelos.numero-documento'|translate }}"
+                                                    [class.is-invalid]="menores.controls[i].controls.documento.invalid && (menores.controls[i].controls.documento.dirty || menores.controls[i].controls.documento.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="menores.controls[i].controls.documento.errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="menores.controls[i].controls.documento.errors.required">
+                                                        {{ 'vuelos.ingrese-numero-documento'|translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-4 form-group">
+                                                <input readonly type="text" class="form-control"
+                                                    formControlName="fecha_expiracion"
+                                                    placeholder="{{ 'vuelos.fecha-expiracion-documento'|translate }}"
+                                                    [bsConfig]="bsConfigExp" bsDatepicker
+                                                    [class.is-invalid]="menores.controls[i].controls.fecha_expiracion.invalid && (menores.controls[i].controls.fecha_expiracion.dirty || menores.controls[i].controls.fecha_expiracion.touched || submitted)"
+                                                    required />
+                                                <div *ngIf="menores.controls[i].controls.fecha_expiracion.errors"
+                                                    class="invalid-feedback">
+                                                    <div
+                                                        *ngIf="menores.controls[i].controls.fecha_expiracion.errors.required">
+                                                        {{ 'vuelos.ingrese-fecha-expiracion-documento'|translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-group text-danger" *ngIf="!uniquePasaports">
+                                            <small>{{ 'vuelos.pasaporte-repetido'|translate }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.pasaporte-repetido'|translate }}:</label>
+                                        <input readonly type="text" class="form-control"
+                                            formControlName="fecha_nacimiento" placeholder="DD/MM/AAAA"
+                                            [bsConfig]="bsConfig" bsDatepicker
+                                            [minDate]="subtractYear(pasajeros.edadmenores[i])"
+                                            (onShown)="onOpenCalendar($event)"
+                                            [class.is-invalid]="menores.controls[i].controls.fecha_nacimiento.invalid && (menores.controls[i].controls.fecha_nacimiento.dirty || menores.controls[i].controls.fecha_nacimiento.touched || submitted)"
+                                            required />
+                                        <div *ngIf="menores.controls[i].controls.fecha_nacimiento.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="menores.controls[i].controls.fecha_nacimiento.errors.required">
+                                                {{ 'vuelos.ingrese-fecha-nacimiento'|translate }}.</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.nacionalidad'|translate }}:</label>
+                                        <select class="form-control" formControlName="pais">
+                                            <option *ngFor="let pais of listPaises" [value]="pais.id">{{ pais.nombre }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">{{ 'vuelos.nacionalidad'|translate }}:</label>
+                                        <div class="">
+                                            <div class="form-check form-check-inline">
+                                                <input [id]="'M-M_'+i" type="radio" value="M" checked
+                                                    formControlName="sexo">
+                                                <label [for]="'M-M_'+i">{{ 'vuelos.masculino'|translate }}</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input [id]="'M-F_'+i" type="radio" value="F" formControlName="sexo">
+                                                <label [for]="'M-F_'+i">{{ 'vuelos.femenino'|translate }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </section>
+                <!-- ! END PASSENGER DATA -->
+
+                <!-- * DOCUMENTS INFO -->
+                <section class="card-white documents-info mt-4" *ngIf="documentacion === 'Internacional'">
+                    <h5 class="font-weight-bold text-danger">{{ 'vuelos.importante'|translate }}</h5>
+                    <p class="m-0">{{ 'vuelos.revisar-documentos-internacional'|translate }}.</p>
+                    <a href="https://guiadelviajero.sre.gob.mx/" target="_blank">{{ 'vuelos.consultalos-aqui'|translate
+                        }}.</a>
+                </section>
+                <!-- ! END DOCUMENTS INFO -->
+
+                <!-- * EMAIL INFO -->
+                <section formGroupName="info_mail" class="card-white mt-4">
+                    <h5>{{ 'vuelos.donde-enviar-vouchers'|translate }}</h5>
+                    <p>{{ 'vuelos.email-info-reserva'|translate }}</p>
+                    <div class="form-group">
+                        <label for="">{{ 'vuelos.email'|translate }}:</label>
+                        <input type="email" class="form-control" formControlName="email"
+                            placeholder="{{ 'vuelos.ingresa-email-contacto'|translate }}"
+                            [class.is-invalid]="f_mail.email.invalid && (f_mail.email.dirty || f_mail.email.touched || submitted)"
+                            [class.is-valid]="f_mail.email.valid && (f_mail.email.dirty || f_mail.email.touched || submitted)"
+                            required />
+                        <div *ngIf="f_mail.email.errors" class="invalid-feedback">
+                            <div *ngIf="f_mail.email.errors.required">{{ 'vuelos.ingresa-email-contacto'|translate }}.
+                            </div>
+                            <div *ngIf="f_mail.email.errors.email">{{ 'vuelos.ingresa-email-valido'|translate }}.</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">{{ 'vuelos.confirma-email'|translate }}:</label>
+                        <input type="email" class="form-control" formControlName="emailConfirm"
+                            placeholder="{{ 'vuelos.vuelve-ingresar-email'|translate }}"
+                            [class.is-invalid]="f_mail.emailConfirm.invalid && (f_mail.emailConfirm.dirty || f_mail.emailConfirm.touched || submitted)"
+                            [class.is-valid]="f_mail.emailConfirm.valid && (f_mail.emailConfirm.dirty || f_mail.emailConfirm.touched || submitted)"
+                            required />
+                        <div *ngIf="f_mail.emailConfirm.errors" class="invalid-feedback">
+                            <div *ngIf="f_mail.emailConfirm.errors.required">{{ 'vuelos.vuelve-ingresar-email'|translate
+                                }}</div>
+                            <div *ngIf="f_mail.emailConfirm.errors.email">{{ 'vuelos.ingresa-email-valido'|translate }}.
+                            </div>
+                            <div *ngIf="f_mail.emailConfirm.errors.mismatch">{{ 'vuelos.emails-no-coinciden'|translate
+                                }}.</div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <input type="checkbox" id="ofertas" formControlName="ofertas" checked>
+                        <label for="ofertas">QUIERO RECIBIR LAS MEJORES OFERTAS</label>
+                        <div>
+                            <small>Recibirás emails y llamados telefónicos con las mejores promociones para tu viaje. Si no
+                                lo deseas, desmarca este mensaje. Para más información consulta las <a href="#">Políticas de
+                                    privacidad</a>.</small>
+                        </div>
+                    </div> -->
+                </section>
+                <!-- ! END EMAIL INFO -->
+
+                <!-- * CONTACT INFO -->
+                <section formGroupName="datos_contacto" class="card-white mt-4">
+                    <h5>{{ 'vuelos.numero-podemos-marcarte'|translate }}</h5>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="">{{ 'vuelos.codigo-pais'|translate }}:</label>
+                                <select class="form-control" formControlName="codigo_pais">
+                                    <option *ngFor="let phones of listPhones" value="{{phones.id}}">
+                                        {{phones.country}} ({{phones.code}})</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="">{{ 'vuelos.telefono'|translate }}:</label>
+                                <input onkeypress="return /[0-9]/i.test(event.key)" maxlength="10" type="tel"
+                                    class="form-control" formControlName="telefono"
+                                    placeholder="{{ 'vuelos.placeholder-numero'|translate }}"
+                                    [class.is-invalid]="f_contact.telefono.invalid && (f_contact.telefono.dirty || f_contact.telefono.touched || submitted)"
+                                    [class.is-valid]="f_contact.telefono.valid && (f_contact.telefono.dirty || f_contact.telefono.touched || submitted)"
+                                    required />
+                                <div *ngIf="f_contact.telefono.errors" class="invalid-feedback">
+                                    <div *ngIf="f_contact.telefono.errors.required">{{
+                                        'vuelos.ingrese-telefono'|translate }}.</div>
+                                    <div *ngIf="f_contact.telefono.errors.minlength">{{
+                                        'vuelos.validacion-10-digitos'|translate }}.</div>
+                                    <div *ngIf="f_contact.telefono.errors.maxlength">{{
+                                        'vuelos.validacion-max-10'|translate }}.</div>
+                                    <div *ngIf="f_contact.telefono.errors.pattern">{{ 'vuelos.solo-numeros'|translate
+                                        }}.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <input type="checkbox" id="notificacion" formControlName="notificacion" checked>
+                        <label for="notificacion">Mantenme informado vía WhatsApp y SMS sobre detalles de mi compra, estado
+                            del vuelo y posibles cambios en mi viaje.</label>
+                    </div> -->
+                </section>
+                <!-- ! END CONTACT INFO -->
+
+                <!-- * EMERGENCY CONTACT -->
+                <section formGroupName="datos_emergencia" class="card-white mt-4">
+                    <h5>{{ 'vuelos.contacto-emergencia'|translate }}</h5>
+                    <p>{{ 'vuelos.contacto-emergencia-texto'|translate }}</p>
+
+
+
+                    <div class="form-group">
+                        <label for="">{{ 'vuelos.nombres'|translate }}:</label>
+                        <input type="text" class="form-control" formControlName="nombres"
+                            [class.is-invalid]="f_emergency.nombres.invalid && (f_emergency.nombres.dirty || f_emergency.nombres.touched || submitted)"
+                            required />
+                        <div *ngIf="f_emergency.nombres.errors" class="invalid-feedback">
+                            <div *ngIf="f_emergency.nombres.errors.required">
+                                {{ 'vuelos.ingrese-nombre-emergencia'|translate }}
+                            </div>
+                            <div *ngIf="f_emergency.nombres.errors.symbols">
+                                {{ 'vuelos.validacion-caracteres'|translate }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="">{{ 'vuelos.apellidos'|translate }}:</label>
+                        <input type="text" class="form-control" formControlName="apellidos" placeholder=""
+                            [class.is-invalid]="f_emergency.apellidos.invalid && (f_emergency.apellidos.dirty || f_emergency.apellidos.touched || submitted)"
+                            required />
+                        <div *ngIf="f_emergency.apellidos.errors" class="invalid-feedback">
+                            <div *ngIf="f_emergency.apellidos.errors.required">
+                                {{ 'vuelos.ingrese-apellido-emergencia'|translate }}
+                            </div>
+                            <div *ngIf="f_emergency.apellidos.errors.symbols">
+                                {{ 'vuelos.validacion-caracteres'|translate }}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="">{{ 'vuelos.codigo-pais'|translate }}:</label>
+                                <select class="form-control" formControlName="codigo_pais">
+                                    <option *ngFor="let phones of listPhones" [value]="phones.id" selected>
+                                        {{phones.country}} ({{phones.code}})</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="">{{ 'vuelos.telefono'|translate }}:</label>
+                                <input type="tel" onkeypress="return /[0-9]/i.test(event.key)" maxlength="10"
+                                    class="form-control" formControlName="telefono"
+                                    [class.is-invalid]="f_emergency.telefono.invalid && (f_emergency.telefono.dirty || f_emergency.telefono.touched || submitted)"
+                                    [class.is-valid]="f_emergency.telefono.valid && (f_emergency.telefono.dirty || f_emergency.telefono.touched || submitted)"
+                                    required />
+                                <div *ngIf="f_emergency.telefono.errors" class="invalid-feedback">
+                                    <div *ngIf="f_emergency.telefono.errors.required">{{
+                                        'vuelos.ingrese-telefono'|translate }}.</div>
+                                    <div *ngIf="f_emergency.telefono.errors.minlength">{{
+                                        'vuelos.validacion-10-digitos'|translate }}.</div>
+                                    <div *ngIf="f_emergency.telefono.errors.maxlength">{{
+                                        'vuelos.validacion-max-10'|translate }}.</div>
+                                    <div *ngIf="f_emergency.telefono.errors.pattern">{{ 'vuelos.solo-numeros'|translate
+                                        }}.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">{{ 'vuelos.email'|translate }}:</label>
+                        <input type="email" class="form-control" formControlName="email" placeholder=""
+                            [class.is-invalid]="f_emergency.email.invalid && (f_emergency.email.dirty || f_emergency.email.touched || submitted)"
+                            [class.is-valid]="f_emergency.email.valid && (f_emergency.email.dirty || f_emergency.email.touched || submitted)"
+                            required />
+                        <div *ngIf="f_emergency.email.errors" class="invalid-feedback">
+                            <div *ngIf="f_emergency.email.errors.required">{{
+                                'vuelos.ingrese-email-emergencia'|translate }}.
+                            </div>
+                            <div *ngIf="f_emergency.email.errors.email">{{ 'vuelos.ingresa-email-valido'|translate }}.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- ! END EMERGENCY CONTACT -->
+
+            </form>
+            <!-- * CHECK DATA -->
+            <section>
+                <h5 class="text-1 font-weight-bold d-flex justify-content-between mt-4">{{
+                    'vuelos.revisa-datos'|translate }}</h5>
+                <div class="card-white">
+                    <div>
+                        <div class="text-blue">
+                            <i class="far fa-calendar mr-3"></i> {{ 'vuelos.fecha'|translate }}
+                        </div>
+                        <div class="row" *ngFor="let tramo of tramos; let i = index">
+                            <div class="col-3">
+                                <p class="m-0"
+                                    *ngIf="tipoVuelo == 'single' || tipoVuelo == 'multitrip' || tipoVuelo == 'roundtrip' && i == 0">
+                                    {{ 'vuelos.salida'|translate }}</p>
+                                <p class="m-0" *ngIf="tipoVuelo == 'roundtrip' && i == 1">{{ 'vuelos.regreso'|translate
+                                    }}</p>
+                            </div>
+                            <div class="col-9">
+                                {{ tramo?.date | date: 'd MMMM y' }}, <span *ngIf="tramo.Horasalida">{{
+                                    formatTime(tramo?.Horasalida) }} hr</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <hr>
+                        <div class="text-blue">
+                            <i class="fas fa-user mr-3"></i> {{ 'vuelos.pasajeros'|translate }}
+                        </div>
+                        <div>
+                            <div class="row" *ngFor="let adulto of formPax.controls.adultos.value; let i = index;">
+                                <div class="col-3">
+                                    {{ 'vuelos.adulto'|translate }} {{ i + 1}}
+                                </div>
+                                <div class="col-9">
+                                    {{ adulto.nombres + ' ' + adulto.apellidos }}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="row" *ngFor="let infante of formPax.controls.infantes.value; let i = index;">
+                                <div class="col-3">
+                                    {{ 'vuelos.infante'|translate }} {{ i + 1}}
+                                </div>
+                                <div class="col-9">
+                                    {{ infante.nombres + ' ' + infante.apellidos }}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="row" *ngFor="let menor of formPax.controls.menores.value; let i = index;">
+                                <div class="col-3">
+                                    {{ 'vuelos.menor'|translate }} {{ i + 1}}
+                                </div>
+                                <div class="col-9">
+                                    {{ menor.nombres + ' ' + menor.apellidos }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <hr>
+                        <div class="container-fluid p-0">
+                            <div class="row" *ngIf="tresDiasFlag">
+                                <div class="col-sm-6">
+                                    <input type="radio" id="customRadioInline1" (change)="cotizarPagar($event)"
+                                        name="customRadioInline" class="custom-control-input" style="position:absolute"
+                                        checked value="cotizar">
+                                    <label for="customRadioInline1" style="font-size:16px">Cotizar y pagar
+                                        después</label>
+                                </div>
+                                <div class="col-sm-6"> <input type="radio" id="customRadioInline2"
+                                        name="customRadioInline" (change)="cotizarPagar($event)"
+                                        class="custom-control-input" style="position:absolute" value="reservar">
+                                    <label for="customRadioInline2" style="font-size:16px"
+                                        class="font-weight-bold">Crear Reservación</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="cotizar && tresDiasFlag">
+                            <span class="align-self-start mt-2"><i class="fas fa-info-circle fa-xs icono"></i>
+                                <span style="font-size:13.5px" class="text-blue">
+                                    Se apartará la reserva por un lapso de 4 horas, para emitir el boleto se debe
+                                    realizar el pago antes de ese tiempo.
+                                </span>
+                            </span>
+                        </div>
+                        <div *ngIf="reservar || tresDiasFlag===false">
+                            <span class="align-self-start mt-2"><i class="fas fa-info-circle fa-xs icono"></i>
+                                <span style="font-size:13.5px" class="text-blue">
+                                    Se realizará el pago, se generará la reserva con su ID y emitirá el boleto de la
+                                    reservación.
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-md-4 mx-auto mt-4" *ngIf="cotizar && tresDiasFlag">
+                            <button class="btn btn-sm btn-select" type="button" (click)="pagarReserva('cotizar')"
+                                style="font-size:14px">CONFIRMAR</button>
+                        </div>
+                        <div *ngIf="reservar || tresDiasFlag===false">
+                            <div class="row mt-4 justify-content-around mx-2">
+                                <button class="btn btn-sm  btn-select" type="button"
+                                    style="font-size:14px;    width: 155px;"
+                                    (click)="pagarReserva('pagar')">PAGAR</button>
+                                <button *ngIf="cobrarCredito" class="btn btn-sm btn-select" type="button"
+                                    style="font-size:14px" (click)="pagarReserva('credito')">COBRAR A
+                                    CRÉDITO</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ! END CHECK DATA -->
+            <div class="mt-4">
+                <!-- <button class="btn btn-block btn-primary" type="button" (click)="fakeReq()">Simular Data <i class="fas fa-arrow-right"></i></button> -->
+                <button class="btn btn-block btn-primary d-none" type="button" (click)="validateData()">{{
+                    'vuelos.siguiente'|translate }} <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-md-6 col-lg-6 mt-4">
+            <div class="sticky-content">
+                <div class="countdown">
+                    <div class="numberscounter">{{ counter | formatTime }} <small>{{ 'vuelos.MIN'|translate }}</small>
+                    </div>
+                    <div class="msg">{{ 'vuelos.mantener-tarifa'|translate }}</div>
+                </div>
+                <!-- * PAYMENT DETAILS -->
+                <section class="payment-aereos">
+                    <h5 class="text-1  font-weight-bold d-flex justify-content-between">{{
+                        'vuelos.detalles-pago'|translate }}</h5>
+                    <div class="card-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>{{ 'vuelos.vuelo-para'|translate }} {{ totalText }}</span>
+                            <span>{{ user?.currency }} {{ sumCostos(tarifa?.detalle_Vuelo) | currencyFormat }}</span>
+                        </div>
+                        <!-- <div class="d-flex justify-content-between align-items-center" *ngIf="sumDescuento(tarifa?.detalle_descuento) as descuento">
+                            <span>Descuento</span>
+                            <span class="">- {{ user?.currency }} {{ descuento | currencyFormat }}</span>
+                        </div> -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <ng-template #impuestos>
+                                {{ 'vuelos.impuestos-tasas'|translate }} {{ (tarifa.impuestos.impuesto_total |
+                                currencyFormat) }} <br>
+                                {{ 'TUA: ' + (tarifa.TUA.TUA_total | currencyFormat) }}
+                            </ng-template>
+                            <div class="">{{ 'vuelos.impuestos-tasas'|translate }} <span class="align-self-start"
+                                    [tooltip]="impuestos"><i class="fas fa-info-circle fa-xs icono"></i></span></div>
+                            <div>{{ user?.currency }} {{ sumExtras(tarifa) | currencyFormat }}</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center" *ngIf="tarifa.TUA">
+                            <!-- <ng-template #tua>
+                                                {{ tarifa.TUA.Mensaje }}
+                                            </ng-template> -->
+                            <div class="">
+                                {{ 'vuelos.cargos'|translate }}
+                                <!-- <span class="align-self-start" [tooltip]="tua"><i class="fas fa-info-circle fa-xs icono"></i></span> -->
+                            </div>
+                            <div>{{ user?.currency }} {{ tarifa.cargo | currencyFormat }}</div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <span class="text-3 font-weight-bold">{{ 'vuelos.total-compra'|translate }}</span>
+                            <div class="text-1 text-orange font-weight-bold">
+                                <span>{{ user?.currency }} <span class="text-blue">{{ tarifa?.costoTotal |
+                                        currencyFormat }}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- ! END PAYMENT DETAILS -->
+            </div>
+            <!-- * PURCHASE DETAILS -->
+            <section>
+                <h5 class="text-1  font-weight-bold d-flex justify-content-between mt-4">{{
+                    'vuelos.detalles-compra'|translate }} </h5>
+                <div class="card-white">
+                    <div *ngFor="let tramo of tramos; let i = index">
+                        <div class="d-flex">
+                            <i class="text-1 mr-3 fas fa-plane color-destino"></i>
+                            <div>
+                                <h5 class="text-font-weight-bold color-destino m-0">{{
+                                    tramo.nombreOrigen + ' - ' + tramo.nombreDestino }}</h5>
+                                <p>
+                                    <span *ngIf="tipoVuelo == 'single' || tipoVuelo == 'roundtrip' && i == 0">{{
+                                        'vuelos.ida'|translate }} </span>
+                                    <span *ngIf="tipoVuelo == 'roundtrip' && i == 1">{{ 'vuelos.vuelta'|translate }}
+                                    </span>
+                                    <span *ngIf="tipoVuelo == 'multitrip'">{{ 'vuelos.tramo'|translate }} {{ i + 1
+                                        }}</span>
+                                    &nbsp;({{ paxDescription(pasajeros) }})
+                                </p>
+
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="m-0"
+                                *ngIf="tipoVuelo == 'single' || tipoVuelo == 'multitrip' || tipoVuelo == 'roundtrip' && i == 0">
+                                {{ 'vuelos.salida'|translate }} </h6>
+                            <h6 class="m-0" *ngIf="tipoVuelo == 'roundtrip' && i == 1">{{ 'vuelos.regreso'|translate }}
+                            </h6>
+                            <p class="font-weight-bold">{{ tramo.date | date: 'd MMMM y' }}</p>
+                            <div>
+                                <div class="row position-relative pt-2">
+                                    <div class="mk_carrier tablet-mk_carrier pr-3" style="margin-left: 15px;" *ngIf="tramo?.TipoVuelo == 'Directo' && tramo.infovuelo[0]?.operating_carrier">
+                                      Operado por: {{ airlineName(tramo.infovuelo[0].operating_carrier) }} <img [src]="'https://tms-img.s3.amazonaws.com/icons/airlines/' + tramo.infovuelo[0].operating_carrier + '.png'" alt="">
+                                    </div>
+                                    <div class="col-12 airline-info">
+                                      <img class="airline-logo"
+                                           [src]="'https://tms-img.s3.amazonaws.com/icons/airlines/' + tramo?.iata_aerolinea + '.png'"
+                                           [alt]="tramo?.iata_aerolinea"
+                                           onerror="this.src = 'https://tms-img.s3.amazonaws.com/icons/airlines/default.png'">
+                                      <div class="d-flex flex-column justify-content-center escalaDirecto">
+                                          
+                                     <span style="    white-space: break-spaces;">  {{ tramo?.aerolinea }}</span>
+                                        <div class="row">
+                                            <div class="col-3 col-md-12 col-lg-3 ">
+                                          <p class="m-0 escalaDirecto" *ngIf="tramo?.TipoVuelo == 'Directo'">{{
+                                              'vuelos.vuelo'|translate }} : {{ tramo?.infovuelo[0]?.vuelo }}</p>
+                                              </div>
+                                          <div class="col-3 col-md-2 col-lg-2 text-center">
+                                            <div *ngIf="tramo.Horasalida">
+                                              {{ formatTime(tramo?.Horasalida) }}
+                                            </div>
+                                          </div>
+                                          <div class="col-3 col-md-3 col-lg-3 text-center">
+                                            <div [ngClass]="tramo?.TipoVuelo == 'Directo' ? 'escalaDirecto' : ''"
+                                                 class="escala" (click)="hasStop(tramo)">
+                                              <span *ngIf="tramo?.NumeroEscalas > 0">{{ tramo?.NumeroEscalas
+                                                }}</span> {{
+                                              tramo?.TipoVuelo }}
+                                            </div>
+                                          </div>
+                                          <div class="col-3 col-md-2 col-lg-2 text-center">
+                                            <div *ngIf="tramo.Horallegada">
+                                              {{ formatTime(tramo?.Horallegada) }}
+                                            </div>
+                                          </div>
+                                          <div class="col-3 col-md-2 col-lg-2 text-center">
+                                        
+                                            <ng-template #waitTime>
+                                              {{ 'vuelos.tiempo-espera-total'|translate }} <br>
+                                              {{ formatDuration(tramo?.tiempo_espera_total) }}
+                                            </ng-template>
+                                            <div [tooltip]="waitTime" [isDisabled]="tramo?.tiempo_espera_total == '00:00'">
+                                              {{ formatDuration(tramo?.duracionVuelo) }}
+                                            </div>
+                                           
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                 
+                                  </div>
+                                <div class="stop-wrapper pt-4" *ngIf="tramo?.TipoVuelo == 'Escala' && tramo?.showStops">
+                                    <div class="stop-info" *ngFor="let escala of tramo?.infovuelo">
+                                        <div class="destinos-stop position-relative">
+                                            <div class="col-4">
+                                                <p class="code">{{ escala?.origen }}</p>
+                                                <p class="city">{{ escala?.nombreOrigen }}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <i class="fas fa-plane"></i>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="code">{{ escala?.destino }}</p>
+                                                <p class="city">{{ escala?.nombreDestino }}</p>
+                                            </div>
+                                            <div class="mk_carrier" *ngIf="escala?.operating_carrier">
+                                                Operado por: {{ airlineName(escala.operating_carrier) }} <img [src]="'https://tms-img.s3.amazonaws.com/icons/airlines/' + escala.operating_carrier + '.png'" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex">
+                                            <div class="col-3">
+                                                {{ tramo?.aerolinea }}
+                                                <p class="m-0">Vuelo: {{ escala?.vuelo }}</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-4 text-center">
+                                                        <div *ngIf="escala.Horasalida">
+                                                            {{ formatTime(escala?.Horasalida) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-4 text-center">
+                                                        {{ 'vuelos.escala'|translate }}
+                                                    </div>
+                                                    <div class="col-12 col-md-4 text-center">
+                                                        <div *ngIf="escala.Horallegada">
+                                                            {{ formatTime(escala?.Horallegada) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 text-right">
+                                                <ng-template #waitTimeStop>
+                                                    {{ 'vuelos.espera-en'|translate }} {{ escala?.destino + ': ' }} <br>
+                                                    {{ formatDuration(escala?.tiempo_espera) }}
+                                                </ng-template>
+                                                <div [tooltip]="waitTimeStop"
+                                                    [isDisabled]="escala?.tiempo_espera == '00:00'">
+                                                    {{ formatDuration(escala?.duracion) }}
+                                                </div>
+                                                <!-- <div>
+                                                    Equipaje
+                                                    <br>
+                                                    <i class="fas fa-shopping-bag fa-xs equipaje"></i>&nbsp;
+                                                    <i class="fas fa-suitcase fa-sm equipaje"></i>&nbsp;
+                                                    <i class="fas fa-suitcase-rolling fa-lg equipaje"></i>&nbsp;
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center escala" (click)="hasStop(tramo)">
+                                        <i class="fas fa-caret-up"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-end">
+                                    <i class="fas fa-shopping-bag fa-xs equipaje mr-2"></i>&nbsp;
+                                    <i class="fas fa-suitcase fa-sm equipaje mr-2"></i>&nbsp;
+                                    <i class="fas fa-suitcase-rolling fa-lg equipaje mr-2"></i>&nbsp;
+                                </div>
+                                <small>Este vuelo incluye solamente {{ 'equipaje de mano' }}.</small>
+                            </div> -->
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="text-center">
+                        <a href="javascript:void(0)" (click)="openPolicy()">{{ 'vuelos.ver-politicas-cambioCancelacion'|translate }} <i class="fas fa-info-circle fa-xs icono"></i></a>
+                    </div>
+                </div>
+            </section>
+            <!-- ! END PURCHASE DETAILS -->
+
+            <!-- * BAGAGE INFO -->
+            <section class="card-white mt-4">
+                <div class="bagage-card">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h4 class="fam-title">{{ 'vuelos.incluye-tarifa'|translate }}</h4>
+                </div>
+                <div class="mt-4">
+                    <h5 class="fam-tarifa">{{ familyFare?.nombreFamilia }}</h5>
+                    <p class="fam-det" [innerHtml]="familyFare.detalle"></p>
+                    <div class="text-center">
+                        <button *ngIf="formcheck" type="button" class="btn btn-fam" (click)="openFamiliaTar()">
+                            {{ 'vuelos.cambiar-tarifa'|translate }}
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- ! END BAGAGE INFO -->
+
+
+            <!-- * TRAVEL INSURANCE -->
+            <!-- <section>
+                <h5 class="text-1  font-weight-bold d-flex justify-content-between mt-4">Asistencia al
+                    viajero</h5>
+                <div class="card-white">
+                    <div class="text-3">
+                        <img src="assets/img/volaris.jpg" alt="volaris" srcset="" class="small-img">
+                        Assist card
+                    </div>
+                    <ul>
+                        <li>Reembolso de tus gastos medicos por hasta $25,000 MXN</li>
+                        <li>Seguro y asistencia en caso de pérdida o retraso de equipaje</li>
+                        <li>Asistencia en caso de robo o extravío de documentos</li>
+                    </ul>
+                    <div class="text-center my-2">
+                        <a href="#">Ver políticas de cambios y cancelación</a>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="id4" name="id4">
+                        <label for="id4">Leí y acepto las <a href="#">condiciones de compra</a>, <a href="#">políticas
+                                de privacidad</a> y <a href="#">políticas de cambio y cancelaciones</a>.</label>
+                    </div>
+                    <hr>
+                    <p>Por <b>8 días</b> para <b>2 personas</b>.</p>
+                    <p class="tachado m-0">MXN $387.50</p>
+                    <p class="text-orange font-weight-bold">MXN <span class="text-blue">$332.00</span></p>
+                </div>
+            </section> -->
+            <!-- ! END TRAVEL INSURANCE -->
+        </div>
+    </div>
+    <!-- <div class="row" *ngIf="formcheck">
+    </div> -->
+</div>
+
+<!-- <ngx-spinner type="">
+    <img src='{{imgruta}}' /> -->
+<!-- </ngx-spinner> -->

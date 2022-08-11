@@ -1,0 +1,218 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 body-cotizador text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 px-0">
+						<app-links></app-links>
+					</div>
+                    <div class="col-xl-12 py-2">
+                        <app-buscador-circuito></app-buscador-circuito>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FILTROS -->
+    <div class="row bg-filtro py-3">
+        <div class="col-12">
+            <div class="container">
+                <form [formGroup]="filtrosVarios" (ngSubmit)="onSubmit()" class="form-row align-items-end">
+                    <div class="col-12 col-md-3">
+                        <label>{{ 'circuito.nombre-proveedor-servicio'|translate }}</label>
+                        <input formControlName="service" type="text" class="form-control">
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-2">
+                        <label for="">{{ 'circuito.categorias-disponibles'|translate }}</label>
+                        <button class="btn btn-light form-control filtro-plan-cat" type="button" (click)="filterByCategory()">{{ 'circuito.categorias'|translate }}</button>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-2">
+                        <label for="">{{ 'circuito.ordenar-busqueda'|translate }}</label>
+                        <select formControlName="order" class="form-control">
+                            <option value="PRICE_ASC">{{ 'circuito.menor-mayor'|translate }}</option>
+                            <option value="PRICE_DESC">{{ 'circuito.mayor-menor'|translate }}</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-2 mt-4 mt-md-0">
+                        <button class="btn btn-block btn-red"><i class="fa fa-ellipsis-v" aria-hidden="true"></i> {{ 'circuito.filtrar'|translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- ! FILTROS -->
+</div>
+<div class="container">
+    <div class="row mt-4" *ngIf="notFound">
+        <div class="col-12">
+            <div class="alert alert-danger text-center" role="alert">
+                {{ 'circuito.no-encontraron-resultados'|translate }}
+            </div>
+        </div>
+    </div>
+    <ng-container *ngFor="let byDate of circuitosOrderByDate; let i = index;">
+        <div class="row" *ngIf="byDate.length > 0">
+            <div class="col-xl-12 fechaSalida pt-4 pb-2" [ngClass]="{'circuito-prox': notFound, 'circuito-prox': availableDates[i] != date}">
+                <h2>{{ 'circuito.fecha-salida'|translate }}: {{ availableDates[i] | date : 'dd-MM-yyyy' }}</h2>
+                <div *ngIf="notFound; else elseBlock">
+                    {{ 'circuito.no-encontraron-resultados'|translate }}
+                </div>
+                <ng-template #elseBlock>
+                    <p *ngIf="availableDates[i] == date">{{ 'circuito.circuitos-encontrados'|translate }}</p>
+                    <p *ngIf="availableDates[i] != date">{{ 'circuito.viajes-cercanos'|translate }}</p>
+                </ng-template>
+            </div>
+        </div>
+        <div class=" row">
+            <div class="col-12">
+                <div class="card-white-img mb-3" *ngFor="let r of byDate; let i = index;">
+                    <div class="row ">
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 img-circuit">
+                            <img [src]="r.info.url_thumb" class="img-fluid" onerror="this.src='//pbs.twimg.com/profile_images/600060188872155136/st4Sp6Aw.jpg';" alt="">
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 info-circuito">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 title-circuit">
+                                    <a href="javascript:void(0)" (click)="showDetails(r)">
+                                        <h5 class="text-uppercase pr-2 d-lg-inline">{{ r.info.nombre }}</h5>
+                                    </a>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 pb-2">
+                                    <ng-container [ngSwitch]="r.broker">
+                                        <span *ngSwitchCase="'SPTOUR'" class="tag-status d-inline">{{ 'circuito.SPECIAL'|translate }}</span>
+                                        <span *ngSwitchDefault class="tag-status d-inline">{{ 'circuito.on-request'|translate }}</span>
+                                    </ng-container>
+                                    <p *ngIf="r.info.fechaSalida" class="d-inline addres-hotel" [ngClass]="{'circuito-prox': r.info.fechaSalida != date}">{{ 'circuito.fecha-salida'|translate }}: {{ r.info.fechaSalida | date:'dd-MM-yyyy' }}</p>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 pb-2">
+                                    <ul class="d-inline list-inline">
+                                        <li *ngIf="r.info.ocuppancy || r.occupancyRules.ocupmin" class="list-inline-item">
+                                            <div [ngSwitch]="r.broker" class="ocupacion-circuit">
+                                                <span *ngSwitchCase="'SPTOUR'">
+                                                    <i class="fas fa-user-alt mr-2"></i>
+                                                    <span *ngIf="r.info.ocuppancy.sgl > 0">
+                                                        {{r.info.ocuppancy.sgl | labelOcp}}
+                                                    </span>
+                                                    <span *ngIf="r.info.ocuppancy.dbl  > 0">
+                                                        {{r.info.ocuppancy.dbl | labelOcp}}
+                                                    </span>
+                                                    <span *ngIf="r.info.ocuppancy.tpl > 0">
+                                                        {{r.info.ocuppancy.tpl | labelOcp}}
+                                                    </span>
+                                                </span>
+                                                <span *ngSwitchDefault>
+                                                    <i class="fas fa-user-alt mr-2"></i> {{ 'circuito.min-pax'|translate }}:
+                                                    {{ r.occupancyRules.ocupmin }}
+                                                </span>
+                                            </div>
+                                        </li>
+                                        <li *ngIf="r.info.duracion" class="list-inline-item">
+                                            <span class="time-circuit"><i class="far fa-clock"></i></span> {{r.info.duracion}}
+                                            <span *ngIf="r.broker == 'SPTOUR'">{{ 'circuito.dias'|translate }}</span>
+                                        </li>
+                                        <li *ngIf="r.info.destinoLlegada" class="list-inline-item">
+                                            <span class="place-circuit"><i class="fas fa-map-marker-alt"></i></span> {{r.info.destinoLlegada.destino}}
+                                        </li>
+                                        <li *ngIf="r.info.categorias" class="text-blue">
+                                            <i class="fas fa-certificate"></i>
+                                            <span class="d-inline" *ngFor="let c of r.info.categorias; let i =index; let last = last">
+                                                {{ c | categoria : categoryFilters }} {{ (last ? '' : ', ') }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 descripcion-hotel">
+                                    <p [innerHTML]="r.info.descripcion | replace: 'Nts':'Noche(s)'"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-12 detalle-costo-circuito">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12">
+                                    <p class="total-reserva">{{ 'circuito.TOTAL-RESERVA'|translate }}</p>
+                                    <h2>{{ user.currency }}
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'D'"> {{ calculateTDC(r.total.publico, r.tarifas.divisa.currency_tc) | currencyFormat }}</span>
+                                        <!-- <span *ngIf="r.tarifas.divisa.tasatipo == 'D'"> {{ r.total.publico | calculateTCD : r.total.currency : r.total.divisa | currencyFormat }}</span> -->
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'F'"> {{ calculateTDC(r.total.publico, r.total.divisa.currency_tc) | currencyFormat }}</span>
+                                        <!-- <span *ngIf="r.tarifas.divisa.tasatipo == 'F'"> {{ r.total.publico | calculateTCD : r.total.currency : r.tarifas.divisa | currencyFormat }}</span> -->
+                                    </h2>
+                                    <p class="descripcion-corta-result">{{ 'circuito.impuestos-incluidos'|translate }}</p>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12" *ngIf="r.total.publico_ant">
+                                    <p class="total-reserva">{{ 'circuito.ANTES'|translate }}</p>
+                                    <h2>{{ user.currency }}
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'D'"> {{ calculateTDC(r.total.publico_ant, r.tarifas.divisa.currency_tc) | currencyFormat }}</span>
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'F'"> {{ calculateTDC(r.total.publico_ant, r.total.divisa.currency_tc) | currencyFormat }}</span>
+                                    </h2>
+                                    <p class="descripcion-corta-result">{{ 'circuito.impuestos-incluidos'|translate }}</p>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-4 col-4 pb-xl-2 pb-lg-2">
+                                    <!-- <button class="btn btn-green btn-block">Cotizar</button> -->
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-8 col-8">
+                                    <button class="btn btn-blue btn-block" type="button" (click)="checkAvail(r)">{{ 'circuito.reservar'|translate }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-9 offset-xl-3 col-sm-12 pt-4 pb-3" *ngFor="let rd of r.ratesDetails; let i = index;">
+                            <div class="row">
+                                <div class="col text-left">
+                                    <p class="habitacion-circ">{{ 'circuito.HABITACION'|translate }} {{ rd.ttarifa }}</p>
+                                    <p class="promo-ant" *ngIf="rd.tPublica_ant">
+                                        <!-- {{ rd.tPublica_ant | calculateTCD : r.total.currency : currencies | currencyFormat }} {{ user.currency }} -->
+                                        {{ calculateTDC(rd.tPublica_ant, r.total.divisa.currency_tc) | currencyFormat }} {{ user.currency }}
+                                    </p>
+                                    <!-- <p class="precio-hab-circ"><span>{{ rd.tPublica | calculateTCD : r.total.currency : currencies | currencyFormat }}</span> {{ user.currency }}</p> -->
+                                    <p class="precio-hab-circ"><span>{{ calculateTDC(rd.tPublica, r.total.divisa.currency_tc) | currencyFormat }}</span> {{ user.currency }}</p>
+                                </div>
+                                <div class="col text-left" *ngFor="let em of rd.edadmenores; let i = index;">
+                                    <p class="habitacion-circ">{{ 'circuito.MENOR-DE'|translate }} {{ em.edad }} {{ 'circuito.AÑOS'|translate }} </p>
+                                    <p *ngIf="em.tPublica_ant" class="promo-ant">
+                                        {{ calculateTDC(em.tPublica_ant, r.total.divisa.currency_tc) | currencyFormat }} {{ user.currency }}
+                                    </p>
+                                    <p *ngIf="em.tPublica > 0" class="precio-hab-circ">
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'D'">{{ calculateTDC(em.tPublica, r.tarifas.divisa.currency_tc) | currencyFormat }}</span>
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'F'">{{ calculateTDC(em.tPublica, r.total.divisa.currency_tc) | currencyFormat }}</span>
+                                        {{ user.currency }}
+                                    </p>
+                                    <div *ngIf="em.tPublica == 0 && em.tipo != 'ADULTO'">
+                                        {{ 'circuito.GRATIS'|translate }}
+                                    </div>
+                                    <div *ngIf="em.tPublica == 0 && em.tipo == 'ADULTO'">
+                                        *{{ 'circuito.ADULTO'|translate }}
+                                    </div>
+                                </div>
+                                <div class="col text-right">
+                                    <p class="num-habitacion-circ">{{ 'circuito.TOTAL-HABITACION-#'|translate }}{{ i + 1}}</p>
+                                    <p *ngIf="rd.totalhab.publica_ant" class="promo-ant">
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'D'">{{ calculateTDC(rd.totalhab.publica_ant, r.tarifas.divisa.currency_tc) | currencyFormat }}</span>
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'F'">{{ calculateTDC(rd.totalhab.publica_ant, r.total.divisa.currency_tc) | currencyFormat }}</span>
+                                        {{ user.currency }}
+                                    </p>
+                                    <p class="habitacion-circ">
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'D'">
+                                            <!-- {{ rd.totalhab.publica | calculateTCD : r.total.currency : currencies | currencyFormat }} -->
+                                            {{ calculateTDC(rd.totalhab.publica, r.tarifas.divisa.currency_tc) | currencyFormat }}
+                                        </span>
+                                        <span *ngIf="r.tarifas.divisa.tasatipo == 'F'">
+                                            <!-- {{ rd.totalhab.publica | calculateTCD : r.total.currency : r.tarifas.divisa.currency_tc | currencyFormat }} -->
+                                            {{ calculateTDC(rd.totalhab.publica, r.total.divisa.currency_tc) | currencyFormat }}
+                                        </span>
+                                        {{ user.currency }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ngx-spinner type="" >
+    <!-- <img src='../../../../assets/img/spinners/tarifas.gif' />  -->
+    <img src='{{imgruta}}'/>
+</ngx-spinner>

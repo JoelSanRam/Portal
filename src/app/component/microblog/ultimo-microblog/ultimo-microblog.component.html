@@ -1,0 +1,27 @@
+<div class="card-white azatips">
+    <div *ngIf='showblog'>
+        <div *ngIf='ultimaPublicacion'>
+            <iframe *ngIf="ultimaPublicacion?.idTipo == 2 && ultimaPublicacion?.url_video; else elseBlock" [src]="ultimaPublicacion.video_embed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <ng-template #elseBlock>
+                <a [routerLink]="['/microblog/', ultimaPublicacion?.idBlog]">
+                    <div class="portada" [ngStyle]="{'background-image': 'url('+ ultimaPublicacion?.url_thumbnail + ')'}"></div>
+                    <!-- <img class="img-fluid border-rounded mb-3" [src]="ultimaPublicacion?.url_thumbnail" alt="thumbnail-post"/> -->
+                </a>
+            </ng-template>
+            <div class="text-blue text-uppercase">
+                <a [routerLink]="['/microblog/', ultimaPublicacion?.idBlog]">{{ ultimaPublicacion?.titulo }}</a>
+            </div>
+            <!-- <div *ngIf="ultimaPublicacion?.descripcion">
+                <div *ngIf="chkDescripMicro(ultimaPublicacion.descripcion | truncateHtml)">
+                    <app-read-more-less [isReadMore]="isReadMore" >
+                        {{ chkDescripMicro(ultimaPublicacion.descripcion | truncateHtml) }}
+                    </app-read-more-less>
+                </div>
+            </div> -->
+            <div class="description scroll-descrip" [innerHTML]="ultimaPublicacion?.descripcion | truncateHtml"></div>
+        </div>
+        <div class="text-uppercase text-right mt-3">
+            <a [routerLink]="['/microblog']">{{ 'microblog.mas-publicaciones'|translate }}</a>
+        </div>
+    </div>
+</div>

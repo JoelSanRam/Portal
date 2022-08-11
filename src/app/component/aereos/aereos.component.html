@@ -1,0 +1,542 @@
+<div class="body-cotizador">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 px-0">
+                <app-links></app-links>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <app-buscador-aereo></app-buscador-aereo>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="row">
+        <!--* FILTROS -->
+        <div class="col-12 col-lg-2 px-0">
+           <app-filtros-aereos [filtros]="filtros" [tipoVuelo]="tipoVuelo" [showFilters]="showFilters" (modalfilters)="openFilters($event)" [selectedFilters]="selectedFilters" (filtersEvent)="getFilters($event,true)"></app-filtros-aereos>
+        </div>
+        <!--! FILTROS -->
+        <div class="col-12 col-lg-10">
+            <!--* Mensaje Error -->
+            <div class="row" *ngIf="noResults">
+                <div class="col-12 ">
+                    <div class="alert-aereos text-center" role="alert" [ngClass]="{'no-results': errorType == 'results', 'no-filtros': errorType == 'filtros'}">
+                        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+                    </div>
+                </div>
+            </div>
+            <!--! Mensaje Error -->
+            <!--*-----------------------------------FILTROS RESPONSIVE-------------------------------->
+            <div class="col-12 d-lg-none" *ngIf="!noResults">
+                <div class="row">
+                    <div class="col-12 py-2 text-left">
+                        <button class="btn btn-block btn-filter" (click)="openFilters(true)"><i class="fas fa-filter"></i> {{ 'vuelos.filtrar'|translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <!--!-----------------------------------FILTROS RESPONSIVE-------------------------------->
+            <!----------------------- CABECERA ------------------------------------------------------------>
+            <h1 *ngIf="tipoVuelo == 'single'">{{ 'vuelos.elige-vuelo-sencillo'|translate }}</h1>
+            <h1 *ngIf="tipoVuelo == 'roundtrip'">{{ 'vuelos.elige-vuelo-redondo'|translate }}</h1>
+            <h1 *ngIf="tipoVuelo == 'multitrip'">{{ 'vuelos.elige-vuelo-multidestino'|translate }}</h1>
+            
+            <ng-template #popTemplate>
+                <div [innerHtml]="toolHtml()"></div>
+            </ng-template>
+            <!----------------TABS DE OPCIONES------------------------------------------------------->
+            <!-- <div class="jumbotron py-2 px-6 pb-3 d-none d-sm-block">
+                <ul class="nav nav-tabs buscador d-none d-sm-flex align-items-center" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="tab nav-link fade show active" id="hotel-tab" data-toggle="tab"
+                            href="#precioAereolinea" role="tab" aria-controls="precioAereolinea"
+                            aria-selected="true">Precio por
+                            aereolinea</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tour-tab" data-toggle="tab" href="#precio3dias" role="tab"
+                            aria-controls="precio3dias" aria-selected="false">Precio +/- 3 dias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="traslados-tab" data-toggle="tab" href="#tendencia" role="tab"
+                            aria-controls="tendencia" aria-selected="false">Tendencia de precios</a>
+                    </li>
+                </ul>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="tab-content py-1 buscador-style" id="myTabContent"> -->
+                                <!--------------  PRECIO POR AEREOLINEA -------------------------->
+                                <!-- <div class="tab-pane fade show active precioAereolinea" id="precioAereolinea"
+                                    role="tabpanel">
+                                    <ng-template #popTemplate>
+                                        <div [innerHtml]="toolHtml()"></div>
+                                    </ng-template>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="">
+                                                <table class="">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Aereolinea</td>
+                                                            <th class="table-aereolineas">Volaris</th>
+                                                            <th class="table-aereolineas">Aeromexico</th>
+                                                            <th class="table-aereolineas">Viva Aerobus</th>
+                                                            <th class="table-aereolineas">Multiaereolineas</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Directo</td>
+                                                            <td class="vueloRapido">$1420
+                                                            </td>
+                                                            <td class="vueloMcomprado">
+                                                                $3875</td>
+                                                            <td>$4479</td>
+                                                            <td>$1281</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1 Escala</td>
+                                                            <td>-</td>
+                                                            <td>$1481</td>
+                                                            <td>-</td>
+                                                            <td class="vueloMeconomico" [tooltip]="popTemplate">
+
+                                                                $899.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2 +/ Escalas</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>$1252.20</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!--------------  PRECIO 3 DIAS -------------------------->
+                                <!-- <div class="tab-pane fade precio3dias" id="precio3dias" role="tabpanel">
+                                    <table>
+                                        <tr>
+                                            <th rowspan="7">Ida</th>
+                                            <td>17 mar.</td>
+                                            <td>18 mar.</td>
+                                            <td>19 mar.</td>
+                                            <td>20 mar.</td>
+                                            <td>21 mar.</td>
+                                            <td>22 mar.</td>
+                                            <td>23 mar.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$1,750</td>
+                                            <td class="vueloMeconomico">$899</td>
+                                            <td>$3,875</td>
+                                            <td>$3,875</td>
+                                            <td>$1750</td>
+                                            <td>$4,479</td>
+                                            <td>$3,875</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$1,750</td>
+                                            <td>$899</td>
+                                            <td>$3,875</td>
+                                            <td>$3,875</td>
+                                            <td>$1750</td>
+                                            <td>$4,479</td>
+                                            <td>$3,875</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$1,750</td>
+                                            <td>$899</td>
+                                            <td>$3,875</td>
+                                            <td class="vueloRapido">$3,875</td>
+                                            <td>$1750</td>
+                                            <td>$4,479</td>
+                                            <td class="vueloMcomprado">$3,875</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$1,750</td>
+                                            <td>$899</td>
+                                            <td>$3,875</td>
+                                            <td>$3,875</td>
+                                            <td>$1750</td>
+                                            <td>$4,479</td>
+                                            <td>$3,875</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$1,750</td>
+                                            <td>$899</td>
+                                            <td>$3,875</td>
+                                            <td>$3,875</td>
+                                            <td>$1750</td>
+                                            <td>$4,479</td>
+                                            <td>$3,875</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$1,750</td>
+                                            <td>$899</td>
+                                            <td>$3,875</td>
+                                            <td>$3,875</td>
+                                            <td>$1750</td>
+                                            <td>$4,479</td>
+                                            <td>$3,875</td>
+                                        </tr>
+                                    </table>
+                                </div> -->
+                                <!-----------------  TENDENCIA -------------------------->
+                                <!-- <div class="tab-pane fade" id="tendencia" role="tabpanel"
+                                    aria-labelledby="circuitos-tab">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- TABLA DE OPCIONES -->
+            <!--* -------------------------PRIMER ANUNCIO--------------------------------------->
+           <!--  <div class="row d-none d-sm-block">
+                <div class="col-12 my-3">
+                    <div class="anuncio text-center ">
+                        <h4 class="text-center">{{ 'vuelos.hasta-12-meses'|translate }}</h4>
+                        <h6 class="text-right">{{ 'vuelos.conoce-nuestras-promos'|translate }} <a href="javascript:void(0)">{{ 'vuelos.aqui'|translate }}</a>.</h6>
+                    </div>
+                </div>
+            </div> -->
+           
+            <div *ngIf="!noResults">
+                <!--* RESULTADOS -->
+                <div class="row" *ngFor="let item of listFlights; let i = index">
+                    <div class="col-12">
+                        <div class="card-aereos mb-3 classSimple" [ngStyle]="{'background-color': flight.text_rule ? flight.text_rule.color : 'none' }" *ngFor="let flight of item.flights.items; let findex = index">
+                            <div class="content-header" *ngIf="flight.text_rule">
+                                <h4 class="content-title">
+                                    <span [innerHTML]="flight.text_rule.icon"></span> 
+                                    {{flight.text_rule.text}}
+                                </h4>
+                                <!-- <h6 class="content-subTitle">Este vuelo ofrece una tarifa más baja que los demás</h6> -->
+                            </div>
+                            <div class="card-aereos-content">
+                                <div class="row">
+                                    <div class="col-12 col-lg-8 content-left">
+                                        <!-- TRAMOS -->
+                                        <div *ngFor="let tramo of flight?.tramos; let tindex = index;">
+                                            <div [ngClass]="{'route-out-wrapper': tindex == 0, 'route-in-wrapper': tindex > 0}">
+                                                <div class="route-type" *ngIf="tipoVuelo == 'single' || tipoVuelo == 'roundtrip' && tindex == 0">
+                                                    <i class="fas fa-plane-departure"></i>&nbsp;&nbsp;{{ 'vuelos.salida'|translate }}
+                                                </div>
+                                                <div class="route-type" *ngIf="tipoVuelo == 'roundtrip' && tindex == 1">
+                                                    <i class="fas fa-plane-arrival"></i>&nbsp;&nbsp;{{ 'vuelos.regreso'|translate }}
+                                                </div>
+                                                <div class="route-type" *ngIf="tipoVuelo == 'multitrip'">
+                                                    <i class="fas fa-plane-departure"></i>&nbsp;&nbsp;{{ 'vuelos.tramo'|translate }} {{ tindex + 1 }}
+                                                </div>
+                                                <span class="font-weight-bold pl-3">{{ tramo?.date | date: 'dd/MM/yyyy' }}</span>
+                                            </div>
+                                            <div class="destinos">
+                                                <div class="col-4">
+                                                    <h4 class="font-weight-bolder">{{ tramo?.origen }}</h4>
+                                                    <h6>{{ tramo?.nombreOrigen }}</h6>
+                                                </div>
+                                                <div class="col-4">
+                                                    <i class="fas fa-plane fa-lg"></i>
+                                                </div>
+                                                <div class="col-4">
+                                                    <h4 class="font-weight-bolder">{{ tramo?.destino }}</h4>
+                                                    <h6>{{ tramo?.nombreDestino }}</h6>
+                                                </div>
+                                            </div>
+                                            <!-- VUELOS -->
+                                            <div class="">
+                                                <div class="flight-wrapper" [ngClass]="[vindex > 1 ? 'collapse flightClass_'+findex+'_'+tindex : '']" *ngFor="let vuelo of tramo.vuelos; let vindex = index">
+                                                    <input type="radio" [id]="'flight_'+findex+'-'+tindex+'-'+vindex" [name]="'flight_'+findex+'-'+tindex" [value]="vindex" [checked]="vuelo.selected" (change)="changeSelectedFlight($event, tramo, vuelo)" />
+                                                    <label class="d-flex" [for]="'flight_'+findex+'-'+tindex+'-'+vindex">
+                                                        <div class="aereos-info-vuelo">
+                                                            <div class="mk_carrier" *ngIf="vuelo.TipoVuelo == 'Directo'">
+                                                                Operado por: {{ airlineName(vuelo.infovuelo[0].operating_carrier) }} <img [src]="'https://tms-img.s3.amazonaws.com/icons/airlines/' + vuelo.infovuelo[0].operating_carrier + '.png'" alt="">
+                                                            </div>
+                                                            <div class="col-4 airline-info">
+                                                                <img class="airline-logo" [src]="'https://tms-img.s3.amazonaws.com/icons/airlines/' + vuelo?.iata_aerolinea + '.png'" [alt]="vuelo?.iata_aerolinea" onerror="this.src = 'https://tms-img.s3.amazonaws.com/icons/airlines/default.png'">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    {{ vuelo?.aerolinea }}
+                                                                    <p class="m-0" *ngIf="vuelo?.TipoVuelo == 'Directo'">{{ 'vuelos.vuelo'|translate }}: {{ vuelo?.infovuelo[0].vuelo }}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <div class="row">
+                                                                    <div class="col-12 col-md-4 text-center" *ngIf="vuelo.Horasalida">
+                                                                        {{ formatTime(vuelo?.Horasalida) }}
+                                                                        <p class="m-0">{{ vuelo?.fechaSalida | date: 'd MMM' }}</p>
+                                                                    </div>
+                                                                    <div class="col-12 col-md-4 text-center">
+                                                                        <div [ngClass]="vuelo?.TipoVuelo == 'Directo' ? 'escalaDirecto' : ''" class="escala" (click)="hasStop(vuelo)">
+                                                                            <span *ngIf="vuelo?.NumeroEscalas > 0">{{ vuelo?.NumeroEscalas }}</span> {{ vuelo?.TipoVuelo }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-md-4 text-center" *ngIf="vuelo.Horallegada">
+                                                                        {{ formatTime(vuelo?.Horallegada) }}
+                                                                        <p class="m-0">{{ vuelo?.fechaLlegada | date: 'd MMM' }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3 text-right">
+                                                                <ng-template #waitTime>
+                                                                    {{ 'Tiempo de espera total: ' }} <br>
+                                                                    {{ formatDuration(vuelo?.tiempo_espera_total) }}
+                                                                </ng-template>
+                                                                <div [tooltip]="waitTime" [isDisabled]="vuelo?.tiempo_espera_total == '00:00'">
+                                                                    {{ formatDuration(vuelo?.duracionVuelo) }}
+                                                                </div>
+                                                                <!-- <div>
+                                                                    Equipaje
+                                                                    <br>
+                                                                    <i class="fas fa-shopping-bag fa-xs equipaje"></i>&nbsp;
+                                                                    <i class="fas fa-suitcase fa-sm equipaje"></i>&nbsp;
+                                                                    <i class="fas fa-suitcase-rolling fa-lg equipaje"></i>&nbsp;
+                                                                </div> -->
+                                                            </div>
+                                                        </div>
+                                                    </label>
+                                                    <div class="stop-wrapper pt-4" *ngIf="vuelo?.TipoVuelo == 'Escala' && vuelo?.showStops">
+                                                        <div class="stop-info position-relative" *ngFor="let escala of vuelo?.infovuelo">
+                                                            <div class="destinos-stop pt-1">
+                                                                <div class="col-4">
+                                                                    <p class="code">{{ escala?.origen }}</p>
+                                                                    <p class="city">{{ escala?.nombreOrigen }}</p>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <i class="fas fa-plane"></i>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <p class="code">{{ escala?.destino }}</p>
+                                                                    <p class="city">{{ escala?.nombreDestino }}</p>
+                                                                </div>
+                                                                <div class="mk_carrier">
+                                                                    Operado por: {{ airlineName(escala.operating_carrier) }} <img [src]="'https://tms-img.s3.amazonaws.com/icons/airlines/' + escala.operating_carrier + '.png'" alt="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex">
+                                                                <div class="col-3">
+                                                                    <!-- {{ vuelo?.aerolinea }} -->
+                                                                    {{ airlineName(escala.aerolinea) }}
+                                                                    <p class="m-0">Vuelo: {{ escala?.vuelo }}</p>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="row">
+                                                                        <div class="col-12 col-md-4 text-center">
+                                                                            <div *ngIf="escala.Horasalida">
+                                                                                {{ formatTime(escala?.Horasalida) }}
+                                                                                <p class="m-0">{{ escala?.fechaSalida | date: 'd MMM' }}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 col-md-4 text-center">
+                                                                            {{ 'Escala' }}
+                                                                        </div>
+                                                                        <div class="col-12 col-md-4 text-center">
+                                                                            <div *ngIf="escala.Horallegada">
+                                                                                {{ formatTime(escala?.Horallegada) }}
+                                                                                <p class="m-0">{{ escala?.fechaLlegada | date: 'd MMM' }}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3 text-right">
+                                                                    <ng-template #waitTimeStop>
+                                                                        {{ 'Espera en ' + escala?.destino + ': ' }} <br>
+                                                                        {{ formatDuration(escala?.tiempo_espera) }}
+                                                                    </ng-template>
+                                                                    <div [tooltip]="waitTimeStop" [isDisabled]="escala?.tiempo_espera == '00:00'">
+                                                                        {{ formatDuration(escala?.duracion) }}
+                                                                    </div>
+                                                                    <!-- <div>
+                                                                        Equipaje
+                                                                        <br>
+                                                                        <i class="fas fa-shopping-bag fa-xs equipaje"></i>&nbsp;
+                                                                        <i class="fas fa-suitcase fa-sm equipaje"></i>&nbsp;
+                                                                        <i class="fas fa-suitcase-rolling fa-lg equipaje"></i>&nbsp;
+                                                                    </div> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- </div> -->
+                                                        <div class="text-center escala" (click)="hasStop(vuelo)">
+                                                            <i class="fas fa-caret-up"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-center" *ngIf="tramo.vuelos.length > 2" (click)="showMore(findex+'_'+tindex)">
+                                                <div class="show-more-flights" [id]="'showMore_'+findex+'_'+tindex"> {{ 'vuelos.ver-mas-vuelos'|translate }} <i class="fas fa-caret-down"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!---------------------------CONTENT DERECHO---------------------------->
+                                    <div class="col-12 col-lg-4 d-none d-lg-block">
+                                        <div class="row">
+                                            <div class="col-4 col-md-5">
+                                                <p class="price-final">{{ 'vuelos.precio-persona'|translate }}</p>
+                                            </div>
+                                            <div class="col-4 col-md-7 price-container">
+                                                <p class="price-amount m-0">{{ user?.currency }}</p>
+                                                <h4 class="font-weight-bold">{{ flight?.tarifa?.detalle_Vuelo?.adultos?.costo | currencyFormat }}</h4>
+                                                <table>
+                                                    <tbody>
+                                                        <tr *ngIf="flight?.tarifa?.detalle_Vuelo?.adultos?.cantidad > 0">
+                                                            <td>
+                                                                {{ flight?.tarifa?.detalle_Vuelo?.adultos?.cantidad }}
+                                                                <ng-container *ngIf="flight?.tarifa?.detalle_Vuelo?.adultos?.cantidad === 1; else elseAdultos">
+                                                                    {{ 'vuelos.adulto'|translate }}
+                                                                </ng-container>
+                                                                <ng-template #elseAdultos>{{ 'vuelos.adultos'|translate }}</ng-template>
+                                                            </td>
+                                                            <td>{{ user?.currency }} {{ (flight?.tarifa?.detalle_Vuelo?.adultos?.costo * flight?.tarifa?.detalle_Vuelo?.adultos?.cantidad)  | currencyFormat }}</td>
+                                                        </tr>
+                                                        <tr *ngIf="flight?.tarifa?.detalle_Vuelo?.infantes?.cantidad > 0">
+                                                            <td>
+                                                                {{ flight?.tarifa?.detalle_Vuelo?.infantes?.cantidad }} 
+                                                                <ng-container *ngIf="flight?.tarifa?.detalle_Vuelo?.infantes?.cantidad === 1; else elseInfantes">
+                                                                    {{ 'vuelos.infante'|translate }}
+                                                                </ng-container>
+                                                                <ng-template #elseInfantes>{{ 'vuelos.infantes'|translate }}</ng-template>
+                                                            </td>
+                                                            <td>{{ user?.currency }} {{ flight?.tarifa?.detalle_Vuelo?.infantes?.costo | currencyFormat }}</td>
+                                                        </tr>
+                                                        <tr *ngIf="flight?.tarifa?.detalle_Vuelo?.menores?.cantidad > 0">
+                                                            <td>
+                                                                {{ flight?.tarifa?.detalle_Vuelo?.menores?.cantidad }}
+                                                                <ng-container *ngIf="flight?.tarifa?.detalle_Vuelo?.menores?.cantidad === 1; else elseMenores">
+                                                                    {{ 'vuelos.menor'|translate }}
+                                                                </ng-container>
+                                                                <ng-template #elseMenores>{{ 'vuelos.menores'|translate }}</ng-template>
+                                                            </td>
+                                                            <td>{{ user?.currency }} {{ (flight?.tarifa?.detalle_Vuelo?.menores?.costo * flight?.tarifa?.detalle_Vuelo?.menores?.cantidad) | currencyFormat }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ 'vuelos.impuestos'|translate }}</td>
+                                                            <td>{{ user?.currency }} {{ flight?.tarifa?.impuestos?.impuesto_total | currencyFormat }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ 'vuelos.cargos'|translate }}</td>
+                                                            <td>{{ user?.currency }} {{ flight?.tarifa?.cargo | currencyFormat }}</td>
+                                                        </tr>
+                                                        <!-- <tr *ngIf="sumDescuento(flight?.tarifa?.detalle_descuento) > 0">
+                                                            <td>Descuento</td>
+                                                            <td>{{ user?.currency }} {{ sumDescuento(flight?.tarifa?.detalle_descuento) | currencyFormat }}</td>
+                                                        </tr> -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- <small>{{ 'vuelos.impuestos-incluidos'|translate }}</small> -->
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-4 col-md-4">
+                                                <p class="price-final">{{ 'vuelos.precio-final'|translate }}</p>
+                                            </div>
+                                            <div class="col-4 col-md-8 text-right">
+                                                <h6 class="price-final-amount">{{ user?.currency }} {{ flight?.tarifa?.costoTotal | currencyFormat }}</h6>
+                                            </div>
+                                            <!-- <div class="col-12 text-right">
+                                                <p class="interest">Hasta 12 meses sin intereses <i class="far fa-credit-card icon"></i></p>
+                                            </div> -->
+                                        </div>
+                                        <div class="w-100 text-right">
+                                            <small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+                                        </div>
+                                        <hr>
+                                        <div class="text-center">
+                                            <button class="btn btn-block btn-select" type="button" (click)="selectFlight(flight)">{{ 'vuelos.seleccionar'|translate }}</button>
+                                        </div>
+                                        <!-- <div class="d-block">
+                                            <i class="fas fa-money-check-alt mr-3 mt-3"></i><a href="javascript:void(0)"> Ver condiciones de pago</a>
+                                        </div> -->
+                                        <div class="mt-3">
+                                            <div *ngIf="flight.familia_tarifaria">
+                                                <p class="fam-title"><i class="fas fa-suitcase"></i>&nbsp;<span>{{ 'vuelos.tarifa'|translate }} {{ flight.familia_tarifaria.nombreFamilia }}</span></p>
+                                                <p class="fam-det" [innerHtml]="flight.familia_tarifaria.detalle"></p>
+                                            </div>
+                                            <button class="btn btn-block btn-fam" type="button" (click)="openFamiliaTar(flight)">{{ 'vuelos.cambiar-tarifa'|translate }}</button>
+                                        </div>
+                                    </div>
+                                    <!---------------------------CONTENT PRECIOS RESPONSIVE---------------------------->
+                                    <div class="col-12 d-lg-none">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <hr>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <p class="price-final m-0">{{ 'vuelos.precio-persona'|translate }}</p>
+                                                <h4 class="font-weight-bold">{{ user?.currency }} {{ flight?.tarifa?.detalle_Vuelo?.adultos?.costo | currencyFormat }}</h4>
+                                                <!-- <div class="d-flex align-items-center">
+                                                    <div class="mr-4">
+                                                        <a href="javascript:void(0)" class="condiciones-pagoR"> Ver condiones de pago</a>
+                                                        <p class="interest">Hasta 12 meses sin intereses</p>
+                                                    </div>
+                                                    <i class="far fa-credit-card icon"></i>
+                                                </div> -->
+                                            </div>
+                                            <div class="w-100 text-right">
+                                                <small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+                                            </div>
+                                            <div class="col-12 col-sm-6 text-right">
+                                                <p class="price-final m-0">{{ 'vuelos.precio-final'|translate }}</p>
+                                                <h5 class="font-weight-bold">{{ user?.currency }} {{ flight?.tarifa?.costoTotal | currencyFormat }}</h5>
+                                                <div class="text-center mt-4">
+                                                    <button class="btn btn-block btn-select" type="button" (click)="selectFlight(flight)">{{ 'vuelos.seleccionar'|translate }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                      
+                </div>
+                <!--! FINAL DE RESULTADOS --->
+                <!-- PAGINACIÓN --->
+                <div class="col-12 text-center" *ngIf="listFlights?.length>0">
+                    <div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-center" *ngIf='!noResults'>
+                        <pagination class="center-pagination" 
+                        [boundaryLinks]="true" 
+                        [(ngModel)]="currentPage" 
+                        [totalItems]="totalResultados" 
+                        [itemsPerPage]="10"
+                        [rotate]="true" 
+                        [maxSize]="maxSize"
+                        [customFirstTemplate]="firstTemplate"
+                        [customLastTemplate]="lastTemplate"
+                        [customPreviousTemplate]="prevTemplate"
+                        [customNextTemplate]="nextTemplate"  (click)="goToPage()">
+                        </pagination>
+    
+                        <ng-template #nextTemplate let-disabled="disabled" let-currentPage="currentPage">
+                            <ng-container>
+                                <i class="fas fa-angle-right"></i>
+                            </ng-container>
+                        </ng-template>
+                        
+                        <ng-template #prevTemplate let-disabled="disabled" let-currentPage="currentPage">
+                            <ng-container>
+                                <i class="fas fa-angle-left"></i>
+                            </ng-container>
+                        </ng-template>
+                        
+                        <ng-template #lastTemplate let-disabled="disabled" let-currentPage="currentPage">
+                            <i class="fas fa-angle-double-right"></i>
+                        </ng-template>
+                        
+                        <ng-template #firstTemplate let-disabled="disabled" let-currentPage="currentPage">
+                            <i class="fas fa-angle-double-left"></i>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

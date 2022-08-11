@@ -1,0 +1,120 @@
+.grupos-form {
+    background-color: $white;
+    padding: 1rem;
+    border-radius: $border-radius;
+    & hr {
+        padding-bottom: 15px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+    & .form-group {
+        margin-bottom: 2rem;
+    }
+    & .input-group-text {
+        background-color: $white;
+        border-radius: $border-radius 0 0 $border-radius;
+        border-right: none;
+    }
+}
+
+.grupos-historial {
+    background-color: $white;
+    padding: 1rem;
+    border-radius: $border-radius;
+    & hr {
+        padding-bottom: 15px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+    & .historial {
+
+        & .cotizacion {
+            display: grid;
+            grid-template-columns: 10% auto 15%;
+            align-items: center;
+            column-gap: 5px;
+            & p {
+                margin: 0;
+            }
+            & .btn {
+                width: 40px;
+            }
+            &:not(:last-child){
+                border-bottom: 1px solid $colorSombraUno;
+                padding-bottom: 15px;
+            }
+            &:not(:first-child){
+                padding-top: 15px;
+            }
+        }
+    }
+}
+
+// ! MODAL MENSAJES
+
+.modal-chat {
+    overflow-y: auto;
+    max-height: 300px;
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $colorSombraDos;
+        border-radius: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: $colorSombraUno;
+        border-radius: 8px;
+    }
+    & .outgoing-content {
+        margin: 5px;
+        width: 70%;
+        float: right;
+        // margin-right: 30px;
+    }
+    
+    & .outgoing-msg {
+        padding: 10px;
+        background: #3BA1EE;
+        color: #fff;
+        border-radius: 10px;
+        & p, h1, h2, h3, h4, h5, h6, a, span {
+            background: #3BA1EE;
+            color: #fff;
+            & font {
+                color: #fff;
+            }
+        }
+    }
+    & .incoming-content {
+        margin: 5px;
+        width: 70%;
+        float: left;
+        // margin-left: 30px;
+    }
+    
+    & .incoming-msg {
+        padding: 10px;
+        background: #ddd;
+        color: #000;
+        border-radius: 10px;
+        & p, h1, h2, h3, h4, h5, h6, a, span {
+            background: #ddd;
+            color: #000;
+            & font {
+                color: #000;
+            }
+        }      
+    }
+    
+    & .time-date {
+        color: #747474;
+        font-size: 12px;
+        margin: 8px 0 15px;
+    }
+}
+
+
+
+
+

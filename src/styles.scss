@@ -1,0 +1,490 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+// @import '~sweetalert2/src/sweetalert2.scss';
+
+// DEFAULT COLORS
+:root {
+    --color: #007bff; // HEADER AND SIDEBAR COLOR
+    --txtColor: #000; // HEADER AND SIDEBAR COLOR FONT
+    --colorMenu: #fff; // COLOR MENU
+    --txtColorMenu: #424242; // COLOR MENU FONT
+    --colorBtnPrimary: #66ccff; // BTN 1
+    --txtPrimary: #fff; // BTN 1
+    --colorBtnInfo: #ffc078; // BTN 2
+    --txtInfo: #fff; // BTN 2
+    --colorBtnSuccess: #a2ffbc; // BTN 3
+    --txtSuccess: #fff; // BTN 3
+    --colorBtnDanger: #ef6b66; // BTN 4
+    --txtDanger: #fff; // BTN 4
+}
+
+$variables: (
+    --color: var(--color),
+    --txtColor: var(--txtColor),
+    --colorMenu: var(--colorMenu),
+    --txtColorMenu: var(--txtColorMenu),
+    --colorBtnPrimary: var(--colorBtnPrimary),
+    --txtPrimary: var(--txtPrimary),
+    --colorBtnInfo: var(--colorBtnInfo),
+    --txtInfo: var(--txtInfo),
+    --colorBtnSuccess: var(--colorBtnSuccess),
+    --txtSuccess: var(--txtSuccess),
+    --colorBtnDanger: var(--colorBtnDanger),
+    --txtDanger: var(--txtDanger),
+);
+
+@function var($variable) {
+    @return map-get($variables, $variable);
+}
+
+// COLORES PRIMARIOS
+$primaryColor: var(--color) !default;
+$primaryColorTxt: var(--txtColor) !default;
+$secondaryColor: var(--colorMenu) !default;
+$secondaryColorTxt: var(--txtColorMenu) !default;
+$successColor: var(--colorBtnSuccess) !default;
+$successColorTxt: var(--txtSuccess) !default;
+$infoColor: var(--colorBtnInfo) !default;
+$infoColorTxt: var(--txtInfo) !default;
+$warningColor: var(--colorBtnPrimary) !default;
+$warningColorTxt: var(--txtPrimary) !default;
+$dangerColor: var(--colorBtnDanger) !default;
+$dangerColorTxt: var(--txtDanger) !default;
+
+// $primaryColorHover: var(--color);
+// $secondaryColorHover: var(--colorMenu);
+// $successColorHover: var(--colorBtnSuccess);
+// $infoColorHover: hsl($infoColor, 90%, 56%);
+// $warningColorHover: var(--colorBtnPrimary);
+// $dangerColorHover: var(--colorBtnDanger);
+
+$colorPrimarioUno: #5499e5;
+$colorPrimarioUnoOscuro: #387ad9;
+$colorPrimarioDos: #cc3333;
+$colorPrimarioDosOscuro: #b71e1e;
+$colorPrimarioTres: #ffcb65;
+$colorPrimarioTresOscuro: #ffcb46;
+// COLORES SECUNDARIOS
+$colorSecundarioUno: #b26ebc;
+$colorSecundarioUnoOscuro: #974ea3;
+$colorSecundarioDos: #8addc2;
+$colorSecundarioDosOscuro: #00e4cd;
+$colorSecundarioTres: #d5631a;
+
+// COLORES EN HOVER
+$colorPrimarioUnoHover: #6db8ef;
+$colorPrimarioDosHover: #f87171;
+$colorPrimarioTresHover: #ffdb90;
+$colorSecundarioUnoHover: #b26ebc;
+$colorSecundarioDosHover: #8fe8d4;
+$colorSecundarioTresHover: #ffaa69;
+
+$body-bg: #f3f3f3;
+
+/***DARKMODE**/
+// $fondoBloqueBuscador: #282828;
+// $colorfontBuscador: #9E9E9E;
+// $colorInput: #181818;
+// $colorBorderInput: #181818;
+/******************/
+
+/***WHITEMODE*/
+$fondoBloqueBuscador: #fff;
+$colorfontBuscador: #424242;
+$colorInput: #fff;
+$colorBorderInput: #424242;
+/******************/
+
+$colorSecundarioTresOscuro: #d5631a;
+// COLORES SOMBRAS
+$colorSombraUno: #f2f2f2;
+$colorSombraDos: #9e9e9e;
+$colorSombraTres: #424242;
+
+$colorSombraHover: #bcbcbc;
+
+$border-radius: 8px;
+
+// $breakpoint-xs: 360px;
+// $breakpoint-sm: 767px;
+// $breakpoint-md: 1023px;
+// $breakpoint-lg: 1360px;
+
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+@mixin media($media) {
+    @if $media == xs {
+        @media (max-width: $breakpoint-sm) {
+            @content;
+        }
+    } @else if $media == sm {
+        @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md) {
+            @content;
+        }
+    } @else if $media == md {
+        @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg) {
+            @content;
+        }
+    } @else if $media == lg {
+        @media (min-width: $breakpoint-lg) {
+            @content;
+        }
+    } @else if $media == xl {
+        @media (min-width: $breakpoint-xl) {
+            @content;
+        }
+    }
+}
+
+
+
+@font-face {
+    font-family: 'Muli-ExtraLight';
+    src: url('./assets/fonts/Muli-ExtraLight.eot');
+    src: url('./assets/fonts/Muli-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('./assets/fonts/Muli-ExtraLight.woff') format('woff'),
+        url('./assets/fonts/Muli-ExtraLight.ttf') format('truetype'),
+        url('./assets/fonts/Muli-ExtraLight.svg#Muli-ExtraLight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Muli-Regular';
+    src: url('./assets/fonts/Muli-Regular.eot');
+    src: url('./assets/fonts/Muli-Regular.eot?#iefix') format('embedded-opentype'),
+        url('./assets/fonts/Muli-Regular.woff') format('woff'), 
+        url('./assets/fonts/Muli-Regular.ttf') format('truetype'),
+        url('./assets/fonts/Muli-Regular.svg#Muli-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Muli-SemiBold';
+    src: url('./assets/fonts/Muli-SemiBold.eot');
+    src: url('./assets/fonts/Muli-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('./assets/fonts/Muli-SemiBold.woff') format('woff'),
+        url('./assets/fonts/Muli-SemiBold.ttf') format('truetype'),
+        url('./assets/fonts/Muli-SemiBold.svg#Muli-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Muli-Bold';
+    src: url('./assets/fonts/Muli-Bold.eot');
+    src: url('./assets/fonts/Muli-Bold.eot?#iefix') format('embedded-opentype'),
+        url('./assets/fonts/Muli-Bold.woff') format('woff'), 
+        url('./assets/fonts/Muli-Bold.ttf') format('truetype'),
+        url('./assets/fonts/Muli-Bold.svg#Muli-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+$font-extraLight: 'Muli-ExtraLight';
+$font-primary: 'Muli-Regular';
+$font-semiBold: 'Muli-SemiBold';
+$font-bold: 'Muli-Bold';
+
+html,
+body {
+    height: 100%;
+    font-family: $font-primary;
+    background-color: $body-bg;
+}
+label {
+    font-family: $font-semiBold;
+    font-size: 0.8rem;
+}
+.ngx-datepicker-calendar-container {
+    z-index: 2;
+}
+.btn:focus,
+.btn.focus {
+    box-shadow: unset;
+}
+.form-control:focus {
+    border-color: $colorPrimarioUno;
+    box-shadow: unset;
+}
+button:focus {
+    outline: 1px dotted;
+    outline: none;
+}
+
+.editor-tag {
+    cursor: text;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    background: white;
+    border: 1px #cccccc solid;
+
+    & .tag-item {
+        line-height: 16px;
+        border-radius: 4px;
+        font-size: 14px;
+        display: inline-block;
+        background: $successColor;
+        color: #ffffff;
+        padding: .2em .4em;
+        margin-bottom: 3px;
+        .remove-tag {
+            // padding-right: 5px;
+            cursor: pointer;
+        }
+    }
+
+    & .tag-item:not(:last-child) {
+        margin-right: 5px;
+    }
+
+    & input {
+        margin: 0;
+        padding-left: 5px;
+        border: none;
+        outline: none;
+        border-radius: 5px;
+    }
+}
+
+.modal-content {
+    border: none !important;
+    border-radius: $border-radius !important;
+    & .modal-header {
+        background-color: $primaryColor;
+        color: $primaryColorTxt;
+        padding: 10px;
+        align-items: center;
+        border: none;
+        border-radius: $border-radius $border-radius 0 0;
+        & i,
+        .close {
+            color: $primaryColorTxt;
+            font-size: 1rem;
+            opacity: 1;
+        }
+        & .modal-title {
+            font-size: 1.3rem;
+            font-family: $font-bold;
+        }
+    }
+    & .modal-body {
+        border: none;
+        border-radius: 0 0 $border-radius $border-radius;
+    }
+}
+
+b,
+strong {
+    font-weight: bold; // Add the correct font weight in Chrome, Edge, and Safari
+}
+
+.date-style {
+    font-family: $font-primary;
+    font-size: 12px;
+    color: $colorSombraTres;
+}
+
+.color-picker {
+    opacity: 0;
+    display: inline;
+    padding: 0;
+    width: 0;
+    height: 0;
+    background-color: none;
+    border: 0;
+    // border-radius: $border-radius;
+    &:focus {
+        outline: none;
+    }
+}
+
+.fake-btn {
+    display: inline-block;
+    width: 100%;
+    font-family: 'Muli-Regular';
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 8px;
+    // cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid $colorSombraUno;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+// INPUT RADIO & CHECKBOX
+.filtros-aereos{
+    input[type='radio'],
+    input[type='checkbox'] {
+        position: absolute;
+        display: block;
+        opacity: 0;
+        & + label {
+            position: relative;
+            cursor: pointer;
+            display: inline;
+            // column-gap: .5em;
+            &:before {
+                content: '\f00c';
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 800;
+                // display: inline-flex;
+                // align-items: center;
+                // justify-content: center;
+                margin-right: 4px;
+                width: 20px;
+                height: 20px;
+                color: transparent;
+                border: #9e9e9e solid 1px;
+                border-radius: 50%;
+                position: relative;
+                line-height: 20px;
+                text-align: center;
+            }
+        }
+        &:checked + label:before {
+            color: #ffffff;
+            background-color: $colorSecundarioDos;
+            border: $colorSecundarioDos solid 1px;
+        }
+        &:disabled + label {
+            color: #c9c9c9;
+            cursor: not-allowed;
+            &:before {
+                border-color: #c9c9c9;
+                // content: "";
+                // display: inline-block;
+                cursor: not-allowed;
+                background-color: $colorSombraUno;
+            }
+        }
+    }
+}
+input[type='radio'],
+input[type='checkbox'] {
+    position: relative;
+    display: block;
+    opacity: 0;
+    & + label {
+        position: relative;
+        cursor: pointer;
+        display: inline;
+        // column-gap: .5em;
+        &:before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 800;
+            // display: inline-flex;
+            // align-items: center;
+            // justify-content: center;
+            margin-right: 4px;
+            width: 20px;
+            height: 20px;
+            color: transparent;
+            border: #9e9e9e solid 1px;
+            border-radius: 50%;
+            position: relative;
+            line-height: 20px;
+            text-align: center;
+        }
+    }
+    &:checked + label:before {
+        color: #ffffff;
+        background-color: $colorSecundarioDos;
+        border: $colorSecundarioDos solid 1px;
+    }
+    &:disabled + label {
+        color: #c9c9c9;
+        cursor: not-allowed;
+        &:before {
+            border-color: #c9c9c9;
+            // content: "";
+            // display: inline-block;
+            cursor: not-allowed;
+            background-color: $colorSombraUno;
+        }
+    }
+}
+
+input[type='checkbox'] {
+    & + label {
+        &:before {
+            border-radius: 20%;
+        }
+    }
+}
+
+textarea {
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        background-color: #f5f5f5;
+    }
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: #f5f5f5;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #555;
+    }
+}
+
+.icon-big {
+    font-size: 4rem;
+}
+
+.break-anywhere {
+    line-break: anywhere;
+}
+
+.loader-container {
+    position: fixed;
+    inset: 0 0 0 0;
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, .8);
+    .content {
+        margin: auto;
+        width: 90%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        h1 {
+            color: #7398C1;
+            font-weight: bold;
+            margin: 0;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        @include media-breakpoint-up(md) {
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        @include media-breakpoint-up(lg) {
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    }
+}
+
+a:not([href]):hover {
+    text-decoration: underline !important;
+}

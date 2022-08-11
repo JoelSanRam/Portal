@@ -1,0 +1,32 @@
+<div class="modal-header">
+	<span class="text-2">{{ 'grupo.cotizacion'|translate }}&nbsp;</span><h4 class="modal-title">{{ cotizacion.folio }}</h4>
+  
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="container">
+    <div class="modal-chat">
+
+    </div>
+    <div class="sin-reservas mb-3" *ngIf="!mensajesList.length">
+      {{ 'grupo.no-mensajes'|translate }}
+    </div>
+    <div class="modal-chat">
+      <div *ngFor="let m of mensajesList; let i = index" [ngClass]="{'outgoing-content': m.nomejecutivo == null, 'incoming-content': m.nomagente == null}">
+        <div [ngClass]="{'outgoing-msg': m.nomejecutivo == null, 'incoming-msg': m.nomagente == null}">
+          <div [innerHTML]="m.mensaje"></div>
+        </div>
+        <div class="time-date">
+            {{m.fecha}} | &nbsp; <span *ngIf="m.nomejecutivo == null"> {{ 'grupo.agente'|translate }}: {{m.nomagente}}</span> <span *ngIf="m.nomagente == null"> {{ 'grupo.ejecutivo'|translate }}: {{m.nomejecutivo}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <textarea class="form-control" name="" [(ngModel)]="mensajeNuevo" rows="3"></textarea>
+    </div>
+    <button class="btn btn-blue btn-block" type="submit" (click)="sendMensaje(mensajeNuevo)">{{ 'grupo.RESPONDER'|translate }}</button>
+	</div>
+</div>  
+	

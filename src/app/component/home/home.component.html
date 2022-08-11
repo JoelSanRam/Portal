@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 my-3 buscador-style" id="myTabContent">
+            <app-buscador></app-buscador>
+        </div>
+    </div>
+    <!-- CONTROL & AZATIPS -->
+    <div class="row">
+        <div class="col-12 my-2 col-md-7">
+        <!-- CONTROL -->
+            <app-ultimas-reservas></app-ultimas-reservas>
+            <!--! CONTROL -->
+        </div>
+        <!-- AZATIPS -->
+        <div class="col-12 my-2 col-md-5">
+            <app-ultimo-microblog></app-ultimo-microblog>
+        </div>
+        <!--! AZATIPS -->
+    </div>
+    <!--! CONTROL & AZATIPS -->
+    <!-- ADS PRINCIPAL-->
+    <div class="row">
+        <div class="col-12 my-2">
+            <div class="border-rounded ads">
+                <a [href]="link1" target="_blank" [ngStyle]="link1 | ifExistLink">
+                    <img class="border-rounded" [src]="anuncio1" alt="Anuncio">
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--! ADS -->
+    <!-- PROMO -->
+    <div class="row">
+        <div class="col-12 my-2">
+            <app-first-flyers></app-first-flyers>
+        </div>
+    </div>
+    <!--! PROMO -->
+    <!-- ADS -->
+    <div class="row">
+        <!-- IZQUIERDA -->
+        <div class="col-12 my-2 col-md-6">
+            <div class="border-rounded ads">
+                <a [href]="link2" target="_blank" [ngStyle]="link2 | ifExistLink">
+                    <img class="border-rounded"[src]="anuncio2"  alt="Anuncio">
+                </a>
+            </div>
+        </div>
+        <!-- DERECHA -->
+        <div class="col-12 my-2 col-md-6">
+            <div class="border-rounded ads">
+                <a [href]="link3" target="_blank" [ngStyle]="link3 | ifExistLink">
+                    <img class="border-rounded" [src]="anuncio3"  alt="Anuncio">
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--! ADS -->
+</div>
+
+<ngx-spinner type="">
+    <!-- <img src='../../../assets/img/spinners/general.gif' /> -->
+    <img src='{{imgruta}}'/>
+</ngx-spinner>

@@ -1,0 +1,257 @@
+<div class="container">
+    <div class="row my-2">
+        <div class="col-12">
+            <a href="javascript:0" class="text-6" [routerLink]="['/hoteles']" [queryParams]="queryParams"> {{ 'hotel.volver-busqueda'|translate }} </a>
+        </div>
+    </div>
+    <!-- HOTEL & ROOMS -->
+    <div class="row mb-3">
+        <div class="col-12 col-md-8">
+            <!-- CARD HOTEL -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="row">
+                            <!-- HOTEL DESCRIPTION -->
+                            <div class="col-12 col-sm-8">
+                                <h5 class="text-1 text-uppercase font-weight-bold">{{ datoshotel.nombre_hotel }}</h5>
+                                <legend class="d-flex align-items-center text-6 m-0">
+                                    <i class="fas fa-map-marker-alt text-orange mr-2"></i> {{ datoshotel.dirHotel }}
+                                </legend>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-6" [innerHTML]="datoshotel.idCategoria | ratingHotel ">
+                                    </div>
+                                    <div class="col-6 m-0">
+                                        <p class="text-uppercase text-4 text-blue m-0">{{ datosplan.nombre_plan }}</p>
+                                    </div>
+                                </div>
+                                <div class="row pt-3">
+                                    <div class="col-6">
+                                        <p class="m-0 text-5">{{ 'hotel.check-in'|translate }}</p>
+                                        <p class="m-0 text-4 font-weight-bold">{{ fechas.finicioText }}</p>
+                                        <!-- <p class="m-0 text-5">15:00</p> -->
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="m-0 text-5">{{ 'hotel.check-out'|translate }}</p>
+                                        <p class="m-0 text-4 font-weight-bold">{{ fechas.ffinalText }}</p>
+                                        <!-- <p class="m-0 text-5">12:00</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--! HOTEL DESCRIPTION -->
+                            <!-- HOTEL IMG -->
+                            <div class="col-12 mt-2 col-sm-4 pl-sm-0">
+                                <div class="position-relative">
+                                    <div class="img-hotel-book" [ngStyle]="{'background-image': 'url(' + datoshotel.urlLogo + ')' }"></div>
+                                    <!-- <span class="tag-promo">PROMOCIÓN</span> -->
+                                </div>
+                            </div>
+                            <!--! HOTEL IMG -->
+                        </div>
+                        <hr>
+                        <!-- Details -->
+                        <div class="row ht-details">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <div class="pol text-6 pl-3">
+                                            <p class="m-0 font-weight-bold">{{ 'hotel.politicas-cancelacion'|translate }}</p>
+                                            <p class="m-0" [innerHTML]="datoshotel.hotel_politicas"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="imp text-6 pl-3">
+                                            <p class="m-0 font-weight-bold">{{ 'hotel.informacion-importante-hotel'|translate }}</p>
+                                            <p class="m-0" [innerHTML]="datoshotel.informacion_importante"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--! Details -->
+                    </div>
+                </div>
+            </div>
+            <!--! CARD HOTEL -->
+            <!-- CARD ROOMS -->
+            <div class="row mb-3" *ngFor="let dh of habitaciones; let i = index">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="d-flex align-items-center text-uppercase text-6 mb-2">
+                            <p class="text-blue mb-0 mr-3">{{ 'hotel.habitacion'|translate }} {{ i+1 }}</p>
+                            <p class="mb-0 mr-3 font-weight-bold" [innerHTML]="datosroom.nombre_room"></p>
+                            <span class="badge badge-orange mr-2">{{ dh.adultos | labelOcp }}</span>
+                            <span class="badge badge-orange mr-2" *ngIf="dh.menores.length">{{dh.menores.length}} MNR</span>
+                            <span class="badge badge-orange mr-2" *ngIf="dh.juniors.length > 0">{{dh.juniors.length}} JR</span>
+                            <span class="badge badge-orange mr-2" *ngIf="dh.extras > 0">{{dh.extras}}} EXT</span>
+                        </div>
+                        <form class="text-6">
+                            <div class="form-group">
+                            <label class="mb-0">{{ 'hotel.nombres'|translate }}</label>
+                            <input type="text" class="form-control" (keypress)="soloNumLetras($event)" [name]="'nombres' + i" [(ngModel)]="dh.nombres">
+                            </div>
+                            <div class="form-group">
+                                <label class="mb-0">{{ 'hotel.apellidos'|translate }}</label>
+                                <input type="text" class="form-control"  (keypress)="soloNumLetras($event)" [name]="'apellidos' + i" [(ngModel)]="dh.apellidos">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="mb-0 text-blue">{{ 'hotel.peticiones-especiales-opcional'|translate }}</label>
+                                <input type="text" class="form-control" [name]="'observaciones' + i" [(ngModel)]="dh.observaciones">
+                                <small>{{ 'hotel.peticiones-hotel'|translate }}</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--! CARD ROOMS -->
+        </div>
+        <div class="col-12 col-md-4 book-price">
+            <!-- CARD BOOK -->
+            <div class="row mb-3">
+                    <!-- TITLE -->
+                    <!-- <div class="col-12 mb-2 mb-md-0 text-md-right font-weight-bold">
+                    Total Precio Público
+                </div> -->
+                <!--! TITLE -->
+                <div class="col-12 mb-3">
+                    <div class="card-white">
+                        <div class="text-right">
+                            <span class="">{{ 'hotel.total-estancia'|translate }}</span>
+                            <div class="text-1 text-orange font-weight-bold">
+                                <span class="text-blue"><span class="color-currency">{{user.currency}} </span>{{ importeTotalCalculado | currencyFormat  }}</span>
+                            </div>
+                            <p class="text-uppercase text-6">{{ datosroom.nombre_room }} <span class="text-blue">{{ datosplan.nombre_plan }}</span></p>
+                        </div>
+
+                        <div class="mb-3 ht-change" *ngIf="difCurrency">
+                            <p class="ht-details text-6 m-0">{{ 'hotel.reserva-cantidad'|translate }} {{detalle_reserva.importe | currencyFormat}} {{detalle_reserva.currency.currency}}, {{ 'hotel.precio-reflejado'|translate }}</p>
+                        </div>
+                        <!-- <div class="mb-3 ht-change">
+                            <p class="ht-details text-6 m-0">*Esta reserva será efectuada en MXN y el precio reflejado en su moneda sólo es un estimado del tipo de cambio al día de hoy.</p>
+                        </div> -->
+                        <div class="pt-2">
+                            <input type="checkbox" name="terms" id="terms" (change)="toggleTerms($event)">
+                            <label for="terms" class="text-blue text-6 font-weight-bold"><a href="javascript:0" (click)="TeminosYCondiciones()">{{ 'hotel.terminos-condiciones'|translate }}</a></label>
+                        </div>
+                        <button type="button" class="btn btn-blue btn-block" [disabled]="!aceptTerms"  (click)="confirmarBook()">{{ 'hotel.reservar'|translate }}</button>
+                        <!-- <button type="button" class="btn btn-orange btn-block">PAGAR AHORA</button> -->
+                    </div>
+                </div>
+            </div>
+            <!--! CARD BOOK -->
+            <!-- CARD INSURENCE -->
+            <!-- <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card-white">
+                        <div class="text-right mb-2">
+                            <h5 class="font-weight-bold">Seguro de viaje</h5>
+                            <span class="text-6">Precio especial</span>
+                            <div class="text-1 text-orange font-weight-bold">
+                                MXN <span class="text-green">$1,230.00</span>
+                            </div>
+                            <p class="book-room m-0 font-weight-bold text-lowercase text-6">
+                                <span class="text-uppercase"> Traveler nacional</span> Para 2 adultos
+                            </p>
+                            <p class="text-6 mb-1">Seguro de cobertura total</p>
+                            <button type="button" class="btn btn-outline-green btn-sm">Más información</button>
+                        </div>
+                        <button type="button" class="btn btn-green btn-block">AGREGAR SEGURO</button>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <!-- <div class="row">
+        <div class="col-12 col-md-8">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="row mb-2">
+                        <div class="col-12 font-weight-bold">
+                            Agrega un tour a un precio especial:
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-2 col-md-6 pr-md-2">
+                            <div class="card-plus">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-4 crop">
+                                        <img src="./assets/img/tour-01.jpg" alt="Tour">
+                                    </div>
+                                    <div class="col-8 text-right">
+                                        <p class="book-room m-0 font-weight-bold">Entrada a Xcaret Plus</p>
+                                        <div class="text-orange font-weight-bold">
+                                            MXN <span class="text-blue">$4,608.00</span>
+                                        </div>
+                                        <p class="text-6 mb-0">Total entradas 2 adultos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2 col-md-6 pr-md-2">
+                            <div class="card-plus">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-4 crop">
+                                        <img src="./assets/img/tour-02.jpg" alt="Tour">
+                                    </div>
+                                    <div class="col-8 text-right">
+                                        <p class="book-room m-0 font-weight-bold">Dolphin Puerto Aventuras</p>
+                                        <div class="text-orange font-weight-bold">
+                                            MXN <span class="text-blue">$1,998.00</span>
+                                        </div>
+                                        <p class="text-6 mb-0">Total entradas 2 adultos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="row mb-2">
+                        <div class="col-12 font-weight-bold">
+                            ¿Necesitas Traslado?
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-2 col-md-6 pr-md-2">
+                            <div class="card-plus">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-4 crop">
+                                        <img src="./assets/img/transp-01.png" alt="Transporte">
+                                    </div>
+                                    <div class="col-8 text-right">
+                                        <p class="m-0 font-weight-bold">Van Express - Redondo</p>
+                                        <div class="text-orange font-weight-bold">
+                                            MXN <span class="text-blue">$840.00</span>
+                                        </div>
+                                        <p class="text-6 mb-0">Total 2 adultos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-2 col-md-6 pr-md-2">
+                            <div class="card-plus">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-4 crop">
+                                        <img src="./assets/img/transp-02.png" alt="Transporte">
+                                    </div>
+                                    <div class="col-8 text-right">
+                                        <p class="m-0 font-weight-bold">Autobus - Redondo</p>
+                                        <div class="text-orange font-weight-bold">
+                                            MXN <span class="text-blue">$600.00</span>
+                                        </div>
+                                        <p class="text-6 mb-0">Total 2 adultos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>

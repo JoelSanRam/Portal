@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card-white mt-5" *ngIf="type == 'timeout'">
+            <h1>{{ 'vuelos.tiempo-expiro'|translate }}</h1>
+            <p>{{ 'vuelos.compra-no-completada'|translate }}</p>
+            <p>{{ 'vuelos.redireccionamiento'|translate }}:</p>
+            <button class="btn btn-primary" (click)="goToHome()">{{ 'vuelos.ir-home'|translate }}</button>
+        </div>
+    </div>
+</div>

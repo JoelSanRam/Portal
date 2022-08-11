@@ -1,0 +1,187 @@
+.fechaSalida {
+    h2 {
+        font-family: 'Muli-Bold';
+        color: $colorSombraTres;
+        margin: 0;
+        @include media(xs) {
+            font-size: 1em;
+        }
+    }
+    p {
+        @include media(xs) {
+            font-size: 0.8em;
+        }
+    }
+}
+.total-reserva {
+    font-size: 1em;
+    margin-bottom: 0px;
+    @include media(md) {
+        font-size: 0.7em;
+    }
+    @include media(xs) {
+        font-size: 0.7em;
+    }
+}
+.info-circuito {
+    h5 {
+        font-family: 'Muli-Bold';
+        // color: $colorPrimarioUnoOscuro;
+        @include media(md) {
+            font-size: 0.84em;
+        }
+        @include media(xs) {
+            font-size: 1em;
+        }
+    }
+    li {
+        margin-right: 1.5rem;
+        @include media(md) {
+        }
+        .ocupacion-circuit {
+            color: $colorPrimarioUno;
+        }
+        .time-circuit {
+            color: $colorSecundarioDosOscuro;
+        }
+        .place-circuit {
+            color: $colorSecundarioTresOscuro;
+        }
+        .plan-circuit {
+            color: $colorPrimarioUnoOscuro;
+        }
+    }
+    .addres-hotel {
+        font-size: 0.8em;
+        @include media(md) {
+            font-size: 0.7em;
+        }
+        span {
+            color: $colorSecundarioTresOscuro;
+            margin-right: 0.5em;
+        }
+    }
+    .descripcion-hotel {
+        line-height: 16px;
+        @include media(md) {
+            font-size: 0.7em;
+            p {
+                margin-bottom: 5px;
+            }
+        }
+    }
+}
+.habitacion-circ,
+.num-habitacion-circ {
+    font-family: 'Muli-SemiBold';
+    margin-top: -10px;
+    margin-bottom: -5px;
+    @include media(xs) {
+        font-size: 0.6em;
+    }
+}
+.precio-hab-circ {
+    margin: 0;
+    font-family: 'Muli-SemiBold';
+    color: $colorSecundarioTresOscuro;
+    span {
+        color: $colorPrimarioUnoOscuro;
+    }
+    @include media(xs) {
+        font-size: 0.7em;
+    }
+}
+.circuito-prox {
+    h2 {
+        color: $colorPrimarioDosOscuro;
+    }
+    color: $colorPrimarioDosOscuro;
+}
+.detalle-costo-circuito {
+    text-align: right;
+    @include media(sm) {
+        text-align: center;
+    }
+    @include media(xs) {
+        // text-align: center;
+    }
+    .text-precio-hab {
+        font-size: 0.8em;
+        margin-bottom: 0px;
+        @include media(md) {
+            font-size: 0.7em;
+        }
+    }
+    h2 {
+        @include media(md) {
+            font-size: 1.3em;
+        }
+        @include media(xs) {
+            font-size: 1.3em;
+        }
+        line-height: 1em;
+        margin-bottom: 5px;
+        font-family: 'Muli-Bold';
+        color: $colorPrimarioUnoOscuro;
+        span {
+            color: $colorSecundarioTresOscuro;
+        }
+    }
+    .descripcion-corta-result {
+        font-size: 0.8em;
+        @include media(md) {
+            font-size: 0.7em;
+            margin-bottom: 0;
+        }
+    }
+    .total-estancia-result {
+        font-size: 0.7em;
+        margin-bottom: 0;
+    }
+    h5 {
+        font-family: 'Muli-SemiBold';
+        color: $colorPrimarioUnoOscuro;
+        @include media(md) {
+            font-size: 0.9em;
+        }
+    }
+    .btn-reservar {
+        background-color: $colorPrimarioUnoOscuro;
+        color: #fff;
+        &:hover {
+            background-color: $colorPrimarioUno;
+        }
+        @include media(md) {
+            font-size: 0.7em;
+        }
+    }
+    .btn-cotizar {
+        background-color: $colorSecundarioTresOscuro;
+        color: #fff;
+        &:hover {
+            background-color: $colorSecundarioTres;
+        }
+        @include media(md) {
+            font-size: 0.7em;
+        }
+    }
+}
+.img-circuit {
+    @include media(xs) {
+        padding: 0;
+        img {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+    }
+}
+.title-circuit {
+    @include media(xs) {
+        position: absolute;
+        top: -25px;
+        h5 {
+            color: #fff;
+            text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
+        }
+    }
+}

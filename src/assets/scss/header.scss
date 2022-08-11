@@ -1,0 +1,74 @@
+header {
+    background-color: $primaryColor;
+    color: $primaryColorTxt;
+    &>nav.navbar-home {
+        z-index: 10;
+        box-shadow: 0 1px 6px #8080807a;
+        & .fa-bars {
+            color: $primaryColorTxt;
+        }
+        & .nav-item>a {
+            color: $primaryColorTxt;
+            padding: .5rem .3rem;
+            @media (max-width: 367px) {
+                float: right;
+                padding: .5rem .5rem;
+            }
+        }
+        & .dropdown-toggle::after {
+            width: 8px;
+            height: 8px;
+            border: 2px solid $primaryColorTxt;
+            border-left: 0;
+            border-top: 0;
+            transform: rotate(45deg);
+            @include media-breakpoint-down(sm) {
+                width: 5px;
+                height: 5px;
+            }
+        }
+    }
+}
+.logo {
+    width: auto;
+    height: 2em;
+}
+.img-perfil {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.nav-item>a {
+    color: $colorSombraTres;
+}
+.btn-toggle {
+    background-color: transparent;
+    border: 1px solid transparent;
+    margin-right: 5px;
+    &:focus {
+        outline: 5px auto transparent;
+    }
+}
+.nav-search {
+    border: 1px solid $colorSombraDos;
+    border-left: none;
+    border-radius: 15px;
+}
+.btn-nav-search {
+    background-color: transparent;
+    border: 1px solid $colorSombraDos;
+    border-right: none;
+    border-radius: 15px;
+    @include media-breakpoint-down(sm) {
+        border: none;
+    }
+}
+
+.banner{
+    background-color: #0fa9ed;
+    a{
+        border: 1px solid #fff;
+        color: #fff;
+    }
+}

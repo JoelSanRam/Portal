@@ -1,0 +1,49 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ 'usuario.modificar-perfil'|translate }}</h4>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="userDataForm" (ngSubmit)="guardarPerfil()">
+        <div class="form-group">
+            <label for="name">{{ 'usuario.nombre-agente'|translate }}</label>
+            <input id="name" class="form-control" type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && d.name.errors }" required>
+            <div *ngIf="submitted && d.name.errors" class="invalid-feedback">
+                <div *ngIf="d.name.errors.required">{{ 'usuario.ingrese-nombre'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">{{ 'usuario.email'|translate }}</label>
+            <input id="email" class="form-control" type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && d.email.errors }" required>
+            <div *ngIf="submitted && d.email.errors" class="invalid-feedback">
+                <div *ngIf="d.email.errors.required">{{ 'usuario.ingrese-email'|translate }}</div>
+                <div *ngIf="d.email.errors.email">{{ 'usuario.email-valido'|translate }}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="usuario">{{ 'usuario.usuario'|translate }}</label>
+            <input id="usuario" class="form-control" type="text" formControlName="usuario">
+        </div>
+        <div class="form-group">
+            <label for="anterior">{{ 'usuario.pass-actual'|translate }}</label>
+            <input id="anterior" class="form-control" type="password" formControlName="anterior">
+        </div>
+        <div class="form-group">
+            <label for="nueva">{{ 'usuario.nueva-pass'|translate }}</label>
+            <input id="nueva" class="form-control" type="password" formControlName="nueva">
+        </div>
+        <div class="form-group">
+            <label for="repetir">{{ 'usuario.repetir-pass'|translate }}</label>
+            <input id="repetir" class="form-control" type="password" formControlName="repetir">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-green btn-block text-uppercasse" type="submit">{{ 'usuario.guardar'|translate }}
+                <span *ngIf="loading">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </span>
+            </button>
+        </div>
+    </form>
+</div>  
+	

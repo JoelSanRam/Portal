@@ -1,0 +1,32 @@
+<footer class="footer bg-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+              {{ 'footer.powered-by'|translate }} <strong><a href="https://travelmapsoft.com/" target="_blank">Softrek</a></strong> &copy;{{ this.year }}
+            </div>
+            <div class="col-12 col-sm-6">
+                <ul class="list-inline m-0">
+                  <li class="list-inline-item">{{ 'footer.siganos'|translate }}</li>
+                  <li *ngFor="let sociales of rsociales" class="list-inline-item">
+                      <a *ngIf="sociales.tipo=='facebook'" href="{{sociales.url}}" target="_blank">
+                        <i *ngIf="sociales.tipo=='facebook'" class="fab fa-facebook-f"></i>
+                      </a>
+                      <a *ngIf="sociales.tipo=='instagram'" href="{{sociales.url}}" target="_blank">
+                        <i *ngIf="sociales.tipo=='instagram'" class="fab fa-instagram"></i>
+                      </a>
+                      <a *ngIf="sociales.tipo=='linkedin'" href="{{sociales.url}}" target="_blank">
+                        <i *ngIf="sociales.tipo=='linkedin'" class="fab fa-linkedin"></i>
+                      </a>
+                      <a *ngIf="sociales.tipo=='youtube'" href="{{sociales.url}}" target="_blank">
+                        <i *ngIf="sociales.tipo=='youtube'" class="fab fa-youtube"></i>
+                      </a>
+                  </li>
+                  <!-- <li class="list-inline-item"><a href="https://www.facebook.com/azabachetravel" target="_blank"><i class="fab fa-facebook-f"></i></a></li> -->
+                  <!-- <li class="list-inline-item"><a href="https://www.instagram.com/azabachetravel" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.linkedin.com/company/azabache-tour-operador" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.youtube.com/channel/UCOY2j1fEvJh51z2SuZxCxFA" target="_blank"><i class="fab fa-youtube"></i></a></li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>

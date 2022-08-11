@@ -1,0 +1,145 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{ detReserva?.datosreserva?.idReserva }}</h4>&nbsp;-&nbsp;<span class="text-2">{{ detReserva?.datosreserva?.status }}&nbsp;</span>
+  <span class="text-2">{{ detReserva?.datosreserva?.book_status }}</span>
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="container mb-4">
+		<h6 class="font-weight-bold mb-3">{{ 'reservaciones.datos-reserva'|translate }}:</h6>
+		<div *ngIf="detReserva?.datosreserva?.producto_tipo">
+			<div class="row">
+				<div class="col-5">{{ 'reservaciones.hotel'|translate }}: </div>
+				<div class="col-7">{{detReserva?.datosreserva?.nombre_hotel}}</div>
+			</div>
+			<div class="row">
+				<div class="col-5">{{ 'reservaciones.checkin'|translate }}:</div>
+				<div class="col-7">{{detReserva?.datosreserva?.checkin}}</div>
+			</div>
+			<div class="row">
+				<div class="col-5">{{ 'reservaciones.checkout'|translate }}:</div>
+				<div class="col-7">{{detReserva?.datosreserva?.checkout}}</div>
+			</div>
+			<div class="row">
+				<div class="col-5">{{ 'reservaciones.habitacion'|translate }}:</div>
+				<div class="col-7">{{detReserva?.datosreserva?.nombre_room}}</div>
+			</div>
+			<div class="row">
+				<div class="col-5">{{ 'reservaciones.plan-alimentos'|translate }}:</div>
+				<div class="col-7">{{detReserva?.datosreserva?.nombre_plan}}</div>
+			</div>
+		</div>
+		<div class="row" *ngIf="detReserva?.datosreserva?.book_producto_tipo">
+			<div class="col-5">{{ 'reservaciones.servicio'|translate }}: </div>
+			<div class="col-7">{{detReserva?.datosreserva?.book_servicioTitulo}}</div>
+			<div class="col-5">{{ 'reservaciones.checkin'|translate }}:</div>
+			<div class="col-7">{{detReserva?.datosreserva?.book_fechasalida}}</div>
+			<div class="col-5">{{ 'reservaciones.descripcion-corta'|translate }}:</div>
+			<div class="col-7">{{detReserva?.datosreserva?.book_servicioDescripcion}}</div>
+		</div>
+	</div>
+   
+	<div class="" *ngIf="detReserva?.datosreserva?.book_tipoServicio == 'TOU' && detReserva?.datosreserva.book_opciones != ''">
+		<div class="container">
+			<h6 class="font-weight-bold mb-2">{{ 'reservaciones.servicios-adicionales'|translate }}:</h6>
+		</div>
+	</div>
+    
+    <div *ngFor="let hab of detReserva?.habitaciones; index as i;" class="mb-3">
+		<div class="container">
+			<h6 class="font-weight-bold mb-2">{{ 'reservaciones.habitacion'|translate }} {{ i + 1 }}:</h6>
+		</div>
+		<div class="border border-rounded p-3">
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.titular'|translate }}:
+				</div>
+				<div class="col-7 text-uppercase">
+				{{ hab.nombrePAX }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.tipo-habitacion'|translate }}:
+				</div>
+				<div class="col-7">
+				{{ hab.tipohab }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.adultos'|translate }}:
+				</div>
+				<div class="col-7">
+				{{ hab.adultos }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.menores'|translate }}:
+				</div>
+				<div class="col-7">
+				{{ hab.menores }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.juniors'|translate }}:
+				</div>
+				<div class="col-7">
+				{{ hab.juniors }}
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div *ngIf="detReserva?.datosreserva?.rooming_adultos">
+		<div class="container">
+			<h6 class="font-weight-bold mb-2">{{ 'reservaciones.ocupacion'|translate }}:</h6>
+		</div>
+		<div class="border border-rounded p-3">
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.titular'|translate }}:
+				</div>
+				<div class="col-7 text-uppercase">
+				{{ detReserva?.datosreserva?.book_nombres }} {{ detReserva?.datosreserva?.book_apellidos }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.adultos'|translate }}:
+				</div>
+				<div class="col-7">
+				{{detReserva.datosreserva.rooming_adultos}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.menores'|translate }}:
+				</div>
+				<div class="col-7">
+					{{detReserva.datosreserva.rooming_menores}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-5">
+					{{ 'reservaciones.infantes'|translate }}:
+				</div>
+				<div class="col-7">
+					{{detReserva.datosreserva.rooming_infantes}}
+				</div>
+			</div>
+			<div class="row" *ngIf="detReserva.datosreserva.book_observaciones">
+				<div class="col-5">
+					{{ 'reservaciones.observaciones'|translate }}:
+				</div>
+				<div class="col-7">
+					{{detReserva.datosreserva.book_observaciones}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>  
+	

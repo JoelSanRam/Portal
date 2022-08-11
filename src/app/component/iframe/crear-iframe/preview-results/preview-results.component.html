@@ -1,0 +1,111 @@
+<div class="preview-results">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-3 p-0">
+                <!-- <div class="img-hotel p-0" [ngStyle]="'background-image': 'url("../../../../../assets/img/hotel-01.jpg")'"></div> -->
+                <img class="img-fluid" src="../../../../../assets/img/hotel-01.jpg" alt="">
+            </div>
+            <div class="col-7">
+              <div>
+                <h5 class="text-uppercase pr-2 font-weight-bold text-6 d-inline-flex">HOTEL SANTA MARIA CANCUN</h5>
+                <div class="d-inline-flex mr-2 text-7" [innerHTML]="'S3' | ratingHotel "></div>
+                <span class="tag-status">Online</span>
+              </div>
+              <div>
+                  <span class="tag-status d-inline-flex">WORLD2MEET</span><p class="d-inline-flex text-8"><span><i class="text-orange fas fa-map-marker-alt mr-1"></i> </span>Av. López Portillo y Torcasita, sm63, mz22 L-11, 77513, Cancun, Mexico</p>
+              </div>
+            </div>
+            <div class="col-2 p-0">
+              <p class="text-8 m-0">{{ 'iframe.precio-bajo'|translate }}</p>
+              <h6 class="text-blue font-weight-bold"><span class="text-orange">MXN</span> {{ 15.46 / totalMkp | currencyFormat }}</h6>
+            </div>
+        </div>
+        <hr>
+        <!-- ROOMS -->
+        <div class="row">
+          <div class="col-2 p-0 my-auto">
+              <div class="d-flex justify-content-center">
+                <ul class="list-inline my-0 text-8">
+                    <li class="list-inline-item">
+                        <i class="fas fa-male adults"></i> <i class="fas fa-female adults"></i><span class="">x2</span>
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fas fa-child child"></i> <span class="">0</span>
+                    </li>
+                </ul>
+              </div>
+          </div>
+          <div class="col-7 p-0">
+            <div class="">
+              <h5 class="text-uppercase text-7 pr-2 d-inline">{{ 'iframe.hab-estandar'|translate }}</h5>
+              <span class="tag-status">{{ 'iframe.confirmada'|translate }}</span>
+            </div>
+            <div>
+              <h5 class="text-blue text-8 text-uppercase">{{ 'iframe.solo-hab'|translate }}</h5>
+            </div>
+            <div class="">
+              <span class="d-inline-flex politicas-cancelacion mr-1 mb-1">{{ 'iframe.politicas-cancelacion'|translate }}</span>
+              <span class="d-inline-flex detalle-tarifa">{{ 'iframe.detalles-tarifa'|translate }}</span>
+            </div>
+          </div>
+          <div class="col-3 p-0">
+            <div class="">
+                <p class="text-8 m-0">{{ 'iframe.total-estancia'|translate }}</p>
+                <h6 class="text-blue font-weight-bold"><span class="text-orange">MXN</span> {{ 30.91 / totalMkp | currencyFormat }}</h6>
+            </div>
+            <div class="">
+                <span class="d-inline-flex btn-results mr-1 mb-1" [ngStyle]="{'background-color': colors.botones.value.reservar.fondo,
+                'color': colors.botones.value.reservar.texto}">{{ 'iframe.reservar'|translate }}</span>
+                <span class="d-inline-flex btn-results" [ngStyle]="{'background-color': colors.botones.value.cotizar.fondo,
+                'color': colors.botones.value.cotizar.texto}">{{ 'iframe.cotizar'|translate }}</span>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-2 p-0 my-auto">
+              <div class="d-flex justify-content-center">
+                <ul class="list-inline my-0 text-8">
+                    <li class="list-inline-item">
+                        <i class="fas fa-male adults"></i> <i class="fas fa-female adults"></i><span class="">x2</span>
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fas fa-child child"></i> <span class="">0</span>
+                    </li>
+                </ul>
+              </div>
+          </div>
+          <div class="col-7 p-0">
+            <div class="">
+              <h5 class="text-uppercase text-7 pr-2 d-inline">{{ 'iframe.hab-estandar-cama'|translate }}</h5>
+              <span class="tag-status">{{ 'iframe.confirmada'|translate }}</span>
+            </div>
+            <div>
+              <h5 class="text-blue text-8 text-uppercase">{{ 'iframe.solo-hab'|translate }}</h5>
+            </div>
+            <div class="">
+              <span class="d-inline-flex politicas-cancelacion mr-1 mb-1">{{ 'iframe.politicas-cancelacion'|translate }}n</span>
+              <span class="d-inline-flex detalle-tarifa">{{ 'iframe.detalles-tarifa'|translate }}</span>
+            </div>
+          </div>
+          <div class="col-3 p-0">
+            <div class="">
+                <p class="text-8 m-0">{{ 'iframe.total-estancia'|translate }}</p>
+                <h6 class="text-blue font-weight-bold"><span class="text-orange">MXN</span> {{ 38.60 / totalMkp | currencyFormat }}</h6>
+            </div>
+            <div class="">
+                <span class="d-inline-flex btn-results mr-1 mb-1" [ngStyle]="{'background-color': colors.botones.value.reservar.fondo,
+                'color': colors.botones.value.reservar.texto}">{{ 'iframe.reservar'|translate }}</span>
+                <span class="d-inline-flex btn-results" [ngStyle]="{'background-color': colors.botones.value.cotizar.fondo,
+                'color': colors.botones.value.cotizar.texto}">{{ 'iframe.cotizar'|translate }}</span>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 text-center">
+                <span class="text-blue" style="cursor: pointer;"><b class="text-uppercasse">{{ 'iframe.ver-mas'|translate }}</b></span>
+            </div>
+        </div>
+    </div>
+<!-- </div> -->

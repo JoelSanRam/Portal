@@ -1,0 +1,292 @@
+
+//
+.ht-details {
+    line-height: 1.3;
+    & div.pol {
+        border-left: 5px solid $colorPrimarioDos;
+        max-height: 180px;
+        overflow-y: scroll;
+        overflow: auto;
+        &::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+
+        &::-webkit-scrollbar
+        {
+            width: 5px;
+            background-color: #F5F5F5;
+        }
+
+        &::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+        // padding-left: 10px;
+    }
+    & div.imp {
+        border-left: 5px solid $colorPrimarioUno;
+        max-height: 180px;
+        overflow-y: scroll;
+        overflow: auto;
+        &::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+
+        &::-webkit-scrollbar
+        {
+            width: 5px;
+            background-color: #F5F5F5;
+        }
+
+        &::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+    }
+}
+.ht-change{
+    background-color: $colorSombraUno;
+    & p {
+        padding: 15px;
+    }
+}
+//
+.tag-promo {
+    min-height: 10px;
+    min-width: 130px;
+    background-color: $colorSecundarioTres;
+    color: $white;
+    position: absolute;
+    top: -.5rem;
+    left: -15px;
+    font-size: .9rem;
+    padding: 4px;
+    padding-left: 14px;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 50%, 100% 100%, 0% 100%);
+    @include media-breakpoint-down(xs) {
+        top: .5rem;
+        left: 0rem;
+    }
+}
+
+.tag-promo-alt {
+    min-height: 10px;
+    min-width: 130px;
+    background-color: $colorSecundarioTres;
+    color: $white;
+    position: absolute;
+    top: .5rem;
+    left: 0rem;
+    font-size: .9rem;
+    padding: 4px;
+    padding-left: 16px;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 50%, 100% 100%, 0% 100%);
+}
+//
+.img-resp {
+    width: 100%;
+    height: auto;
+}
+.card-white{
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1rem;
+}
+
+.pagination {
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+    & li {
+        display: inline;
+        & :active {
+            z-index: 3;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #337ab7;
+            & a {
+                background-color: #337ab7;
+                border-color: #337ab7;
+            }
+        }
+        & :focus {
+            z-index: 3;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+        & a {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            & :focus {
+                z-index: 3;
+                color: #fff;
+                background-color: #337ab7;
+                border-color: #337ab7;
+            }
+            & :active {
+                z-index: 3;
+                color: #fff;
+                background-color: #b9d1e6;
+                border-color: #b9d1e6;
+            }
+        }
+    }
+}
+
+.pagination {
+    & .active {
+        & a {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+    }
+}
+
+.pagination {
+    & .active {
+        & a:focus {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+    }
+}
+.pagination {
+    & .active {
+        & a:active {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+    }
+}
+
+.card-white-img {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1rem;
+    & .crop {
+        position: relative;
+        // padding-left: 1rem;
+        & img {
+            max-width: 35%;
+            width: 35%;
+            height: auto;
+            float: left;
+            margin-right: 1rem;
+            // margin-bottom: 1rem;
+            clear: right;
+        }
+    }
+    @include media-breakpoint-down(xs) {
+        padding: 0 1rem 1rem 1rem;
+        & .crop {
+            display: flow-root;
+            margin-right: -15px;
+            margin-left: -15px;
+            & img {
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+                margin-bottom: 0rem;
+                border-radius: $border-radius;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+        }
+    }
+}
+.card-danger {
+    background-color: $colorPrimarioDos;
+    color: $white;
+    border-radius: $border-radius;
+    padding: 1rem;
+}
+.border-black {
+    border: 1px solid #ced4da;
+    padding: 5px 10px;
+}
+.card-plus {
+    background-color: $white;
+    padding: 0 1rem;
+    border-radius: .3rem;
+    .crop {
+        padding: 0;
+        & img {
+            max-width: 100%;
+            width: 100%;
+            height: 114px;
+            border-top-left-radius: .3rem;
+            border-bottom-left-radius: .3rem;
+        }
+    }
+}
+.btn-gallery {
+    position: absolute;
+    bottom: 1rem;
+    left: 10px;
+}
+.img-hotel-book{
+    min-height: 180px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.modal-terminosCondiciones{
+    max-height: 700px;
+    overflow-y: auto;
+    &::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar
+    {
+        width: 5px;
+        background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #555;
+    }
+}
+.color-currency{
+    color: #d5631a;
+}
+.btn-efect {
+    color: #007bff !important;
+    cursor: pointer;
+    :hover{
+        text-decoration: underline !important;
+    }
+}

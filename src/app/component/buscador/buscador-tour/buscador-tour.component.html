@@ -1,0 +1,101 @@
+<form autocomplete="off" [formGroup]="toursForm" (ngSubmit)="searchTour()" class="tours-searchbox">
+    <div class="row">
+        <div class="col-12 col-md-3 __border-line mb-3">
+            <div class="form-group">
+                <label for="destinoTour" class="label_search">{{ 'buscador.tours.destino'|translate }}</label>
+                <div class="input-group">
+                    <input formControlName="destino" [typeahead]="destinos" container="body" [typeaheadMinLength]="2" [typeaheadAsync]="true" [typeaheadItemTemplate]="customItemTemplate" (typeaheadOnSelect)="onSelect($event)" class="form-control">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                    </div>
+                </div>
+                <ng-template #customItemTemplate let-model="item" let-index="index">
+                    <i class="fas" [ngClass]="setIconClass(model)" aria-hidden="true"></i>
+                    {{model.label}}
+                </ng-template>
+                <div *ngIf="submitted && f.destino.errors" class="invalid-feedback d-block">
+                    {{ 'buscador.tours.selecciona-destino'|translate }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3 col-lg-2 __border-line mb-3" (click)="dpft.show()">
+            <div class="form-group">
+                <div class="row justify-content-center">
+                    <div class="col-md-10 col-6 d-flex align-items-center justify-content-center">
+                        <div>
+                            <label class="label_search">{{ 'buscador.tours.fecha'|translate }}</label>
+                            <div class="d-flex day-margin-top">
+                                <div class="numbers-search">
+                                    {{ day | lpad : 2 }}
+                                </div>
+                                <div class="InOut align-self-center">
+                                    <p class="m-0">{{ month }}</p>
+                                    <p class="m-0">{{ year }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-auto">
+                        <input type="text"
+                        formControlName="dt"
+                        #dpft="bsDatepicker"
+                        placeholder="Datepicker"
+                        class="form-control noShowDP"
+                        (bsValueChange)="changeFecha($event)"
+                        [bsConfig]="bsConfig"
+                        bsDatepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-5 col-md-3 col-xl-2 align-self-start my-2 my-md-0" [ngClass]="{'__border-line': f.ocupacion.value}">
+            <input type="checkbox" formControlName="ocupacion" id="ocupacion">
+            <label for="ocupacion" class="label_search">{{ 'buscador.tours.ingresar-pasajeros'|translate }}</label>
+            <div *ngIf="f.ocupacion.value">
+                <div class="d-flex">
+                    <div class="mr-4">
+                        <label class="label_search mb-0">{{ 'buscador.tours.adultos'|translate }}</label>
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex flex-column mr-1">
+                                <div class="btn-pax btn-plus" (click)="addRemoveAdulto(f.adultos.value,'add')">+</div>
+                                <div class="btn-pax btn-minus mt-1" (click)="addRemoveAdulto(f.adultos.value,'rm')">-</div>
+                            </div>
+                            <span class="numbers-search">
+                                <p class="m-0">{{ f.adultos.value }}</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label_search mb-0">{{ 'buscador.tours.menores'|translate }}</label>
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex flex-column mr-1">
+                                <div class="btn-pax btn-plus" (click)="addRemoveMenor(f.menores.value,'add')">+</div>
+                                <div class="btn-pax btn-minus mt-1" (click)="addRemoveMenor(f.menores.value,'rm')">-</div>
+                            </div>
+                            <span class="numbers-search">
+                                <p class="m-0">{{ f.menores.value }}</p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="col-12 col-sm-2 col-md-3 col-xl-2">
+            <div class="form-group">
+                <label class="label_search" for="">&nbsp;</label>
+                <button [disabled]="loading" class="btn btn-block btn-danger" type="submit">
+                    <span class="d-sm-none d-lg-inline">
+                        {{ 'buscador.tours.buscar'|translate }}
+                    </span>
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

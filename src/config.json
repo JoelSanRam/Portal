@@ -1,0 +1,53 @@
+{
+    "idOperador": "AZAMID", 
+    "redes_sociales": [
+        {
+            "tipo": "facebook",
+            "url": "https://www.facebook.com/groups/touroperaoorazabache"
+        },
+        {
+            "tipo": "instagram",
+            "url": "https://www.instagram.com/azabachetravel"
+        },
+        {
+            "tipo": "linkedin",
+            "url": "https://www.linkedin.com/company/azabache-tour-operador"
+        },
+        {
+            "tipo": "youtube",
+            "url": "https://www.youtube.com/channel/UCOY2j1fEvJh51z2SuZxCxFA"
+        }
+    ],
+    "anuncios": {
+        "AZAMID":{
+            "principal" : "https://viajoporqueviajo.com",
+            "izquierda": "https://facebook.com/AzabacheWeddings/",
+            "derecha": "https://www.facebook.com/azabachetravel/"
+        },
+        "AZALTM":{
+            "principal" : "https://mujeres-lideres.aza.tours",
+            "izquierda": "",
+            "derecha": ""
+        },
+        "AZABR":{
+            "principal" : "",
+            "izquierda": "",
+            "derecha": ""
+        },
+        "AZACR":{
+            "principal" : "",
+            "izquierda": "",
+            "derecha": ""
+        },
+        "AZAPTY":{
+            "principal" : "",
+            "izquierda": "",
+            "derecha": ""
+        },
+        "principal" : "https://viajoporqueviajo.com",
+        "izquierda": "https://facebook.com/AzabacheWeddings/",
+        "derecha": "https://www.facebook.com/azabachetravel/"
+    },
+    "lang":"es-mx",
+    "url_loader":"https://tms-img.s3.amazonaws.com/loaders/loader_aza.json"
+}

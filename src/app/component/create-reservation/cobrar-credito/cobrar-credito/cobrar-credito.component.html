@@ -1,0 +1,129 @@
+<div class="modal-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="modal-title ms-2 my-1" id="staticBackdropLabel">COBRAR A CRÉDITO</h5>
+            </div>
+            <div class="col-md-1 mb-1 mt-2">
+                <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"
+                    style="background-color: transparent;border-radius: none; border-color: transparent;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <p>
+        Se emitirá el ticket de avión de esta reserva, con el crédito autorizado en la agencia NOMBRE DE LA AGENCIA. El pago deberá ser 
+        cubierto de acuerdo a las cláusulas y condiciones de su convenio.
+    </p>
+       <!-- * CHECK DATA -->
+       <section>
+        <div class="card-white" style="box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;">
+            <div>
+                <div class="text-blue">
+                    <i class="far fa-calendar mr-3"></i> {{ 'vuelos.fecha'|translate}}
+                </div>
+                <div class="row" *ngFor="let tramo of tramos; let i = index">
+                    <div class="col-3">
+                        <p class="m-0"
+                            *ngIf="tipoVuelo == 'single' || tipoVuelo == 'multitrip' || tipoVuelo == 'roundtrip' && i == 0">
+                            {{ 'vuelos.salida'|translate }}</p>
+                        <p class="m-0" *ngIf="tipoVuelo == 'roundtrip' && i == 1">{{ 'vuelos.regreso'|translate
+                            }}</p>
+                    </div>
+                    <div class="col-9">
+                        {{ tramo?.date | date: 'd MMMM y' }}, <span *ngIf="tramo.Horasalida">{{
+                            formatTime(tramo?.Horasalida) }} hr</span>
+                    </div> 
+                </div>
+            </div>
+           <div> 
+                <hr>
+                <div class="text-blue">
+                    <i class="fas fa-user mr-3"></i> {{ 'vuelos.pasajeros'|translate}}
+                </div>
+                <div>
+                    <div class="row" *ngFor="let adulto of formPax.controls.adultos.value; let i = index;">
+                        <div class="col-3">
+                            {{ 'vuelos.adulto'|translate }} {{ i + 1}}
+                        </div>
+                        <div class="col-9">
+                            {{ adulto.nombres + ' ' + adulto.apellidos }}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" *ngFor="let infante of formPax.controls.infantes.value; let i = index;">
+                        <div class="col-3">
+                            {{ 'vuelos.infante'|translate }} {{ i + 1}}
+                        </div>
+                        <div class="col-9">
+                            {{ infante.nombres + ' ' + infante.apellidos }}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row" *ngFor="let menor of formPax.controls.menores.value; let i = index;">
+                        <div class="col-3">
+                            {{ 'vuelos.menor'|translate }} {{ i + 1}}
+                        </div>
+                        <div class="col-9">
+                            {{ menor.nombres + ' ' + menor.apellidos }}
+                        </div>
+                    </div>
+                </div>
+            </div>  
+          
+        </div>
+    </section>
+       <!-- ! END CHECK DATA -->
+
+     <!-- * PAYMENT DETAILS -->
+     <section class="payment-aereos">
+        <div class="card-white mt-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>{{ 'vuelos.vuelo-para'|translate }} {{ totalText }}</span>
+                <span>{{ user?.currency }} {{ sumCostos(tarifa?.detalle_Vuelo) | currencyFormat }}</span>
+            </div>
+            <!-- <div class="d-flex justify-content-between align-items-center" *ngIf="sumDescuento(tarifa?.detalle_descuento) as descuento">
+                <span>Descuento</span>
+                <span class="">- {{ user?.currency }} {{ descuento | currencyFormat }}</span>
+            </div> -->
+            <div class="d-flex justify-content-between align-items-center">
+                <ng-template #impuestos>
+                    {{ 'vuelos.impuestos-tasas'|translate }} {{ (tarifa.impuestos.impuesto_total |
+                    currencyFormat) }} <br>
+                    {{ 'TUA: ' + (tarifa.TUA.TUA_total | currencyFormat) }}
+                </ng-template>
+                <div class="">{{ 'vuelos.impuestos-tasas'|translate }} <span class="align-self-start"
+                        [tooltip]="impuestos"><i class="fas fa-info-circle fa-xs icono"></i></span></div>
+                <div>{{ user?.currency }} {{ sumExtras(tarifa) | currencyFormat }}</div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center" *ngIf="tarifa.TUA">
+                <!-- <ng-template #tua>
+                                    {{ tarifa.TUA.Mensaje }}
+                                </ng-template> -->
+                <div class="">
+                    {{ 'vuelos.cargos'|translate }}
+                    <!-- <span class="align-self-start" [tooltip]="tua"><i class="fas fa-info-circle fa-xs icono"></i></span> -->
+                </div>
+                <div>{{ user?.currency }} {{ tarifa.cargo | currencyFormat }}</div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-end">
+                <span class="text-3 font-weight-bold">{{ 'vuelos.total-compra'|translate }}</span>
+                <div class="text-1 text-orange font-weight-bold">
+                    <span>{{ user?.currency }} <span class="text-blue">{{ tarifa?.costoTotal |
+                            currencyFormat }}</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ! END PAYMENT DETAILS -->
+    <div class="col-md-4 mx-auto mt-4">
+        <button class="btn btn-sm btn-success" (click)="confirmarCobrarCredito()" type="button" style="font-size:14px">CONFIRMAR</button>
+    </div>
+ 
+</div>

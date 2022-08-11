@@ -1,0 +1,449 @@
+<!-- <form (ngSubmit)="searchFlights()" class="aereos__box-search" autocomplete="off"> -->
+    <form class="aereos__box-search" autocomplete="off">
+        <div class="row">
+            <!-- * TIPO DE VUELO -->
+            <div class="col-12">
+                <div class="d-inline mr-4">
+                    <label>
+                        <input type="radio" name="tipoVuelo" value="roundtrip" (change)="changeTipoVuelo($event)" [checked]="tipoVuelo == 'roundtrip'">
+                        <span class="label-text">{{ 'buscador.vuelos.vuelo-redondo'|translate }}</span>
+                    </label>
+                </div>
+                <div class="d-inline mr-4">
+                    <label>
+                        <input type="radio" name="tipoVuelo" value="single" (change)="changeTipoVuelo($event)" [checked]="tipoVuelo == 'single'">
+                        <span class="label-text">{{ 'buscador.vuelos.vuelo-sencillo'|translate }}</span>
+                    </label>
+                </div>
+                <div class="d-inline">
+                    <label>
+                        <input type="radio" name="tipoVuelo" value="multitrip" (change)="changeTipoVuelo($event)" [checked]="tipoVuelo == 'multitrip'">
+                        <span class="label-text">{{ 'buscador.vuelos.vuelo-multiple'|translate }}</span>
+                    </label>
+                </div>
+            </div>
+            <!-- ! END TIPO DE VUELO -->
+        </div>
+    
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 col-lg-10">
+                        <div>
+                            <!-- ROUNDTRIP -->
+                            <div *ngIf="tipoVuelo == 'roundtrip'">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <label class="label_search">{{ 'buscador.vuelos.origen'|translate }}</label>
+                                        <div class="input-group">
+                                            <div class="input-group">
+                                                <input class="form-control" name="origen" 
+                                                [(ngModel)]="destinosForm[0].origenLabel" 
+                                                (ngModelChange)="autocompleteAirport($event)" 
+                                                [typeahead]="destinos" 
+                                                [typeaheadMinLength]="2"
+                                                [typeaheadScrollable]="true"
+                                                [typeaheadOptionsInScrollableView]="6"
+                                                [typeaheadAsync]="true" 
+                                                [typeaheadItemTemplate]="customItemTemplateOrigen" 
+                                                (typeaheadOnSelect)="onSelectAirport($event, 'origen', 0)">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="destinosForm[0].origenError" class="invalid-feedback d-block">
+                                            {{ 'buscador.vuelos.selecciona-origen'|translate }}
+                                        </div>
+                                        <ng-template #customItemTemplateOrigen let-model="item" let-index="index">
+                                            <p class="m-0">
+                                                <i class="fas fa-plane-departure" aria-hidden="true"></i>
+                                                {{ model.ciudad + ', ' + model.pais + ' (' + model.codigo + ')' }} 
+                                            </p>
+                                            <small>{{ model.aeropuerto }}</small>
+                                        </ng-template>
+                                        <div class="" *ngIf="showOptions">
+                                            <label>
+                                                <input type="checkbox" name="" value="">
+                                                <span class="label-text label-options">{{ 'buscador.vuelos.aeropuertos'|translate }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <label class="label_search">{{ 'buscador.vuelos.destino'|translate }}</label>
+                                        <div class="input-group">
+                                            <input class="form-control" name="destino" 
+                                            [(ngModel)]="destinosForm[0].destinoLabel" 
+                                            (ngModelChange)="autocompleteAirport($event)" 
+                                            [typeahead]="destinos" 
+                                            [typeaheadMinLength]="2" 
+                                            [typeaheadScrollable]="true"
+                                            [typeaheadOptionsInScrollableView]="6"
+                                            [typeaheadAsync]="true" 
+                                            [typeaheadItemTemplate]="customItemTemplateDestino" 
+                                            (typeaheadOnSelect)="onSelectAirport($event, 'destino', 0)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="destinosForm[0].destinoError" class="invalid-feedback d-block">
+                                            {{ 'buscador.vuelos.selecciona-destino'|translate }}
+                                        </div>
+                                        <ng-template #customItemTemplateDestino let-model="item" let-index="index">
+                                            <p class="m-0">
+                                                <i class="fas fa-plane-arrival" aria-hidden="true"></i>
+                                                {{ model.ciudad + ', ' + model.pais + ' (' + model.codigo + ')' }}
+                                            </p>
+                                            <small>{{ model.aeropuerto }}</small>
+                                        </ng-template>
+                                        <div class="" *ngIf="showOptions">
+                                            <label>
+                                                <input type="checkbox" name="" value="">
+                                                <span class="label-text label-options">{{ 'buscador.vuelos.anadir-aeropuertos'|translate }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4 ">
+                                        <div class="form-group">
+                                            <div class="row justify-content-center">
+                                                <div class="col-12 col-md-6 col-lg-6 d-flex align-items-center justify-content-center">
+                                                    <div>
+                                                        <label class="label_search">{{ 'buscador.vuelos.salida'|translate }}</label>
+                                                        <div class="d-flex day-margin-top" (click)="isOpen[0] = !isOpen[0]">
+                                                            <div class="numbers-search">
+                                                                {{ this.fechas[0].dia | lpad: 2 }}
+                                                            </div>
+                                                            <div class="InOut align-self-center">
+                                                                <p class="m-0">{{ this.fechas[0].mes }}</p>
+                                                                <p class="m-0">{{ this.fechas[0].anio }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-auto">
+                                                            <input name="fecha[0]" [(ngModel)]="this.fechas[0].fecha" class="form-control noShowDP" [bsConfig]="bsConfig" [bsValue]="this.fechas[0].fecha" (bsValueChange)="onValueChange($event, 0)" bsDatepicker [isOpen]="isOpen[0]">
+                                                        </div>
+                                                        <!-- * HORARIO -->
+                                                        <div class="mt-2" *ngIf="showOptions">
+                                                            <div class="input-group">
+                                                                <input class="form-control" placeholder="Horario">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-lg-6 d-flex align-items-center justify-content-center">
+                                                    <div>
+                                                        <label class="label_search">{{ 'buscador.vuelos.regreso'|translate }}</label>
+                                                        <div class="d-flex day-margin-top" (click)="isOpen[1] = !isOpen[1]">
+                                                            <div class="numbers-search">
+                                                                {{ this.fechas[1].dia | lpad: 2 }}
+                                                            </div>
+                                                            <div class="InOut align-self-center">
+                                                                <p class="m-0">{{ this.fechas[1].mes }}</p>
+                                                                <p class="m-0">{{ this.fechas[1].anio }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-auto">
+                                                            <input name="fecha[1]" [minDate]="minDateRange" [maxDate]="maxDate" [(ngModel)]="this.fechas[1].fecha" class="form-control noShowDP" [bsConfig]="bsConfig" [bsValue]="this.fechas[1].fecha" (bsValueChange)="onValueChange($event, 1)" bsDatepicker [isOpen]="isOpen[1]">
+                                                        </div>
+                                                        <div class="mt-2" *ngIf="showOptions">
+                                                            <div class="input-group">
+                                                                <input class="form-control" placeholder="Horario">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="fechasError" class="invalid-feedback d-block">
+                                                    {{ 'buscador.vuelos.rango-fecha'|translate }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <!-- END ROUNDTRIP -->
+
+                             <!-- MULTITRIP -->
+                            <div *ngIf="tipoVuelo != 'roundtrip'">
+                                <div class="row" *ngFor="let i of (totalDestinos | range)" [ngClass]="[i > 0 && tramosHidden ? 'collapse' : '']">
+                                    <div class="col-12 mt-0 d-flex" *ngIf="tipoVuelo == 'multitrip'">
+                                        <h5 class="m-0 mr-4">{{ 'buscador.vuelos.tramo'|translate }} {{ i + 1}}</h5>
+                                        <button *ngIf="totalDestinos > 2 && i >= 2" class="btn btn-clear p-0 color-red" (click)="addRmTramo('rm', i)">
+                                            <i class="fa fa-minus-circle"></i>&nbsp; {{ 'buscador.vuelos.eliminar-tramo'|translate }}
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-md-5 col-lg-5">
+                                        <label class="label_search">{{ 'buscador.vuelos.origen'|translate }}</label>
+                                        <div class="input-group">
+                                            <input class="form-control" 
+                                            [id]="'origen_'+i" [name]="'origen_'+i" 
+                                            [(ngModel)]="destinosForm[i].origenLabel" 
+                                            (ngModelChange)="autocompleteAirport($event)" 
+                                            [typeahead]="destinos" 
+                                            [typeaheadMinLength]="2"
+                                            [typeaheadScrollable]="true"
+                                            [typeaheadOptionsInScrollableView]="6"
+                                            [typeaheadAsync]="true" 
+                                            [typeaheadItemTemplate]="customItemTemplateOrigen" 
+                                            (typeaheadOnSelect)="onSelectAirport($event, 'origen', i)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="destinosForm[i].origenError" class="invalid-feedback d-block">
+                                            {{ 'buscador.vuelos.selecciona-origen'|translate }}
+                                        </div>
+                                        <ng-template #customItemTemplateOrigen let-model="item" let-index="index">
+                                            <p class="m-0">
+                                                <i class="fas fa-plane-departure" aria-hidden="true"></i>
+                                                {{ model.ciudad + ', ' + model.pais + ' (' + model.codigo + ')' }}
+                                            </p>
+                                            <small>{{ model.aeropuerto }}</small>
+                                        </ng-template>
+                                        <div class="" *ngIf="showOptions">
+                                            <label>
+                                                <input type="checkbox" name="" value="">
+                                                <span class="label-text label-options">{{ 'buscador.vuelos.anadir-aeropuertos'|translate }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-5 col-lg-5">
+                                        <label class="label_search">{{ 'buscador.vuelos.destino'|translate }}</label>
+                                        <div class="input-group">
+                                            <input class="form-control" 
+                                            [name]="'destino'+i" 
+                                            [(ngModel)]="destinosForm[i].destinoLabel" 
+                                            (ngModelChange)="autocompleteAirport($event)" 
+                                            [typeahead]="destinos" [typeaheadMinLength]="2" 
+                                            [typeaheadScrollable]="true"
+                                            [typeaheadOptionsInScrollableView]="6"
+                                            [typeaheadAsync]="true" 
+                                            [typeaheadItemTemplate]="customItemTemplateDestino" 
+                                            (typeaheadOnSelect)="onSelectAirport($event, 'destino', i)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="destinosForm[i].destinoError" class="invalid-feedback d-block">
+                                            {{ 'buscador.vuelos.selecciona-destino'|translate }}
+                                        </div>
+                                        <ng-template #customItemTemplateDestino let-model="item" let-index="index">
+                                            <p class="m-0">
+                                                <i class="fas fa-plane-arrival" aria-hidden="true"></i>
+                                                {{ model.ciudad + ', ' + model.pais + ' (' + model.codigo + ')' }}
+                                            </p>
+                                            <small>{{ model.aeropuerto }}</small>
+                                        </ng-template>
+                                        <div class="" *ngIf="showOptions">
+                                            <label>
+                                                <input type="checkbox" name="" value="">
+                                                <span class="label-text label-options">{{ 'buscador.vuelos.anadir-aeropuertos'|translate }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-2 col-lg-2  d-flex align-items-center justify-content-center">
+                                        <div class="form-group">
+                                            <div class="row justify-content-center">
+                                                <div class="col-12 d-flex align-items-center justify-content-center">
+                                                    
+                                                    <div>
+                                                        <label class="label_search">{{ 'buscador.vuelos.salida'|translate }}</label>
+                                                        <div class="d-flex day-margin-top" (click)="isOpen[i] = !isOpen[i]">
+                                                            <div class="numbers-search">
+                                                                {{ this.fechas[i].dia | lpad: 2 }}
+                                                            </div>
+                                                            <div class="InOut align-self-center">
+                                                                <p class="m-0">{{ this.fechas[i].mes }}</p>
+                                                                <p class="m-0">{{ this.fechas[i].anio }}</p>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="m-auto">
+                                                        <input name="fecha" [(ngModel)]="this.fechas[i].fecha" class="form-control noShowDP" [value]="this.fechas[i].fecha" [bsConfig]="bsConfig"  (ngModelChange)="onValueChange($event, i)" bsDatepicker [isOpen]="isOpen[i]">
+                                                    </div>
+                                                    <div *ngIf="fechasError && this.fechas[i - 1]">
+                                                        <div *ngIf="this.fechas[i].fecha < this.fechas[i - 1].fecha" class="invalid-feedback d-block">
+                                                            {{ 'buscador.vuelos.fecha-mayor'|translate }}
+                                                        </div>
+                                                    </div>
+                                                    <!-- * HORARIO -->
+                                                    <div class="mt-2" *ngIf="showOptions">
+                                                        <div class="input-group">
+                                                            <input class="form-control" placeholder="Horario">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="row">
+                                <div class="col-12 col-md-6" *ngIf="tipoVuelo == 'multitrip'">
+                                    <div *ngIf="totalDestinos < 6">
+                                        <button class="btn btn-clear p-0 color-green" (click)="addRmTramo('add', null)">
+                                            <i class="fa fa-plus-circle"></i>&nbsp; {{ 'buscador.vuelos.anadir-tramo'|translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 text-center" *ngIf="tipoVuelo == 'multitrip'" [ngClass]="[router.url == '/vuelos' ? '' : 'd-none']">
+                                    <a href="javascript:void(0)" (click)="tramosHidden = !tramosHidden"> 
+                                        <span *ngIf="!tramosHidden">
+                                            {{ 'buscador.vuelos.ocultar-tramo'|translate }} <i class="fas fa-caret-up"></i>
+                                        </span>
+                                        <span *ngIf="tramosHidden">
+                                            {{ 'buscador.vuelos.mostrar-tramo'|translate }} <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                                <!-- <div class="col-6 col-lg-8 my-2">
+                                    <label *ngIf="showOptions">
+                                        <input type="checkbox" name="" value="">
+                                        <span class="label-text">Solamente vuelos directos</span>
+                                    </label>
+                                </div> -->
+                                <!-- <div class="col-6 my-2 col-lg-4">
+                                    <label>
+                                        <input type="checkbox" name="noDates" value="true">
+                                        <span class="label-text">Aún no he decidido la fecha</span>
+                                    </label>
+                                </div> -->
+                            </div>
+                            <!-- END MULTITRIP -->
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-1">
+                        <div class="aereos__input__passengers" [ngStyle]="{'margin-top': tipoVuelo == 'multitrip' ? '25px' : ''}">
+                            <label class="label_search">{{ 'buscador.vuelos.pasajeros'|translate }}</label>
+                            <div class="input-group">
+                                <div class="dropdown">
+                                    <button class="btn openDrop form-control" type="button" #dropdownMenuButton data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-user"></i>&nbsp;&nbsp;{{ personas.total }}
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-left px-4 py-3">
+                                        <form>
+                                            <div class="container__passengers">
+                                                <div>
+                                                    {{ 'buscador.vuelos.adultos'|translate }}
+                                                    <p class="label-options">{{ 'buscador.vuelos.desde-18'|translate }}</p>
+                                                </div>
+                                                <div (click)="addRemovePerson('adultos','rm')">
+                                                    <i class="fas fa-minus-circle"></i>
+                                                </div>
+                                                <div class="numbers-search">
+                                                    {{ personas.adultos }}
+                                                </div>
+                                                <ng-template #maxPerson>
+                                                    {{ 'buscador.vuelos.busqueda-hasta-9-personas'|translate }}
+                                                </ng-template>
+                                                <div (click)="addRemovePerson('adultos','add')" [tooltip]="maxPerson" [isDisabled]="!showMaxPerson">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <div class="container__passengers">
+                                                <div>
+                                                    {{ 'buscador.vuelos.menores'|translate }}
+                                                    <p class="label-options">{{ 'buscador.vuelos.hasta-17'|translate }}</p>
+                                                </div>
+                                                <div (click)="addRemovePerson('menores','rm')">
+                                                    <i class="fas fa-minus-circle"></i>
+                                                </div>
+                                                <div class="numbers-search">
+                                                    {{ personas.menores }}
+                                                </div>
+                                                <ng-template #menores>
+                                                    <div *ngIf="showMaxPerson"> {{ 'buscador.vuelos.busqueda-hasta-9-personas'|translate }}</div>
+                                                    <div *ngIf="showNoMenor"> {{ 'buscador.vuelos.menor-al-menos-1-adulto'|translate }}</div>
+                                                </ng-template>
+                                                <div (click)="addRemovePerson('menores','add')" [tooltip]="menores" [isDisabled]="!showNoMenor && !showMaxPerson">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="personas.edadmenores.length > 0">
+                                                <div class="dropdown-divider"></div>
+                                                <div class="container__ages" *ngFor="let menorEdad of personas.edadmenores; let i = index;">
+                                                    <div>
+                                                        <div>{{ 'buscador.vuelos.edad-menor'|translate }} {{ i + 1 }}</div>
+                                                        <p class="label-options">{{ 'buscador.vuelos.al-terminar-viaje'|translate }}</p>
+                                                    </div>
+                                                    <select class="edad-menor" [name]="'menorEdad_'+i" [(ngModel)]="personas.edadmenores[i]">
+                                                        <option [ngValue]="edad" *ngFor="let edad of edadesMenores">{{ edad }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <div class="container__passengers">
+                                                <div>
+                                                    {{ 'buscador.vuelos.infantes'|translate }}
+                                                    <p class="label-options">{{ 'buscador.vuelos.de-0-a-2-edad'|translate }}</p>
+                                                </div>
+                                                <div (click)="addRemovePerson('infantes','rm')">
+                                                    <i class="fas fa-minus-circle"></i>
+                                                </div>
+                                                <div class="numbers-search">
+                                                    {{ personas.infantes }}
+                                                </div>
+                                                <ng-template #noInfant>
+                                                    <div *ngIf="showMaxPerson">{{ 'buscador.vuelos.busqueda-hasta-9-personas'|translate }}</div>
+                                                    <div *ngIf="showNoInfant">{{ 'buscador.vuelos.infante-al-menos-1-adulto'|translate }}</div>
+                                                </ng-template>
+                                                <div (click)="addRemovePerson('infantes','add')" [tooltip]="noInfant" [isDisabled]="!showNoInfant && !showMaxPerson">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="personas.edadinfantes.length > 0">
+                                                <div class="dropdown-divider"></div>
+                                                <div class="container__ages" *ngFor="let infanteEdad of personas.edadinfantes; let i = index;">
+                                                    <div>
+                                                        <div>{{ 'buscador.vuelos.edad-infante'|translate }} {{ i + 1 }}</div>
+                                                        <p class="label-options">{{ 'buscador.vuelos.al-terminar-viaje'|translate }}</p>
+                                                    </div>
+                                                    <select class="edad-menor" [name]="'infanteEdad_'+i" [(ngModel)]="personas.edadinfantes[i]">
+                                                        <option [ngValue]="edad" *ngFor="let edad of edadesInfantes">{{ edad }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                <!-- <select class="form-control" name="clase" [(ngModel)]="aereosForm.clase">
+                                    <option value="Clase economica" selected>Clase económica</option>
+                                    <option value="Premium economy">Premium economy</option>
+                                    <option value="Ejecutiva business">Ejecutiva business</option>
+                                    <option value="Primera clase">Primera clase</option>
+                                </select> -->
+                            </div>
+                        </div>
+                        <div *ngIf="personas.error" class="invalid-feedback d-block">
+                            {{ 'buscador.vuelos.ingrese-minimo-adulto'|translate }}
+                        </div>
+                        <!-- <button class="btn btn-clear p-0 my-2" (click)="showOptions = !showOptions">
+                            <span *ngIf="!showOptions"><i class="fa fa-plus-circle"></i>&nbsp; Más opciones </span>
+                            <span *ngIf="showOptions"><i class="fa fa-minus-circle"></i>&nbsp; Menos opciones </span>
+                        </button> -->
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-1" [ngStyle]="{'margin-top': tipoVuelo == 'multitrip' ? '68px' : '30px'}">
+                        <button class="btn btn-danger btn-block" type="submit" (click)="searchFlights()">
+                            <div *ngIf="!submitted">
+                                <i class="fa fa-search"></i> <span class="d-md-none">&nbsp; {{ 'buscador.vuelos.buscar'|translate }}</span>
+                            </div>
+                            <div *ngIf="submitted">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>

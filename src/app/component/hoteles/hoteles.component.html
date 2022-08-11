@@ -1,0 +1,990 @@
+<div class="body-cotizador">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 px-0">
+				<app-links></app-links>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<app-buscador-hotel (itemsBusqueda)="busquedahotel($event)"></app-buscador-hotel>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container mt-4 max-container">
+
+	<div class="row">
+
+		<div class="col-md-4 col-lg-3">
+			<div class="filtros">
+				<div class="bg-filtro mb-3">
+					<h5 class="text-center text-white">{{ 'hotel.filtros'|translate }}</h5>
+					<div class="row">
+						<div class="col-12">
+							<div class="form-group">
+								<label>{{ 'hotel.nombre-hotel'|translate }}</label>
+								<div class="input-group">
+									<input [(ngModel)]="filhotel" (ngModelChange)="onHotelChange($event)" type="text"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label for="destinoHotel">{{ 'hotel.planes-disponibles'|translate }}</label>
+								<button class="btn btn-light form-control filtro-plan-cat" type="button"
+									(click)="camposfiltros(arrplanes,1)">{{ 'hotel.planes'|translate }}</button>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label for="destinoHotel">{{ 'hotel.categorias-disponibles'|translate }}</label>
+								<button class="btn btn-light form-control filtro-plan-cat" type="button"
+									(click)="camposfiltros(arrcategoria,2)">{{ 'hotel.categorias'|translate }}</button>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label for="destinoHotel">{{ 'hotel.ordenar-busqueda'|translate }}</label>
+								<select [(ngModel)]="filorder" (change)="onSubmit($event.target.value, 'price')"
+									class="form-control">
+									<option value="PRICE_ASC">{{ 'hotel.precio-menor-mayor'|translate }}</option>
+									<option value="PRICE_DESC">{{ 'hotel.precio-mayor-menor'|translate }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-12">
+							<label>{{ 'hotel.tipo-reserva'|translate }}</label>
+							<div class="check-tipo-res">
+								<div class="mr-2">
+									<label class="text-center">
+										<input type="radio" name="brokers" [(ngModel)]="filterBrokers"
+											(ngModelChange)="onSubmit($event, 'broker')" [value]='1'>
+										<span class="label-text">{{ 'hotel.todos'|translate }}</span>
+									</label>
+								</div>
+								<div class="mr-2">
+									<label class="text-center">
+										<input type="radio" name="brokers" [(ngModel)]="filterBrokers"
+											(ngModelChange)="onSubmit($event, 'broker')" [value]='2'>
+										<span class="label-text">{{ 'hotel.confirmadas'|translate }}</span>
+									</label>
+								</div>
+								<div class="">
+									<label class="text-center">
+										<input type="radio" name="brokers" [(ngModel)]="filterBrokers"
+											(ngModelChange)="onSubmit($event, 'broker')" [value]='3'>
+										<span class="label-text">{{ 'hotel.producto-propio'|translate }}</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="tags.length!=0" class="editor-tag">
+					<span>{{ 'hotel.filtros-aplicados'|translate }}</span>
+					<div>
+						<span class="tag-item" *ngFor="let tag of tags">
+							{{tag.nombre}}
+							<span class="remove-tag" (click)="removeTags(tag)">×</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-8 col-lg-9" *ngIf='mensajeshow'>
+			<div class="alert alert-danger text-center" role="alert">
+				{{mensaje}}
+			</div>
+		</div>
+
+		<div class="col-12 col-md-8 col-lg-9" *ngIf="resultadosshow">
+			<!-- Paginacion -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-center" *ngIf='resultadosshow'>
+					<pagination class="center-pagination" [boundaryLinks]="true" [(ngModel)]="currentPage"
+						[totalItems]="totalResultados" [itemsPerPage]="20" [rotate]="true" [maxSize]="maxSize"
+						[customFirstTemplate]="firstTemplate" [customLastTemplate]="lastTemplate"
+						[customPreviousTemplate]="prevTemplate" [customNextTemplate]="nextTemplate"
+						(click)="goToPage(resulthotel,currentPage)">
+					</pagination>
+
+					<ng-template #nextTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<ng-container>
+							<i class="fas fa-angle-right"></i>
+						</ng-container>
+					</ng-template>
+
+					<ng-template #prevTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<ng-container>
+							<i class="fas fa-angle-left"></i>
+						</ng-container>
+					</ng-template>
+
+					<ng-template #lastTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<i class="fas fa-angle-double-right"></i>
+					</ng-template>
+
+					<ng-template #firstTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<i class="fas fa-angle-double-left"></i>
+					</ng-template>
+				</div>
+			</div>
+			<!-- fin Paginacion -->
+
+			<div class="col-12 text-right" *ngIf="totalResultados > 0">
+				<h5> <span class="numResults">{{ totalResultados }}</span> <span
+						*ngIf="totalResultados >1	|| totalResultados == 0 "> {{ 'hotel.encontrados'|translate }}</span>
+					<span *ngIf="totalResultados == 1"> {{ 'hotel.encontrado'|translate }}</span> </h5>
+			</div>
+
+			<div class="row">
+				<div class="col-12 pb-3" *ngFor="let h of arrDestacados | slice:0:limitResult; let ih = index">
+					<div class="card-white-img" style="border-color: #049df7 !important; border: solid;">
+						<div style="display: flow-root;">
+							<button class="btn btn-warning btn-shadown mb-2" type="button"
+								style="cursor: auto; float: right;">
+								<i class="fa fa-star"></i> {{ 'hotel.hotel-destacado'|translate }}
+							</button>
+						</div>
+						<div class="col-12 img-hotel">
+							<div class="row">
+								<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 p-0">
+									<div class="img-hotel p-0"
+										[ngStyle]="{'background-image': 'url(' + h.datoshotel.url_img + ')' }"></div>
+									<div class="promoImg" *ngIf="h.datoshotel.promo==1">
+										<a href="javascript:void(0)">
+											<img src="{{h.datoshotel.urlpromo}}">
+										</a>
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-9 col-sm-12 info-hotel">
+									<div class="row">
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<h5 class="text-uppercase pr-2 nomb-hotel"
+												(click)="getInfoHotel(h.datoshotel.brokers,'',0)">
+												{{h.datoshotel.nombre}}</h5>
+											<div class="flex">
+												<div class="d-inline"
+													[innerHTML]="h.datoshotel.categoria.idCategoria | ratingHotel ">
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-12 col-lg-12 col-md-12 pb-2">
+											<p class="d-inline addres-hotel"><span><i class="fas fa-map-marker-alt"
+														*ngIf="h.datoshotel.direccion != ''"></i></span>{{h.datoshotel.direccion}}
+											</p>
+										</div>
+										<div class="col-12" *ngIf="h.datoshotel.descripcion">
+											<div
+												*ngIf="checkDescripcionLength(h.datoshotel.descripcion | truncateHtml)">
+												<app-read-more-less [isReadMore]="isReadMore">
+													{{ checkDescripcionHotelLength(h.datoshotel.descripcion |
+													truncateHtml) }}
+												</app-read-more-less>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div
+									class="col-12 col-md-3 col-xl-3 col-lg-3 detalle-costo-hotel d-flex flex-column align-items-center">
+									<div [innerHTML]="mejorprecioBroker(h)"></div>
+									<div style="margin-right: -10px;">
+										<small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="row pb-2" *ngFor="let r of filterRoom(h.rooms); let i = index; let last = last"
+								[ngClass]="[i > 1 ? 'collapse  '+ih+'-room' : '']">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pb-3 room-div"
+									[ngClass]="{ first: first, last: last }">
+									<div class="row">
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div class="row">
+												<div
+													class="col-xl-2 col-lg-2 col-md-12 col-sm-12 rooms-disponibles text-center align-self-center">
+													<ul class="list-inline ocupancy-grafico my-0"
+														*ngFor="let oc of r.tarifas.detalles">
+														<li class="list-inline-item">
+															<i class="fas fa-male adults"></i>
+															<i class="fas fa-female adults"></i>
+															<span class="align-middle">x{{oc.adultos}}</span>
+														</li>
+														<li class="list-inline-item">
+															<i class="fas fa-child child"></i>
+															<span class="align-middle"
+																*ngIf="oc.menores">x{{oc.menores.length}}</span>
+															<span class="align-middle" *ngIf="!oc.menores">x0</span>
+														</li>
+													</ul>
+												</div>
+												<div class="col-xl-7 col-lg-7 col-md-9 col-sm-12 px-0 room-info">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 py-1">
+															<h5 class="text-uppercase pr-lg-2 d-lg-inline"
+																[innerHTML]="r.datosroom.nombre"></h5>
+															<div *ngIf="h.datoshotel.status.id=='PP'">
+																<div *ngIf="r.status == 'OR' ;else compartido">
+																	<span class="tag-status pendi">{{
+																		'hotel.sujeto-disponibilidad'|translate
+																		}}</span>
+																</div>
+																<ng-template #compartido>
+																	<span class="tag-status"
+																		[ngClass]="(r.idBroker != 'OMBE' && r.idBroker != 'DING' && r.idBroker != idOpe)? 'compartido': 'confirm'">{{
+																		'hotel.confirmada'|translate }}</span>
+																</ng-template>
+															</div>
+															<div *ngIf="h.datoshotel.status.id!='PP'">
+																<span class="tag-status">{{ 'hotel.confirmada'|translate
+																	}}</span>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+															<h5 class="room-planalimento text-uppercase">
+																{{r.datosplan.plan}}</h5>
+														</div>
+														<div class="col-12" *ngIf="r.datosroom.descripcion">
+															<div
+																*ngIf="checkDescripcionLength(r.datosroom.descripcion)">
+																<app-read-more-less [isReadMore]="isReadMore">
+																	<span
+																		[innerHTML]="r.datosroom.descripcion | truncateHtml"></span>
+																</app-read-more-less>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+															<a class="politicas-cancelacion btn btn-sm mr-lg-3 mr-sm-2 mx-1"
+																(click)="getFechaLimite(r)">{{
+																'hotel.politicas-cancelacion'|translate }}</a>
+															<a href="#detalleTarifa-{{ r.idHotel+i }}"
+																class="detalle-tarifa btn btn-sm mr-lg-3 mr-sm-2 mx-1"
+																(click)="getdetalles(r,h.fechas)"
+																data-toggle="collapse">{{
+																'hotel.detalles-tarifa'|translate }}</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-3 col-lg-3 col-md-3 detalle-costo-room">
+													<p class="text-precio-room">{{ 'hotel.total-estancia'|translate
+														:{output:rnumnoches} }}</p>
+													<h4><span>{{user.currency}}</span> {{
+														calculateTDC(r.tarifas.total,r.tarifas.divisa.tasa_cambio,r.tarifas.divisa.currency,0)
+														| currencyFormat }}</h4>
+
+													<div>
+														<small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+													</div>
+													<div class="row">
+
+														<div class="col-xl-6 col-lg-6 col-md-6 col-4 pr-lg-1 pr-md-1">
+															<button class="btn btn-blue btn-sm btn-block"
+																*ngIf='permisosreservar==1'
+																(click)="reservaModal(h.datoshotel,h.fechas,r)">
+																{{ 'hotel.reservar'|translate }} <div hidden
+																	id="spin-{{r.idHotel}}-{{r.datosroom.idRoom}}"
+																	style="display: contents;"><i
+																		class="fa fa-spinner fa-spin"></i></div>
+															</button>
+														</div>
+														<div class="col-xl-6 col-lg-6 col-md-6 col-8 pl-lg-1 pl-md-1">
+															<button class="btn btn-green btn-sm btn-block"
+																*ngIf='permisoscotizar==1'
+																(click)="cotizar(h.datoshotel,h.fechas,r)">{{
+																'hotel.cotizar'|translate }}</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tarifa-dia collapse"
+												id="detalleTarifa-{{ r.idHotel+i }}">
+												<div class="row">
+													<div
+														class="col-xl-6 offset-xl-3 col-lg-6 offset-lg-3 col-md-12 col-sm-12 col-12">
+														<div class="table-responsive">
+															<table class="table table-sm text-center">
+																<thead>
+																	<tr>
+																		<th scope="col"
+																			*ngFor="let s of ctrlHoteles.semanas">{{
+																			s.fecha }}</th>
+																	</tr>
+																</thead>
+																<tbody *ngIf="!r.detalle">
+																	<tr>
+																		<td colspan="7">
+																			<i class="fa fa-spinner fa-spin"></i>
+																		</td>
+																	</tr>
+																</tbody>
+																<tbody *ngIf="r.detalle">
+																	<tr *ngFor="let semana of r.semanas">
+																		<td
+																			*ngFor="let dia of semana; let $index = index">
+																			<div
+																				*ngIf="(dia.sintarifa==1 || dia.abierta==0 || dia.allotmentDisponible==0 || dia.cubreminimonoches==0 ) && dia.calcula==1">
+																				<a
+																					uib-popover-html="toolNoDisponible(r.datosroom.nombre,room.datosplan.plan,dia)">
+																					x </a>
+																			</div>
+																			<div
+																				*ngIf="dia.sintarifa==0 && dia.abierta==1 && dia.allotmentDisponible==1 && dia.cubreminimonoches==1 &&  dia.calcula==1">
+																				<div *ngIf="dia.importesxdia.totalregular>0 && dia.importesxdia.totalpromocion>0 && dia.cumplentarifas==1"
+																					class="tachado">
+																					{{ dia.importesxdia.totalregular |
+																					currencyFormat}}
+																				</div>
+																				<div>
+																					<ng-template #popTemplate>
+																						<div
+																							[innerHtml]="toolHtml(h.datoshotel.nombre,r.datosroom.nombre,r.datosplan.plan,dia,r.idBroker)">
+																						</div>
+																					</ng-template>
+																					<a [ngbPopover]="popTemplate"
+																						placement="bottom">
+																						<span
+																							*ngIf="dia.cumplentarifas==1">{{
+																							dia.importesxdia.totalxdia |
+																							currencyFormat }}</span>
+																						<span
+																							*ngIf="dia.cumplentarifas==0">
+																							x </span>
+																					</a>
+																				</div>
+																			</div>
+																			<div *ngIf=" dia.calcula==0">
+																				<span *ngIf=" dia.checkout!=1">-
+																					-</span>
+																				<span *ngIf=" dia.checkout==1"
+																					class="cblue fs-9">
+																					<div>
+																						{{ 'hotel.check-out'|translate
+																						}}
+																					</div>
+																					<div>
+																						{{ h.datoshotel.checkout }}
+																					</div>
+																				</span>
+																			</div>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row" *ngIf="h.rooms.length >= 3">
+								<div class="col-11 text-center">
+									<a *ngIf="h.limitRooms < h.rooms.length" href="Javascript:void(0);"
+										(click)="isOpen('destVM-',ih, h.hotel.code, h.hotel.broker, ih )"><b
+											id="destVM-{{ ih }}">{{btn_ver}}</b></a>
+									<a *ngIf="h.limitRooms > h.rooms.length" href="Javascript:void(0);"
+										(click)="vermenos(ih)"><b id="destVM-{{ ih }}">Ver menos</b></a>
+								</div>
+								<div class="col-1" *ngIf="h.limitRooms > 3 && h.limitRooms < h.rooms.length">
+									<button class="btn border-0" (click)="vermenos(ih)"><i
+											class="fa fa-chevron-up text-primary" aria-hidden="true"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div (window:scroll)="loadMore($event)">
+				<div class="pb-3" *ngFor="let h of arrHotels | slice:0:limitResult; let ih = index">
+					<div *ngIf="h.datoshotel" class="card-white-img"
+						id="hotel-{{h.datoshotel.idHotel}}-{{h.datoshotel.idBroker}}">
+						<div class="col-12 img-hotel">
+							<div class="row">
+								<div class="col-lg-4 col-sm-12 p-0">
+									<div class="img-hotel p-0"
+										[ngStyle]="{'background-image': 'url(' + h.datoshotel.url_img + ' ), url(/https://azabachetour.com/img/assets/noimage.jpg)'}">
+									</div>
+								</div>
+								<div class="promoImg" *ngIf="h.datoshotel.promo==1">
+									<a href="javascript:void(0)">
+										<img src="{{h.datoshotel.urlpromo}}">
+									</a>
+								</div>
+								<div class="col-lg-5 col-sm-12 info-hotel">
+									<div class="row">
+										<div class="col-12">
+											<h5 class="text-uppercase mb-0 pr-2 nomb-hotel"
+												(click)="getInfoHotel(h.datoshotel.brokers,'',0)">
+												{{h.datoshotel.nombre}}</h5>
+											<div class="d-inline"
+												[innerHTML]="h.datoshotel.categoria.idCategoria | ratingHotel"></div>
+											<span class="tag-status"
+												*ngIf="h.datoshotel.status.id=='PP' && permisosbroker==1">{{
+												'hotel.producto-propio'|translate }}</span>
+											<span class="tag-status"
+												*ngIf="h.datoshotel.status.id!='PP' && permisosbroker==1">{{
+												'hotel.online'|translate }}</span>
+										</div>
+										<div class="col-12 pb-2"> <span class="tag-status d-inline"
+												*ngIf='permisosbroker==1'>{{h.datoshotel.desc_broker}}</span>
+											<p class="d-inline addres-hotel">
+												<span>
+													<i class="fas fa-map-marker-alt"
+														*ngIf="h.datoshotel.direccion != ''"></i>
+												</span>
+												{{h.datoshotel.direccion}}
+											</p>
+										</div>
+										<div class="col-12" *ngIf="h.datoshotel.descripcion">
+											<div
+												*ngIf="checkDescripcionHotelLength(h.datoshotel.descripcion | truncateHtml)">
+												<app-read-more-less [isReadMore]="isReadMore">
+													{{ checkDescripcionHotelLength(h.datoshotel.descripcion |
+													truncateHtml) }}
+												</app-read-more-less>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3 col-12 detalle-costo-hotel">
+									<div class="row" [innerHTML]="mejorprecioBroker(h)"></div>
+									<div style="margin-right: -10px;">
+										<small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+									</div>
+								</div>
+							</div>
+							<hr>
+
+							<div class="row pb-2" *ngFor="let r of h.rooms | slice:0:5; let i = index; let last = last"
+								[ngClass]="[i > 1 ? 'collapse  '+ih+'-room' : '']">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pb-3 room-div"
+									[ngClass]="{ first: first, last: last }">
+									<div class="row">
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div class="row">
+												<div
+													class="col-xl-2 col-lg-2 col-md-12 col-sm-12 rooms-disponibles text-center align-self-center">
+													<ul class="list-inline ocupancy-grafico my-0"
+														*ngFor="let oc of r.tarifas.detalles">
+														<li class="list-inline-item">
+															<i class="fas fa-male adults"></i> <i
+																class="fas fa-female adults"></i><span
+																class="align-middle">x{{oc.adultos}}</span>
+														</li>
+														<li class="list-inline-item">
+															<i class="fas fa-child child"></i>
+															<span class="align-middle"
+																*ngIf="oc.menores">x{{oc.menores.length}}</span>
+															<span class="align-middle" *ngIf="!oc.menores">x0</span>
+														</li>
+													</ul>
+												</div>
+												<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 px-0 room-info">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 py-1">
+															<h5 class="text-uppercase pr-lg-2 d-lg-inline"
+																[innerHTML]="r.datosroom.nombre"></h5>
+															<div *ngIf="h.datoshotel.status.id=='PP'">
+																<div *ngIf="r.status == 'OR' ;else compartido">
+																	<span class="tag-status pendi">{{
+																		'hotel.sujeto-disponibilidad'|translate
+																		}}</span>
+																</div>
+																<ng-template #compartido>
+																	<span class="tag-status"
+																		[ngClass]="(r.idBroker != 'OMBE' && r.idBroker != 'DING' && r.idBroker != idOpe)? 'compartido': 'confirm'">Confirmada</span>
+																</ng-template>
+															</div>
+															<div *ngIf="h.datoshotel.status.id!='PP'">
+																<span class="tag-status">{{ 'hotel.confirmada'|translate
+																	}}</span>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+															<h5 class="room-planalimento text-uppercase">
+																{{r.datosplan.plan}}</h5>
+														</div>
+														<div class="col-12" *ngIf="r.datosroom.descripcion">
+															<div
+																*ngIf="checkDescripcionLength(r.datosroom.descripcion)">
+																<app-read-more-less [isReadMore]="isReadMore">
+																	<span
+																		[innerHTML]="r.datosroom.descripcion | truncateHtml"></span>
+																</app-read-more-less>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+															<a class="politicas-cancelacion btn btn-sm mr-lg-3 mr-sm-3 mx-1"
+																(click)="getFechaLimite(r)">{{
+																'hotel.politicas-cancelacion'|translate }}</a>
+															<a href="#detalleTarifa-{{ r.idHotel+i }}"
+																class="detalle-tarifa btn btn-sm mr-lg-3 mr-sm-3 mx-1"
+																(click)="getdetalles(r,h.fechas)"
+																data-toggle="collapse">{{
+																'hotel.detalles-tarifa'|translate }}</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-3 col-lg-3 col-md-12 detalle-costo-room">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12">
+															<p class="text-precio-room">{{
+																'hotel.total-estancia'|translate :{output:rnumnoches} }}
+															</p>
+
+															<h4>
+																<span>{{user.currency}}</span> {{
+																calculateTDC(r.tarifas.total,r.tarifas.divisa.tasa_cambio,r.tarifas.divisa.currency,
+																0) | currencyFormat }}
+															</h4> <!-- aplicar filtro TDC -->
+															<div>
+																<small>{{ 'vuelos.impuestos-incluidos'|translate
+																	}}</small>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 mt-auto">
+															<div class="row">
+																<div
+																	class="col-xl-6 col-lg-6 col-md-6 col-4 pr-lg-1 pr-md-1">
+																	<button class="btn btn-blue btn-sm btn-block"
+																		*ngIf='permisosreservar==1'
+																		(click)="reservaModal(h.datoshotel,h.fechas,r)">
+																		{{ 'hotel.reservar'|translate }} <div hidden
+																			id="spin-{{r.idHotel}}-{{r.datosroom.idRoom}}"
+																			style="display: contents;"><i
+																				class="fa fa-spinner fa-spin"></i></div>
+																	</button>
+																</div>
+																<div
+																	class="col-xl-6 col-lg-6 col-md-6 col-8 pl-lg-1 pl-md-1">
+																	<button class="btn btn-green btn-sm btn-block"
+																		*ngIf='permisoscotizar==1'
+																		(click)="cotizar(h.datoshotel,h.fechas,r)">{{
+																		'hotel.cotizar'|translate }}</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- <div *ngIf="r.detalle"> -->
+											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tarifa-dia collapse"
+												id="detalleTarifa-{{ r.idHotel+i }}">
+												<div class="row">
+													<div
+														class="col-xl-6 offset-xl-3 col-lg-6 offset-lg-3 col-md-12 col-sm-12 col-12">
+														<div class="table-responsive">
+															<table class="table table-sm text-center">
+																<thead>
+																	<tr>
+																		<th scope="col"
+																			*ngFor="let s of ctrlHoteles.semanas">{{
+																			s.fecha }}</th>
+																	</tr>
+																</thead>
+																<tbody *ngIf="!r.detalle">
+																	<tr>
+																		<td colspan="7">
+																			<i class="fa fa-spinner fa-spin"></i>
+																		</td>
+																	</tr>
+																</tbody>
+																<tbody *ngIf="r.detalle">
+																	<tr *ngFor="let semana of r.semanas">
+																		<td
+																			*ngFor="let dia of semana; let $index = index">
+																			<div
+																				*ngIf="(dia.sintarifa==1 || dia.abierta==0 || dia.allotmentDisponible==0 || dia.cubreminimonoches==0 ) && dia.calcula==1">
+																				<a
+																					uib-popover-html="toolNoDisponible(r.datosroom.nombre,room.datosplan.plan,dia)">
+																					x </a>
+																			</div>
+																			<div
+																				*ngIf="dia.sintarifa==0 && dia.abierta==1 && dia.allotmentDisponible==1 && dia.cubreminimonoches==1 &&  dia.calcula==1">
+																				<div *ngIf="dia.importesxdia.totalregular>0 && dia.importesxdia.totalpromocion>0 && dia.cumplentarifas==1"
+																					class="tachado">
+																					<span>{{user.currency}} </span>{{
+																					calculateTDC(dia.importesxdia.totalregular,r.tarifas.divisa.tasa_cambio)
+																					| currencyFormat}}
+																				</div>
+																				<div>
+																					<ng-template #popTemplate>
+																						<div
+																							[innerHtml]="toolHtml(h.datoshotel.nombre,r.datosroom.nombre,r.datosplan.plan,dia,r.idBroker)">
+																						</div>
+																					</ng-template>
+																					<a [ngbPopover]="popTemplate"
+																						placement="auto">
+																						<span
+																							*ngIf="dia.cumplentarifas==1"><span>{{user.currency}}
+																							</span>{{calculateTDC(dia.importesxdia.totalxdia,r.tarifas.divisa.tasa_cambio)
+																							| currencyFormat }}</span>
+																						<span
+																							*ngIf="dia.cumplentarifas==0">
+																							x </span>
+																					</a>
+																				</div>
+																			</div>
+																			<div *ngIf=" dia.calcula==0">
+																				<span *ngIf=" dia.checkout!=1">--</span>
+																				<span *ngIf=" dia.checkout==1"
+																					class="cblue fs-9">
+																					<div> {{ 'hotel.check-out'|translate
+																						}} </div>
+																					<div>{{ h.datoshotel.checkout }}
+																					</div>
+																				</span>
+																			</div>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- </div> -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- </div> -->
+							
+							<div class="row" *ngIf="h.rooms.length >= 3">
+								<div class="col-11 text-center">
+									<a *ngIf="h.limitRooms < h.rooms.length" href="Javascript:void(0);"
+										(click)="isOpen('hotelVM-',ih, h.hotel.code, h.hotel.broker, ih )"><b
+											id="hotelVM-{{ ih }}">{{btn_ver}}</b></a>
+									<a *ngIf="h.limitRooms > h.rooms.length" href="Javascript:void(0);"
+										(click)="vermenos(ih)"><b id="hotelVM-{{ ih }}">Ver menos</b></a>
+								</div>
+								<div class="col-1" *ngIf="h.limitRooms > 3 && h.limitRooms < h.rooms.length">
+									<button class="btn border-0" (click)="vermenos(ih)"><i
+											class="fa fa-chevron-up text-primary" aria-hidden="true"></i></button>
+								</div>
+							</div>
+							
+							<!-- end hotel -->
+						</div>
+					</div>
+					<!-- end card-result -->
+					<!-- inicio unificacionv2 -->
+					<div *ngIf="h.uuid" class="card-white-img" id="hotel-{{h.hotel.code}}-{{h.hotel.broker}}">
+						<div class="col-12 img-hotel">
+							<div class="row">
+								<div class="col-lg-4 col-sm-12 p-0">
+									<div class="img-hotel p-0"
+										[ngStyle]="{'background-image': 'url(' + h.hotel.url_img + ' ), url(https://azabachetour.com/img/assets/noimage.jpg)'}">
+									</div>
+									<!-- <img src="{{h.hotel.url_img}}" alt="{{h.hotel.name}}" class="img-fluid-hotel" onerror="this.src='/https://azabachetour.com/img/assets/noimage.jpg';"> -->
+								</div>
+								<div class="promoImg" *ngIf="h.hotel.promo==1">
+									<a href="javascript:void(0)">
+										<img src="{{h.hotel.urlpromo}}">
+									</a>
+								</div>
+								<div class="col-lg-5 col-sm-12 info-hotel">
+									<div class="row">
+										<div class="col-12">
+											<h5 class="text-uppercase mb-0 pr-2 nomb-hotel"
+												(click)="getInfoHotel(h.hotel.broker,h.hotel.code,1)">{{h.hotel.name}}
+											</h5>
+											<div class="d-inline" [innerHTML]="h.hotel.category.id | ratingHotel"></div>
+											<span class="tag-status"
+												*ngIf="h.hotel.status.id=='PP' && permisosbroker==1">{{
+												'hotel.producto-propio'|translate }}</span>
+											<span class="tag-status"
+												*ngIf="h.hotel.status.id!='PP' && permisosbroker==1">{{
+												'hotel.online'|translate }}</span>
+										</div>
+										<div class="col-12 pb-2">
+											<span class="tag-status d-inline"
+												*ngIf='permisosbroker==1'>{{h.hotel.broker_name}}</span>
+											<!-- <span class="tag-status d-inline">{{h.hotel.desc_broker}}</span> -->
+											<p class="d-inline addres-hotel"><span><i class="fas fa-map-marker-alt"
+														*ngIf="h.hotel.address != ''"></i> </span>{{h.hotel.address}}
+											</p>
+										</div>
+										<div class="col-12" *ngIf="h.hotel?.description">
+											<div
+												*ngIf="checkDescripcionHotelLength(h.hotel.description | truncateHtml)">
+												<app-read-more-less [isReadMore]="isReadMore">
+													{{ checkDescripcionHotelLength(h.hotel.description | truncateHtml)}}
+												</app-read-more-less>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3 col-12 detalle-costo-hotel">
+									<div class="row" [innerHTML]="mejorprecioBroker(h)"></div>
+									<div style="margin-right: -10px;">
+										<small>{{ 'vuelos.impuestos-incluidos'|translate }}</small>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<!-- habitacion1 -->
+							<div class="row pb-2"
+								*ngFor="let r of h.rooms| slice:0:h.limitRooms; let i = index; let last = last"
+								[ngClass]="[i > 1 ? '  '+ih+'-room' : '']">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pb-3 room-div"
+									[ngClass]="{ first: first, last: last }">
+									<div class="row">
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div class="row">
+												<div
+													class="col-xl-2 col-lg-2 col-md-12 col-sm-12 rooms-disponibles text-center align-self-center">
+													<ul class="list-inline ocupancy-grafico my-0"
+														*ngFor="let oc of r.rates.occupancies">
+														<li class="list-inline-item">
+															<i class="fas fa-male adults"></i>
+															<i class="fas fa-female adults"></i>
+															<span class="align-middle">x{{oc.occupancy.adults}}</span>
+														</li>
+														<li class="list-inline-item">
+															<i class="fas fa-child child"></i>
+															<span class="align-middle"
+																*ngIf="oc.occupancy.childs.length != 0">x{{oc.occupancy.childs.length}}</span>
+															<span class="align-middle"
+																*ngIf="oc.occupancy.childs.length == 0">x0</span>
+														</li>
+													</ul>
+												</div>
+												<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 px-0 room-info">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 py-1">
+															<h5 class="text-uppercase pr-lg-2 d-lg-inline"
+																[innerHTML]="r.info.name"></h5>
+															<div *ngIf="h.hotel.status.id=='PP'">
+																<div
+																	*ngIf="idOpe == 'AZAMID' || idOpe == 'AZAMX' || idOpe == 'AZAMTY' ;else compartido">
+																	<span class="tag-status confirm"
+																		*ngIf="r.status=='CO'">{{
+																		'hotel.confirmada'|translate }}</span>
+																	<span class="tag-status pendi"
+																		*ngIf="r.status=='OR'">{{
+																		'hotel.sujeto-disponibilidad'|translate
+																		}}</span>
+																</div>
+																<ng-template #compartido>
+																	<span class="tag-status compartido">{{
+																		'hotel.confirmada'|translate }}</span>
+																</ng-template>
+															</div>
+															<div *ngIf="h.hotel.status.id!='PP'">
+																<span class="tag-status">{{ 'hotel.confirmada'|translate
+																	}}</span>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+															<h5 class="room-planalimento text-uppercase">
+																{{r.mealplan.name}}</h5>
+														</div>
+														<div class="col-12" *ngIf="r.info.description">
+															<div *ngIf="checkDescripcionLength(r.info.description)">
+																<app-read-more-less [isReadMore]="isReadMore">
+																	<span
+																		[innerHTML]="r.info.description | truncateHtml"></span>
+																</app-read-more-less>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+															<a class="politicas-cancelacion btn btn-sm mr-lg-3 mr-sm-3 mx-1"
+																(click)="getFechaLimiteUnificado(r)">
+																{{ 'hotel.politicas-cancelacion'|translate }}
+															</a>
+															<a href="#detalleTarifa-{{ h.hotel.code+i }}"
+																class="detalle-tarifa btn btn-sm mr-lg-3 mr-sm-3 mx-1"
+																(click)="getdetallesUnificado(r,h.hotel.broker)"
+																data-toggle="collapse">Detalles de tarifa</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-3 col-lg-3 col-md-12 detalle-costo-room">
+													<div class="row">
+
+														<!-- <div *ngIf="currencyA == 'USD'">
+															<p>USD</p>
+														</div> -->
+
+
+														<div class="col-xl-12 col-lg-12 col-md-12">
+															<p class="text-precio-room">{{
+																'hotel.total-estancia'|translate :{output:rnumnoches} }}
+															</p>
+															<h4><span>{{user.currency}}</span> {{
+																calculateTDC(r.rates.rate.public,r.rates.rate.exchange.exchange_rate,null,1)
+																| currencyFormat }}</h4> <!-- aplicar filtro TDC -->
+															<div>
+																<small>{{ 'vuelos.impuestos-incluidos'|translate
+																	}}</small>
+															</div>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 mt-auto">
+															<div class="row">
+																<div
+																	class="col-xl-6 col-lg-6 col-md-6 col-4 pr-lg-1 pr-md-1">
+																	<button class="btn btn-blue btn-sm btn-block"
+																		*ngIf='permisosreservar==1'
+																		(click)="reservaModal(h.hotel,fechas,r)">
+																		{{ 'hotel.reservar'|translate }} <div
+																			*ngIf='index==h.hotel.code+"-"+r.info.id && loading'
+																			style="display: contents;"><i
+																				class="fa fa-spinner fa-spin"></i></div>
+																	</button>
+																</div>
+																<div
+																	class="col-xl-6 col-lg-6 col-md-6 col-8 pl-lg-1 pl-md-1">
+																	<button class="btn btn-green btn-sm btn-block"
+																		*ngIf='permisoscotizar==1'
+																		(click)="cotizar(h.hotel,'',r)">{{
+																		'hotel.cotizar'|translate }}</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- <div *ngIf="r.detalle"> -->
+											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 tarifa-dia collapse"
+												id="detalleTarifa-{{ h.hotel.code+i }}">
+												<div class="row">
+													<div
+														class="col-xl-6 offset-xl-3 col-lg-6 offset-lg-3 col-md-12 col-sm-12 col-12">
+														<div class="table-responsive">
+															<table class="table table-sm text-center">
+																<thead>
+																	<tr>
+																		<th scope="col"
+																			*ngFor="let s of ctrlHoteles.semanas">{{
+																			s.fecha }}</th>
+																	</tr>
+																</thead>
+																<tbody *ngIf="!r.detalle">
+																	<tr>
+																		<td colspan="7">
+																			<i class="fa fa-spinner fa-spin"></i>
+																		</td>
+																	</tr>
+																</tbody>
+																<tbody *ngIf="r.detalle">
+																	<tr *ngFor="let semana of r.semanas">
+																		<td *ngFor="let dia of semana">
+																			<div *ngIf="dia.rate">
+																				<div>
+																					<ng-template #popTemplate>
+																						<div
+																							[innerHtml]="toolHtml(h.hotel.name,r.info.name,r.mealplan.name,dia,h.hotel.broker,1)">
+																						</div>
+																					</ng-template>
+																					<a [ngbPopover]="popTemplate"
+																						placement="auto">
+																						<span>
+																							{{
+																							calculateTDC(dia.rate.public,dia.rate.exchange.exchnage_rate)
+																							| currencyFormat }}
+																						</span>
+																					</a>
+																				</div>
+																			</div>
+																			<div *ngIf="!dia.rate">
+																				<span *ngIf="dia.checkout!=1">--</span>
+																				<span *ngIf="dia.checkout==1"
+																					class="cblue fs-9">
+																					<div>
+																						{{ 'hotel.check-out'|translate
+																						}}
+																					</div>
+																					<div>
+																						12:00 Hrs
+																					</div>
+																				</span>
+																			</div>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- </div> -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- </div> -->
+							<div class="row" *ngIf="h.rooms.length >= 3">
+								<div class="col-11 text-center">
+									<a *ngIf="h.limitRooms < h.rooms.length" href="Javascript:void(0);"
+										(click)="isOpen('uniVM-',ih, h.hotel.code, h.hotel.broker, ih )"><b
+											id="uniVM-{{ ih }}">{{btn_ver}}</b></a>
+									<a *ngIf="h.limitRooms > h.rooms.length" href="Javascript:void(0);"
+										(click)="vermenos(ih)"><b id="uniVM-{{ ih }}">Ver menos</b></a>
+								</div>
+								<div class="col-1" *ngIf="h.limitRooms > 3 && h.limitRooms < h.rooms.length">
+									<button class="btn border-0" (click)="vermenos(ih)"><i
+											class="fa fa-chevron-up text-primary" aria-hidden="true"></i></button>
+								</div>
+							</div>
+							<!-- end hotel -->
+						</div>
+					</div>
+					<!-- fin price -->
+				</div>
+			</div>
+
+			<!-- Paginacion -->
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-center" *ngIf='resultadosshow'>
+					<pagination class="center-pagination" [boundaryLinks]="true" [(ngModel)]="currentPage"
+						[totalItems]="totalResultados" [itemsPerPage]="20" [rotate]="true" [maxSize]="maxSize"
+						[customFirstTemplate]="firstTemplate" [customLastTemplate]="lastTemplate"
+						[customPreviousTemplate]="prevTemplate" [customNextTemplate]="nextTemplate"
+						(click)="goToPage(resulthotel,currentPage)">
+					</pagination>
+
+					<ng-template #nextTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<ng-container>
+							<i class="fas fa-angle-right"></i>
+						</ng-container>
+					</ng-template>
+
+					<ng-template #prevTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<ng-container>
+							<i class="fas fa-angle-left"></i>
+						</ng-container>
+					</ng-template>
+
+					<ng-template #lastTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<i class="fas fa-angle-double-right"></i>
+					</ng-template>
+
+					<ng-template #firstTemplate let-disabled="disabled" let-currentPage="currentPage">
+						<i class="fas fa-angle-double-left"></i>
+					</ng-template>
+				</div>
+			</div>
+			<!-- fin Paginacion -->
+		</div>
+		<!-- FIN RESULTADOS -->
+	</div>
+	<!--! SCROLL TO TOP -->
+	<button class="scroll-to-top" [ngClass]="{'show-scroll': showScroll}" type="button" (click)="scrollToTop()"><i
+			class="fas fa-chevron-up"></i></button>
+	<!-- SCROLL TO TOP -->
+
+</div>
+
+<ngx-spinner type="">
+	<!-- <img src='../../../assets/img/spinners/tarifas.gif' />  -->
+	<img src='{{imgruta}}' />
+</ngx-spinner>

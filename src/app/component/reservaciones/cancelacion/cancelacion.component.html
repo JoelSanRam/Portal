@@ -1,0 +1,46 @@
+<div class="modal-header bg-primary text-white">
+    <h4 class="modal-title">{{cancelacionesList.IdReserva}}</h4>&nbsp;-&nbsp;<span class="text-2">En espera&nbsp;</span>
+
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-1 d-flex justify-content-center align-items-center">
+                <p class="py-2 px-3 bg-success rounded-circle">
+                    <i class="fas fa-exclamation text-white"></i>
+                </p>
+                
+            </div>
+            <div class="col-11">
+                <p>Esta reserva cuenta con el servicio de cancelación automática con el proveedor, Esto cancelará el
+                    pago de la
+                    reservación y la confirmación del hotel.</p>
+            </div>
+
+        </div>
+
+        <div class="pol">
+            <h4 class="font-weight-bold mb-3"><strong>Políticas de cancelación</strong></h4>
+            <p [innerHTML]="cancelacionesList.politicas"></p>
+        </div>
+        <div class="mt-2">
+            <p>Costo de penalidad ${{cancelacionesList.costo_penalidad_publica}} MXN</p>
+        </div>
+        <div class="mb-3">
+            <label style="font-size: 20px;" for="">Motivo de la cancelación</label>
+            <select class="form-control" name="motivo" id="motivo" (change)="onChangeOption($event)">
+                <option value="" selected>Seleccionar</option>
+                <option *ngFor="let opcion of motivosList" [value]="opcion.motivo_id">{{opcion.motivo}}</option>
+            </select>
+            <!-- <p> {{textAreaMotivo}} </p> -->
+            <textarea class="form-control" [(ngModel)]="textAreaMotivo" placeholder="Motivo de cancelación" *ngIf="textAreaMostrar" name="otro" id="otro" cols="30" rows="5"></textarea>
+            <button (click)="accionCancelar()" class="btn btn-red d-flex my-3 mx-auto">
+                Cancelar reservación
+            </button>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ 'usuario.cambiar-perfil'|translate }}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+		<i class="fas fa-times"></i>
+	</button>
+</div>
+<div class="modal-body">
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="fileChangeEvent($event)">
+    <label class="custom-file-label" for="inputGroupFile01">{{ 'usuario.seleccionar-archivo'|translate }}Seleccionar archivo</label>
+  </div>
+  <!-- <div class="mt-2">
+    <button class="btn btn-outline-blue btn-sm" (click)="rotateLeft()">Rotar izquierda</button>
+    <button class="btn btn-outline-blue btn-sm" (click)="rotateRight()">Rotar derecha</button>
+    <button class="btn btn-outline-blue btn-sm" (click)="flipHorizontal()">Voltear horizontal</button>
+    <button class="btn btn-outline-blue btn-sm" (click)="flipVertical()">Voltear vertical</button>
+  </div> -->
+  
+  <div>
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 4"
+      [resizeToWidth]="150"
+      [cropperMinWidth]="150"
+      [onlyScaleDown]="true"
+      [roundCropper]="true"
+      format="png"
+      outputType="base64"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+      [style.display]="showCropper ? null : 'none'"
+    ></image-cropper>
+  </div>
+  <div class="mt-2" *ngIf="showSave==true">
+    <h6 class="font-weight-bold">Vista previa</h6>
+    <img [src]="croppedImage" class="rounded-img"/> 
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button *ngIf="showSave==true" class="btn btn-green" (click)="subirImg(croppedImage, data)">{{ 'usuario.guardar-imagen'|translate }}
+    <span *ngIf="loading">
+      <i class="fa fa-spinner fa-spin"></i>
+    </span>
+  </button>
+  <button type="button" class="btn btn-outline-blue" (click)="activeModal.close('Close click')">{{ 'usuario.cerrar'|translate }}</button>
+</div>

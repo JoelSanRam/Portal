@@ -1,0 +1,71 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ 'agencia.crear-usuario'|translate }}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <button class="btn btn-blue btn-block mb-2" type="button" (click)="defaultPermisos()">{{ 'agencia.default-permisos'|translate }}</button>
+  <hr>
+  <div class="row mb-6">
+    <div class="col-lg-6">
+      <div class="col-6 col-lg-12">
+        <input (change)="reservarFuncion(permisos.reservar)" type="checkbox" id="reservar" [(ngModel)]="permisos.reservar">
+        <label for="reservar">{{ 'agencia.realizar-reservas'|translate }}</label>
+      </div>
+      <div class="col-6 col-lg-12">
+        <input (change)="cotizarFuncion(permisos.cotizar)" type="checkbox" id="cotizar" [(ngModel)]="permisos.cotizar">
+        <label for="cotizar">{{ 'agencia.realizar-cotizaciones'|translate }}</label>
+      </div>
+      <div class="col-6 col-lg-12">
+        <input type="checkbox" id="reservaciones_agente" [(ngModel)]="permisos.reservaciones_agente"
+          (change)="viewReservasAgente(permisos.reservaciones_agente)">
+        <label for="reservaciones_agente">{{ 'agencia.ver-reservas-propias'|translate }}</label>
+      </div>
+      <div class="col-6 col-lg-6">
+        <input type="checkbox" id="reservaciones_todas" [(ngModel)]="permisos.reservaciones_todas"
+          (change)="viewAllReservas(permisos.reservaciones_todas)">
+        <label for="reservaciones_todas">{{ 'agencia.ver-todas-reservas'|translate }}</label>
+      </div>
+      <div class="col-6 col-lg-12">
+        <input (change)="cancelarReservasFuncion(permisos.cancelar_reservas)" type="checkbox" id="cancelar_reservas" [(ngModel)]="permisos.cancelar_reservas">
+        <label for="cancelar_reservas">{{ 'agencia.cancelar-reservas'|translate }}</label>
+      </div>
+      <div class="col-6 col-lg-12">
+        <input (change)="gastosCancelacionReservasFuncion(permisos.gastos_cancelacion)" type="checkbox" id="gastos_cancelacion" [(ngModel)]="permisos.gastos_cancelacion">
+        <label for="gastos_cancelacion">{{ 'agencia.gastos-cancelacion'|translate }}</label>
+      </div>
+
+    </div>
+    <div class="col-6 col-lg-6">
+      <div class="col-6 col-lg-12" *ngIf="PermisosAgencia.hoteles=='1' && sessionPermisos.hoteles=='1'">
+        <input (change)="hotelesFuncion(permisos.hoteles)" type="checkbox" id="hotel" [(ngModel)]="permisos.hoteles">
+        <label for="hotel">{{ 'agencia.hoteles'|translate }}</label>
+      </div>
+      <div class="col-12 col-lg-12" *ngIf="PermisosAgencia.traslados=='1' && sessionPermisos.traslados=='1'">
+        <input (change)="trasladosFuncion(permisos.traslados)" type="checkbox" id="traslados" [(ngModel)]="permisos.traslados">
+        <label for="traslados">{{ 'agencia.traslados'|translate }}</label>
+      </div>
+      <div class="col-12 col-lg-12" *ngIf="PermisosAgencia.circuitos=='1' && sessionPermisos.circuitos=='1'">
+        <input (change)="circuitosFuncion(permisos.circuitos)" type="checkbox" id="circuitos" [(ngModel)]="permisos.circuitos">
+        <label for="circuitos">{{ 'agencia.circuitos'|translate }}</label>
+      </div>
+      <div class="col-12 col-lg-12" *ngIf="PermisosAgencia.tours=='1' && sessionPermisos.tours=='1'">
+        <input (change)="toursFuncion(permisos.tours)" type="checkbox" id="tours" [(ngModel)]="permisos.tours">
+        <label for="tours">{{ 'agencia.tours'|translate }}</label>
+      </div>
+      <div class="col-12 col-lg-12" *ngIf="PermisosAgencia.vuelos=='1' && sessionPermisos.vuelos=='1'">
+        <input (change)="vuelosFuncion(permisos.vuelos)" type="checkbox" id="vuelos" [(ngModel)]="permisos.vuelos">
+        <label for="vuelos">{{ 'agencia.vuelos'|translate }}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button class="btn btn-green btn-block text-uppercasse" type="submit" (click)="savePermisos()">{{ 'agencia.guardar'|translate }}
+      <span *ngIf="loading">
+        <i class="fa fa-spinner fa-spin"></i>
+      </span>
+    </button>
+  </div>
+</div>

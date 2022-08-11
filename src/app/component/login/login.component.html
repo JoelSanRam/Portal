@@ -1,0 +1,111 @@
+<div class="container-fluid">
+    <div class="row vh-100">
+        <div class="col-lg-6 h-100 img-fond-log d-none d-lg-flex justify-content-center align-items-center">
+            <img src="./assets/img/logo-agencia-blanco.svg" class="col-9 img-fluid" alt="">
+        </div>
+
+        <div class="col-lg-6 col-12 d-flex justify-content-center align-items-center formulario">
+            <div class="container">
+                <div class="container d-lg-none d-flex justify-content-center align-items-center">
+                    <img src="./assets/img/logo-agencia-color.svg" class="img-fluid logo-agency" alt="">
+                </div>
+                <div class="row">
+                    <div class="col-xl-10 offset-xl-2 col-lg-11 offset-lg-1 col-md-10 offset-md-1 col-sm-12">
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-lg-12 hola">
+                                    <h1>{{ 'login.hola'|translate }} :)</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 login-links">
+                                    <span (click)="setLang('es-mx')">Español</span> | <span (click)="setLang('pt-br')">Português</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form-login">
+                                    <div class="row">
+                                        <div class="col-md-2 labels-login">
+                                            <label for="username" class="col-form-label">{{ 'login.usuario'|translate }}</label>
+                                        </div>
+                                        <div class="col-md-10 form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text form-login icon-input"> <i class="far fa-user-circle"></i></span>
+                                                </div>
+                                                <input type="text" formControlName="username" class="form-control form-login border-left-0" />
+                                            </div>
+                                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                                                <div *ngIf="f.username.errors.required">{{ 'login.ingrese-usuario'|translate }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form-login">
+                                    <div class="row">
+                                        <div class="col-md-2 labels-login">
+                                            <label for="Password" class="col-form-label">{{ 'login.password'|translate }}</label>
+                                        </div>
+                                        <div class="col-md-10 form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text form-login icon-input"> <i class="fas fa-key" aria-hidden="true"></i></span>
+                                                </div>
+                                                <input type="password" formControlName="password" class="form-control form-login border-left-0">
+                                            </div>
+                                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                                <div *ngIf="f.password.errors.required">{{ 'login.ingrese-password'|translate }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form-">
+                                    <div class="col-md-10 offset-md-2 form-group">
+                                        <button [disabled]="loading" class="btn btn-primary btn-md btn-block">{{ 'login.iniciar-sesion'|translate }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form-">
+                                    <div class="col-md-10 offset-md-2 sn-links">
+                                        <div class="row">
+                                            <div class="col-md-6 col-6">  <a href="javascript:0" [routerLink]="['/forgot']"><u>{{ 'login.forgot'|translate }}</u></a> </div>
+                                            <div class="col-md-6 col-6 text-right">  <a href="javascript:0" [routerLink]="['/signup']"><u>{{ 'login.registrarme'|translate }}</u></a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-10 padding-form- social-icon-movil">
+                                    <div class="col-md-10 offset-md-2 text-center">
+                                        <ul class="list-inline">
+                                            <li *ngFor="let sociales of rsociales" class="list-inline-item">
+                                                <a *ngIf="sociales.tipo=='facebook'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='facebook'" src="./assets/img/social_icons/fb.png" width="30px" alt="">
+                                                </a>
+                                                <a *ngIf="sociales.tipo=='instagram'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='instagram'" src="./assets/img/social_icons/ig.png" width="30px" alt="">
+                                                </a>
+                                                <a *ngIf="sociales.tipo=='linkedin'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='linkedin'" src="./assets/img/social_icons/in.png" width="30px" alt="">
+                                                </a>
+                                                <a *ngIf="sociales.tipo=='youtube'" href="{{sociales.url}}" target="_blank" rel="noopener noreferrer">
+                                                    <img *ngIf="sociales.tipo=='youtube'" src="./assets/img/social_icons/yt.png" width="30px" alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

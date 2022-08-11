@@ -1,0 +1,221 @@
+
+<header class="fixed-top">
+    <!-- <div class="row banner">
+        <div class="col-12 py-1 ml-5 my-1">
+            <a href="https://azabachetour.com/#/app/cotizador/hotel/promos" class="btn">< Volver al Portal anterior</a>
+        </div>
+    </div> -->
+    <nav class="navbar navbar-home">
+        <div class="d-flex align-items-center">
+            <button #toggleButton type="button" class="btn-toggle" (click)="collapseSidebar()">
+                <span><i class="fas fa-bars"></i></span>
+            </button>
+            <a class="navbar-brand py-0 d-flex" href="#">
+                <img class="img-fluid logo" [src]="agencia?.agencia_logobanner" alt="Logo">
+            </a>
+        </div>
+        <div class="d-flex align-items-center justify-content-end">
+            <div class="px-2">
+                <div class="btn-group">
+                    <span class="pr-2" data-toggle="dropdown">{{user?.categoria_nombre}} <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" >
+                        <a class="dropdown-item" *ngFor="let pc of user?.producto_comisiones" href="javascript:0">{{pc.producto_nombre}} : {{pc.comision}} &#37;</a>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-md-flex align-items-center" href="#" id="navlang" data-toggle="dropdown">
+                        <i class="fas fa-user d-md-none"></i>
+                        <div class="d-none d-md-flex align-items-end">
+                            <div class="d-flex flex-column mx-2 text-uppercase">
+                              {{ actualLang }}
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" (click)="setLang('es-mx')" >Español</a>
+                        <a class="dropdown-item" (click)="setLang('pt-br')">Português</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle py-0 d-md-flex align-items-center" href="#" id="navbardrop" data-toggle="dropdown">
+                      <i class="fas fa-user d-md-none"></i>
+                      <div class="d-none d-md-flex align-items-center">
+                          <img class="img-fluid img-perfil" [src]="user?.fotoPerfil" onerror="this.src='./assets/img/userimg.jpg'">
+                          <div class="d-flex flex-column mx-2">
+                              {{ user?.name }}
+                              <small class="font-weight-bold">{{ user?.nomAgencia }}</small>
+                          </div>
+                      </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item" routerLink="/usuario">{{ 'header.mi-perfil'|translate }}</a>
+                      <a *ngIf="user?.nivel==50" class="dropdown-item" routerLink="/agencia">{{ 'header.perfil-agencia'|translate }}</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="javascript:0" (click)="logout()"><i class="fas fa-sign-out-alt"></i>{{ 'header.cerrar-sesion'|translate }}</a>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+
+<div class="d-flex">
+    <nav id="sidebar" #sidebar [class.sidebarCollapse]="sidebarStatus" (mouseover)="sidebarStatus=false" (mouseout)="sidebarStatus=true">
+        <ul class="list-unstyled">
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a routerLink="/home" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-concierge-bell text-center"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        {{ 'sidebar.inicio'|translate }}
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/grupos" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        {{ 'sidebar.grupos'|translate }}
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/flyers" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        {{ 'sidebar.flyers'|translate }}
+                    </div> 
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/cotizaciones" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-clipboard"></i><span *ngIf="cotizaciones_novistas>0" class="badge badge-danger badge-pill">{{cotizaciones_novistas}}</span>
+                    </div>
+                    <div class="sidebar-title">
+                        {{ 'sidebar.cotizaciones'|translate }}
+                    </div> 
+                </a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/reservaciones" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        {{ 'sidebar.reservaciones'|translate }}
+                    </div> 
+                </a>
+            </li>
+            <!-- <li class="nav-item dropdown" routerLinkActive="active">
+                <a routerLink="/reservaciones" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="collapse">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        Reservaciones
+                    </div> 
+                </a>
+                <ul id="submenu" class="sidebar-sub collapse list-unstyled">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Hoteleria
+                            </div>
+                            <span class="badge badge-danger badge-pill">26</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Actividades
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Circuitos
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Traslados
+                            </div>
+                            <span class="badge badge-danger badge-pill">2</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Grupos
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Bodas
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Seguros
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <div class="sidebar-title">
+                                Aéreos
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </li> -->
+            <hr>
+            <li class="nav-item" routerLinkActive="active">
+                <a routerLink="/microblog" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        {{ 'sidebar.microblog'|translate }}
+                    </div> 
+                </a>
+            </li>
+            <!-- <li class="nav-item" routerLinkActive="active">
+                <a href="#" class="nav-link d-flex">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        Azatips
+                    </div> 
+                </a>
+            </li> -->
+            <!-- <li class="nav-item" routerLinkActive="active">
+                <a href="#" class="nav-link d-flex" (click)="closeSidebar()">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-info"></i>
+                    </div>
+                    <div class="sidebar-title">
+                        Información
+                    </div> 
+                </a>
+            </li> -->
+        </ul>
+    </nav>
+</div>
